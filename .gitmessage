@@ -3,3 +3,69 @@
 <body>
 
 <footer>
+
+# <type>(<scope>): <subject> (Max 70 characters)
+#
+# <body> (Optional. Explain why this change is being made. Max 80 characters lines)
+#
+# <footer> (Optional. Referencing/closing issues (one or more) or breaking changes)
+# --- COMMIT END ---
+#
+# Example:
+#
+#     fix(middleware): ensure Range headers adhere more closely to RFC 2616
+#   
+#     Add one new dependency, use `range-parser` (Express dependency) to compute
+#     range. It is more well-tested in the wild.
+#   
+#     Fixes #2310
+
+# The first line cannot be longer than 70 characters, 
+# the second line is always blank and other lines should be wrapped at 80 characters.
+# The type and scope should always be lowercase as shown below.
+#
+# Type can be
+#    feat     (new feature)
+#    fix      (bug fix)
+#    refactor (refactoring production code, eg. renaming a variable)
+#    style    (formatting, missing semi colons, etc; no code change)
+#    docs     (changes to documentation)
+#    test     (adding missing tests, refactoring tests; no production code change)
+#    chore    (updating grunt tasks etc; no production code change)
+#
+# --------------------
+#
+# Scope can be
+#    init
+#    runner
+#    watcher
+#    config
+#    web-server
+#    proxy
+#    etc.
+#
+# The <scope> can be empty (e.g. if the change is a global or difficult to assign 
+# to a single component), in which case the parentheses are omitted.
+# In smaller projects such as Karma plugins, the <scope> is empty.
+#
+# --------------------
+#
+# All breaking changes have to be mentioned in footer with the description of the change, justification and migration notes.
+#
+# Example:
+#
+#     BREAKING CHANGE:
+#     
+#     `port-runner` command line option has changed to `runner-port`, so that it is
+#     consistent with the configuration file syntax.
+#     
+#     To migrate your project, change all the commands, where you use `--port-runner`
+#     to `--runner-port`.
+#
+# Remember to:
+#   * Use the imperative mood in the subject line
+#   * Do not end the subject line with a period
+#   * Separate subject from body with a blank line
+#   * Use the body to explain what and why vs. how
+#   * Comments won't appear in the commit
+# --------------------
