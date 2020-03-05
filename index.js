@@ -1,9 +1,10 @@
 const express = require('express');
 const app = express();
-const userRouter = require('./routers/user');
 const knex = require('knex');
 const morgan = require('morgan');
 const cors = require('cors');
+const userRouter = require('./routers/user');
+const breedingRouter = require('./routers/breeding');
 require('dotenv').config();
 
 // database
@@ -28,8 +29,13 @@ app.use( (req, res, next) => {
   req.connection = knex(connection);
   next();
 });
+
+// routes
 app.use('/user', userRouter);
+app.use('/breeding', breedingRouter);
 
 // server
-app.listen(3000);
-console.log('Running port 3000');
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Listening at port ${port}`);
+});
