@@ -4,8 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "develop": "nodemon index.js",
-    "seed": "knex seed:run"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "db:rb": "knex migrate:rollback --all",
+    "db:lt": "knex migrate:latest",
+    "seed": "knex seed:run",
+    "db": "npm run db:rb && npm run db:lt && npm run seed"
   },
   "author": "",
   "license": "ISC",
