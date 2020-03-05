@@ -47,7 +47,7 @@ exports.up = (knex) => {
         table.increments().primary();
         table.enu('status', ['In revision', 'Accepted', 'Rejected', 'In progress', 'Completed']);
       })
-      
+
       //publication
       .createTable('publication', function(table) {
         table.increments().primary();
@@ -56,6 +56,44 @@ exports.up = (knex) => {
         table.string('identification_photo', 200);
         table.string('location', 500).notNullable();
         table.string('vaccine_passport', 500);
+      })
+
+      // particular
+      .createTable('particular', function(table) {
+        table.increments().primary();
+        table.string('surname', 100);
+        table.integer('actor_id').unsigned().notNullable();
+        table.foreign('actor_id').references('id').inTable('actor');
+      })
+
+      // moderator
+      .createTable('moderator', function(table) {
+        table.increments().primary();
+        table.string('surname', 100);
+        table.integer('actor_id').unsigned().notNullable();
+        table.foreign('actor_id').references('id').inTable('actor');
+      })
+
+      // breeding
+      .createTable('breeding', function(table) {
+        table.increments().primary();
+        table.boolean('isCompleted').notNullable();
+        table.double('price').notNullable();
+        table.integer('publication_id').unsigned().notNullable();
+        table.foreign('publication_id').references('id').inTable('publication');
+      })
+
+      //adoption
+      .createTable('adoption', function(table) {
+        table.increments().primary();
+        table.integer('age');
+        table.string('contact_number');
+        table.enu('gender', ['Male', 'Female']);
+        table.string('name');
+        table.double('taxes').notNullable();
+        table.integer('publication_id').unsigned().notNullable();
+        table.foreign('publication_id').references('id').inTable('publication');
+
       });
 };
 

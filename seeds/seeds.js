@@ -3,7 +3,11 @@ exports.seed = async (knex) => {
   await knex('request').del();
   await knex('shelter').del();
   await knex('administrator').del();
+  await knex('adoption').del();
+  await knex('breeding').del();
   await knex('publication').del();
+  await knex('particular').del();
+  await knex('moderator').del();
   await knex('actor').del();
   await knex('user_account').del();
 
@@ -51,18 +55,51 @@ exports.seed = async (knex) => {
     {id: 2, user_name: 'ejemplo2', password: 'ejemplo2', activate: true},
     {id: 3, user_name: 'ejemplo3', password: 'ejemplo3', activate: false},
   ]);
+  // publication
+  await knex('publication').insert([
+    //breeding
+    {id: 1, animal_photo: 'http://www.ejemplo1.com/, http://www.ejemplo2.com/', identification_photo: 'http://www.ejemplo1.com/', location: 'Calle ejemplo 1', vaccine_passport: 'Vaccine passport 1'},
+    {id: 2, animal_photo: 'http://www.ejemplo3.com/', identification_photo: 'http://www.ejemplo2.com/', location: 'Calle ejemplo 2', vaccine_passport: 'Vaccine passport 2'},
+    {id: 3, animal_photo: 'http://www.ejemplo4.com/, http://www.ejemplo5.com/, http://www.ejemplo6.com/', identification_photo: 'http://www.ejemplo3.com/', location: 'Calle ejemplo 3', vaccine_passport: 'Vaccine passport 3'},
+  
+    //adoption
+    {id: 4, animal_photo: 'http://www.ejemplo5.com/, http://www.ejemplo8.com/', identification_photo: 'http://www.ejemplo4.com/', location: 'Calle ejemplo 4', vaccine_passport: 'Vaccine passport 4'},
+    {id: 5, animal_photo: 'http://www.ejemplo7.com/', identification_photo: 'http://www.ejemplo1.com/', location: 'Calle ejemplo 5', vaccine_passport: 'Vaccine passport 5'},
+    {id: 6, animal_photo: 'http://www.ejemplo9.com/, http://www.ejemplo1.com/, http://www.ejemplo2.com/', identification_photo: 'http://www.ejemplo6.com/', location: 'Calle ejemplo 6', vaccine_passport: 'Vaccine passport 6'},
+  ]);
 
+  // particular
+  await knex('particular').insert([
+    {id: 1, surname:'surname1', actor_id: 10},
+    {id: 2, surname:'surname2', actor_id: 11},
+    {id: 3, surname:'surname3', actor_id: 12},
+  ]);
+
+  // moderator
+  await knex('moderator').insert([
+    {id: 1, surname:'surname1', actor_id: 7},
+    {id: 2, surname:'surname2', actor_id: 8},
+    {id: 3, surname:'surname3', actor_id: 9},
+  ]);
+
+  // breeding
+  await knex('breeding').insert([
+    {id: 1, isCompleted: true, price: 5.5, publication_id: 1},
+    {id: 2, isCompleted: false, price: 69, publication_id: 2},
+    {id: 3, isCompleted: true, price: 44.1, publication_id: 3},
+  ]);
   // request
   await knex('request').insert([
     {id: 1, status: 'Accepted'},
     {id: 2, status: 'In progress'},
     {id: 3, status: 'Completed'},
   ]);
-
-  // publication
-  await knex('publication').insert([
-    {id: 1, animal_photo: 'http://www.ejemplo1.com/, http://www.ejemplo2.com/', identification_photo: 'http://www.ejemplo1.com/', location: 'Calle ejemplo 1', vaccine_passport: 'Vaccine passport 1'},
-    {id: 2, animal_photo: 'http://www.ejemplo3.com/', identification_photo: 'http://www.ejemplo2.com/', location: 'Calle ejemplo 2', vaccine_passport: 'Vaccine passport 2'},
-    {id: 3, animal_photo: 'http://www.ejemplo4.com/, http://www.ejemplo5.com/, http://www.ejemplo6.com/', identification_photo: 'http://www.ejemplo3.com/', location: 'Calle ejemplo 3', vaccine_passport: 'Vaccine passport 3'},
+  // adoption
+  await knex('adoption').insert([
+    {id: 1, age: 5, contact_number: 555467668, gender: 'Male', taxes: 390, publication_id: 4},
+    {id: 2, age: 9, contact_number: 551117668, gender: 'Female', taxes: 210, publication_id: 5},
+    {id: 3, age: 15, contact_number: 555467111, gender: 'Male', taxes: 870, publication_id:6 },
   ]);
+
+  
 };
