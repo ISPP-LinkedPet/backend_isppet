@@ -4,9 +4,9 @@ exports.seed = async (knex) => {
   await knex('administrator').del();
   await knex('adoption').del();
   await knex('breeding').del();
-  await knex('particular').del();
   await knex('request').del();
   await knex('publication').del();
+  await knex('particular').del();
   await knex('moderator').del();
   await knex('vet').del();
   await knex('actor').del();
@@ -214,6 +214,25 @@ exports.seed = async (knex) => {
     {id: 3, surname: 'Ejemplo 6', actor_id: 6},
   ]);
 
+  // particular
+  await knex('particular').insert([
+    {
+      id: 1,
+      surname: 'surname1',
+      actor_id: 10,
+    },
+    {
+      id: 2,
+      surname: 'surname2',
+      actor_id: 11,
+    },
+    {
+      id: 3,
+      surname: 'surname3',
+      actor_id: 12,
+    },
+  ]);
+
   // publication
   await knex('publication').insert([
     // breeding
@@ -228,6 +247,7 @@ exports.seed = async (knex) => {
       breed: 'Doberman',
       transaction_status: 'In progress',
       title: 'Example breeding 1',
+      particular_id: 1,
     },
     {
       id: 2,
@@ -240,6 +260,7 @@ exports.seed = async (knex) => {
       breed: 'Bulldog Terrier',
       transaction_status: 'Completed',
       title: 'Example breeding 2',
+      particular_id: 2,
     },
     {
       id: 3,
@@ -253,6 +274,7 @@ exports.seed = async (knex) => {
       breed: 'Yorkshire Terrier',
       transaction_status: 'In progress',
       title: 'Example breeding 3',
+      particular_id: 3,
     },
 
     // adoption
@@ -267,6 +289,7 @@ exports.seed = async (knex) => {
       breed: 'Maine Coon',
       transaction_status: 'Completed',
       title: 'Example adoption 1',
+      particular_id: 1,
     },
     {
       id: 5,
@@ -279,6 +302,7 @@ exports.seed = async (knex) => {
       breed: 'Siamés',
       transaction_status: 'In progress',
       title: 'Example adoption 2',
+      particular_id: 2,
     },
     {
       id: 6,
@@ -292,21 +316,33 @@ exports.seed = async (knex) => {
       breed: 'Árabe',
       transaction_status: 'In progress',
       title: 'Example adoption 3',
+      particular_id: 3,
     },
   ]);
 
   // request
   await knex('request').insert([
-    {id: 1, status: 'Favorite', is_favorite: true, publication_id: 4},
-    {id: 2, status: 'Pending', is_favorite: false, publication_id: 5},
-    {id: 3, status: 'Accepted', is_favorite: false, publication_id: 6},
-  ]);
-
-  // particular
-  await knex('particular').insert([
-    {id: 1, surname: 'surname1', actor_id: 10, publication_id: 4, request_id: 1},
-    {id: 2, surname: 'surname2', actor_id: 11, publication_id: 5, request_id: 2},
-    {id: 3, surname: 'surname3', actor_id: 12, publication_id: 6, request_id: 3},
+    {
+      id: 1,
+      status: 'Favorite',
+      is_favorite: true,
+      publication_id: 4,
+      particular_id: 1,
+    },
+    {
+      id: 2,
+      status: 'Pending',
+      is_favorite: false,
+      publication_id: 5,
+      particular_id: 2,
+    },
+    {
+      id: 3,
+      status: 'Accepted',
+      is_favorite: false,
+      publication_id: 6,
+      particular_id: 3,
+    },
   ]);
 
   // moderator
