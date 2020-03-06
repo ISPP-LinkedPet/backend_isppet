@@ -20,12 +20,17 @@ const connection = {
 };
 exports.connection = connection;
 
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
+
 // middleware
-app.use(cors({
-  origin: '*',
-}));
+app.use(
+    cors({
+      origin: '*',
+    }),
+);
 app.use(morgan('common'));
-app.use( (req, res, next) => {
+app.use((req, res, next) => {
   req.connection = knex(connection);
   next();
 });
