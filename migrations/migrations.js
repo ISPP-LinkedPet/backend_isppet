@@ -10,7 +10,6 @@ exports.up = (knex) => {
         .dropTableIfExists('particular')
         .dropTableIfExists('moderator')
         .dropTableIfExists('vet')
-        .dropTableIfExists('actor')
         .dropTableIfExists('user_account')
 
     // user_account
@@ -18,22 +17,24 @@ exports.up = (knex) => {
           table.increments().primary();
           table.string('user_name', 100).notNullable();
           table.unique('user_name');
+          table.enu('roles', ['administrator', 'moderator', 'particular', 'vet', 'shelter']);
           table.string('password', 32).notNullable();
           table.boolean('activate').notNullable();
           table
               .timestamp('register_date')
               .defaultTo(knex.fn.now())
               .notNullable();
-        })
-
-    // actor
-        .createTable('actor', function(table) {
-          table.increments().primary();
           table.string('name', 100).notNullable();
           table.string('email_adress', 500).notNullable();
           table.string('adress', 500).notNullable();
           table.integer('telephone').notNullable();
           table.string('optional_photo', 500).nullable();
+        })
+
+    // administrator
+        .createTable('administrator', function(table) {
+          table.increments().primary();
+          table.string('surname', 200).notNullable();
           table
               .integer('user_account_id')
               .unsigned()
@@ -42,21 +43,6 @@ exports.up = (knex) => {
               .foreign('user_account_id')
               .references('id')
               .inTable('user_account');
-          table.unique('user_account_id');
-        })
-
-    // administrator
-        .createTable('administrator', function(table) {
-          table.increments().primary();
-          table.string('surname', 200).notNullable();
-          table
-              .integer('actor_id')
-              .unsigned()
-              .notNullable();
-          table
-              .foreign('actor_id')
-              .references('id')
-              .inTable('actor');
         })
 
     // particular
@@ -64,13 +50,13 @@ exports.up = (knex) => {
           table.increments().primary();
           table.string('surname', 100);
           table
-              .integer('actor_id')
+              .integer('user_account_id')
               .unsigned()
               .notNullable();
           table
-              .foreign('actor_id')
+              .foreign('user_account_id')
               .references('id')
-              .inTable('actor');
+              .inTable('user_account');
         })
 
     // publication
@@ -128,13 +114,13 @@ exports.up = (knex) => {
           table.increments().primary();
           table.string('surname', 100);
           table
-              .integer('actor_id')
+              .integer('user_account_id')
               .unsigned()
               .notNullable();
           table
-              .foreign('actor_id')
+              .foreign('user_account_id')
               .references('id')
-              .inTable('actor');
+              .inTable('user_account');
         })
 
     // breeding
@@ -170,13 +156,13 @@ exports.up = (knex) => {
         .createTable('shelter', function(table) {
           table.increments().primary();
           table
-              .integer('actor_id')
+              .integer('user_account_id')
               .unsigned()
               .notNullable();
           table
-              .foreign('actor_id')
+              .foreign('user_account_id')
               .references('id')
-              .inTable('actor');
+              .inTable('user_account');
           table
               .integer('adoption_id')
               .unsigned()
@@ -194,13 +180,13 @@ exports.up = (knex) => {
           table.string('surname', 200).notNullable();
           table.boolean('is_premium');
           table
-              .integer('actor_id')
+              .integer('user_account_id')
               .unsigned()
               .notNullable();
           table
-              .foreign('actor_id')
+              .foreign('user_account_id')
               .references('id')
-              .inTable('actor');
+              .inTable('user_account');
         })
   );
 };
