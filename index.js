@@ -6,7 +6,6 @@ const morgan = require('morgan');
 const cors = require('cors');
 require('dotenv').config();
 // routers
-const userRouter = require('./routers/user');
 const breedingRouter = require('./routers/breeding');
 const authRouter = require('./routers/auth');
 
@@ -36,7 +35,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 // routers
-app.use('/user', userRouter);
 app.use('/breeding', breedingRouter);
 app.use('/auth', authRouter);
 
