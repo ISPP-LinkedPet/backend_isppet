@@ -5,6 +5,8 @@ const morgan = require('morgan');
 const cors = require('cors');
 const userRouter = require('./routers/user');
 const breedingRouter = require('./routers/breeding');
+const shelterRouter = require('./routers/shelter');
+const adoptionRouter = require('./routers/adoption');
 require('dotenv').config();
 
 // database
@@ -33,7 +35,8 @@ app.use( (req, res, next) => {
 // routes
 app.use('/user', userRouter);
 app.use('/breeding', breedingRouter);
-
+app.use('/shelter', shelterRouter);
+app.use('/adoption', adoptionRouter);
 // server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
