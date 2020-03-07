@@ -23,7 +23,7 @@ exports.login = async (req, res) => {
     }
 
     // jwt, role and userId
-    const access_token = jwt.sign({id: user.userId, role: user.role}, process.env.JWT_SECRET, {expiresIn: '1d'});
+    const access_token = jwt.sign({id: user.id, role: user.role}, process.env.JWT_SECRET, {expiresIn: '1d'});
 
     return res.status(200).send({access_token});
   } catch (error) {

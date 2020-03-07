@@ -1,8 +1,7 @@
 exports.getUserLogin = async (connection, userName) =>{
   try {
     const rows = await connection('user_account')
-        .select('user_account.id AS userId', 'user_account.role', 'user_account.password', 'user_account.activate')
-        .where('user_account.user_name', userName);
+        .where({'user_account.user_name': userName});
     if (!rows.length) {
       const error = new Error();
       error.status = 404;
