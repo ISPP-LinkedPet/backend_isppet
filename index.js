@@ -7,6 +7,8 @@ const cors = require('cors');
 require('dotenv').config();
 // routers
 const breedingRouter = require('./routers/breeding');
+const shelterRouter = require('./routers/shelter');
+const adoptionRouter = require('./routers/adoption');
 const authRouter = require('./routers/auth');
 
 // database
@@ -37,7 +39,8 @@ app.use(bodyParser.json());
 // routers
 app.use('/breeding', breedingRouter);
 app.use('/auth', authRouter);
-
+app.use('/shelter', shelterRouter);
+app.use('/adoption', adoptionRouter);
 
 // server
 const port = process.env.PORT || 3000;
