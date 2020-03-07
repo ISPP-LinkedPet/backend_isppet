@@ -1,5 +1,8 @@
 exports.getShelters = async (connection) => {
-  const shelters = await connection('shelter').join('actor', 'shelter.actor_id', '=', 'actor.id')
-      .join('adoption', 'shelter.adoption_id', '=', 'adoption.id').join('publication', 'adoption.publication_id', '=', 'publication.id');
+  const shelters = await connection('shelter').select('*')
+      .innerJoin('user_account', 'shelter.user_account_id', '=', 'user_account.id')
+      .innerJoin('adoption', 'shelter.adoption_id', '=', 'adoption.id')
+      .innerJoin('publication', 'adoption.publication_id', '=', 'publication.id')
+      .limit(10).offset(0);
   return shelters;
 };
