@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
 const knex = require('knex');
 const morgan = require('morgan');
 const cors = require('cors');
@@ -25,16 +24,18 @@ const connection = {
 exports.connection = connection;
 
 // middleware
-app.use(cors({
-  origin: '*',
-}));
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
+app.use(
+    cors({
+      origin: '*',
+    }),
+);
 app.use(morgan('common'));
-app.use( (req, res, next) => {
+app.use((req, res, next) => {
   req.connection = knex(connection);
   next();
 });
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
 
 // routers
 app.use('/breeding', breedingRouter);

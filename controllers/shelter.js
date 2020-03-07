@@ -12,7 +12,7 @@ exports.getShelters = async (req, res) => {
     const shelter = await shelterService.getShelters(connection, page);
     return res.status(200).send(shelter);
   } catch (error) {
-    console.log(JSON.stringify(error));
+    console.log(error);
     if (error.status && error.message) return res.status(error.status).send(error.message);
     return res.status(500).send(error);
   }

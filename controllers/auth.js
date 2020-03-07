@@ -27,7 +27,7 @@ exports.login = async (req, res) => {
 
     return res.status(200).send({access_token});
   } catch (error) {
-    console.log(JSON.stringify(error));
+    console.log(error);
     if (error.status && error.message) return res.status(error.status).send(error.message);
     return res.status(500).send(error);
   }
