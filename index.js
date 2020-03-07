@@ -1,13 +1,15 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
 const knex = require('knex');
 const morgan = require('morgan');
 const cors = require('cors');
-const userRouter = require('./routers/user');
+require('dotenv').config();
+// routers
 const breedingRouter = require('./routers/breeding');
 const shelterRouter = require('./routers/shelter');
 const adoptionRouter = require('./routers/adoption');
-require('dotenv').config();
+const authRouter = require('./routers/auth');
 
 // database
 const connection = {
@@ -31,12 +33,15 @@ app.use( (req, res, next) => {
   req.connection = knex(connection);
   next();
 });
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
-// routes
-app.use('/user', userRouter);
+// routers
 app.use('/breeding', breedingRouter);
+app.use('/auth', authRouter);
 app.use('/shelter', shelterRouter);
 app.use('/adoption', adoptionRouter);
+
 // server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
