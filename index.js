@@ -1,11 +1,14 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
 const knex = require('knex');
 const morgan = require('morgan');
 const cors = require('cors');
+require('dotenv').config();
+// routers
 const userRouter = require('./routers/user');
 const breedingRouter = require('./routers/breeding');
-require('dotenv').config();
+const authRouter = require('./routers/auth');
 
 // database
 const connection = {
@@ -29,10 +32,14 @@ app.use( (req, res, next) => {
   req.connection = knex(connection);
   next();
 });
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
-// routes
+// routers
 app.use('/user', userRouter);
 app.use('/breeding', breedingRouter);
+app.use('/auth', authRouter);
+
 
 // server
 const port = process.env.PORT || 3000;

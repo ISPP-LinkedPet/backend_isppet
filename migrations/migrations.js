@@ -15,10 +15,9 @@ exports.up = (knex) => {
     // user_account
         .createTable('user_account', function(table) {
           table.increments().primary();
-          table.string('user_name', 100).notNullable();
-          table.unique('user_name');
+          table.string('user_name', 100).notNullable().unique('user_name');
           table.enu('role', ['administrator', 'moderator', 'particular', 'vet', 'shelter']);
-          table.string('password', 32).notNullable();
+          table.string('password', 70).notNullable();
           table.boolean('activate').notNullable();
           table
               .timestamp('register_date')
