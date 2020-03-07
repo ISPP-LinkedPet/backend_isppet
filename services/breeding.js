@@ -47,3 +47,26 @@ exports.createBreeding = async (breedingData, trx) => {
     throw error;
   }
 };
+
+exports.getMyFavoriteBreedings = async (connection, userId) => {
+  try {
+    const user = await connection('particular').select('id').where({user_account_id: userId}).first();
+    if (!user) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'Not found user';
+      throw error;
+    }
+
+    const breedings = await connection('breeding')
+        .join('publication', 'breeding.publication_id', '=', 'publication.id')
+        .join('particular', 'particular.id', '=', 'publication.particular_id')
+        .join('request', 'request.particular_id', '=', 'particular.id')
+        .where({'particular.id': user.id})
+        .andWhere({'request.is_favorite': true});
+
+    return breedings;
+  } catch (error) {
+    throw error;
+  }
+};
