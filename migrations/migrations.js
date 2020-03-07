@@ -17,7 +17,7 @@ exports.up = (knex) => {
           table.increments().primary();
           table.string('user_name', 100).notNullable();
           table.unique('user_name');
-          table.enu('roles', ['administrator', 'moderator', 'particular', 'vet', 'shelter']);
+          table.enu('role', ['administrator', 'moderator', 'particular', 'vet', 'shelter']);
           table.string('password', 32).notNullable();
           table.boolean('activate').notNullable();
           table
