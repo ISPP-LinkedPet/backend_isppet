@@ -97,7 +97,6 @@ exports.up = (knex) => {
               .foreign('publication_id')
               .references('id')
               .inTable('publication');
-          table.unique('publication_id');
           table
               .integer('particular_id')
               .unsigned()
