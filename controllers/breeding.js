@@ -86,3 +86,30 @@ exports.getMyFavoriteBreedings = async (req, res) => {
     return res.status(500).send(error);
   }
 };
+
+exports.imInterested = async (req, res) => {
+  const connection = req.connection;
+  const trx = await connection.transaction();
+ 
+  try {
+ 
+    // authorization
+    const userId = req.user.id;
+    const breedingId = req.params.id;
+
+    const request = await breedingService.imInterested(userId, breedingId, trx);
+    trx.commit();
+
+    // Ver el formato en el que mandar los mensajes
+    return res.status(200).send(request);
+  }catch(error){
+
+    trx.rollback();
+
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    
+    return res.status(500).send({error});
+  }
+};

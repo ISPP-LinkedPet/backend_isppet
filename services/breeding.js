@@ -88,6 +88,78 @@ exports.getMyFavoriteBreedings = async (connection, userId) => {
   return breedings;
 };
 
+exports.imInterested = async (userId, breedingId, trx) => {
+  
+  // Se comprueba que no se hace
+  const pub = await trx('publication')
+  .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+  .where({'breeding.id': breedingId})
+  .first();
+
+  if(pub.particular_id === userId){
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not make your own publications favorite';
+    throw error;
+    
+  }
+
+  // Se comprueba que esta publicacion no este en los favoritos del particular
+  const rqt = await trx('request')
+  .where({publication_id: pub.publication_id})
+  .andWhere({particular_id: userId})
+  .first();
+
+  if(rqt && rqt.is_favorite){
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Already favorite';
+    throw error;
+    
+  }
+
+  const wrongPub = await trx('publication')
+  .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+  .where({'publication.document_status': 'Accepted'})
+  .andWhere({'publication.transaction_status': 'In progress'})
+  .andWhere({'breeding.id': breedingId});
+
+  if(wrongPub.length == 0){
+    const error = new Error();
+    error.status = 404;
+    error.message = 'The publication documents or status are wrong';
+    throw error;
+    
+  }
+  
+  if(rqt){
+
+    await trx('request')
+    .where({id: rqt.id})
+    .update({
+      is_favorite: true
+    });
+
+    return await trx('request')
+    .where({id: rqt.id}).first();
+
+  }else{
+
+    const rqtData = {
+      status: 'Favorite',
+      is_favorite: true,
+      publication_id: pub.publication_id,
+      particular_id: userId,
+    };
+
+    const requestId = await trx('request').insert(rqtData);
+    return await trx('request')
+    .where({id: requestId}).first();
+  }
+
+  // Comprobar que la request no sea del propia usuario y que sea visible para todo el mundo
+};
+
 const savePhoto = async (photo, photoRoute) => {
   await photo.mv(`./${photoRoute}`);
 };
@@ -96,3 +168,5 @@ const getExtension = (photo) => {
   // Hay que ver qué extensiones son válidas
   return photo.split('.').pop();
 };
+
+
