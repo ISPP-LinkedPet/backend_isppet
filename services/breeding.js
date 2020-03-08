@@ -1,3 +1,5 @@
+const path = require('path');
+
 const breedingFields = ['breeding.id',
   'publication_id',
   'particular_id',
@@ -13,9 +15,9 @@ const breedingFields = ['breeding.id',
   'price',
   'vaccine_passport'];
 
-const animalPhotosFolder = 'images/animal_photos/';
-const identificationPhotosFolder = 'images/identification_photos/';
-const vaccinesPassportFolder = 'images/vaccines_passports/';
+const animalPhotosFolder = path.join('public', 'images', 'animal_photos');
+const identificationPhotosFolder = path.join('public', 'images', 'identification_photos');
+const vaccinesPassportFolder = path.join('public', 'images', 'vaccines_passports');
 
 exports.getBreeding = async (connection, breedingId) => {
   const breeding = await connection('breeding')
@@ -35,21 +37,22 @@ exports.getBreeding = async (connection, breedingId) => {
 };
 
 exports.createBreeding = async (breedingData, breedingPhotos, particularId, trx) => {
-  const animalPhotoName = `${animalPhotosFolder}${particularId}-${new Date().getTime()}.${getExtension(breedingPhotos.animal_photo.name)}`;
-  const identificationPhotoName = `${identificationPhotosFolder}${particularId}-${new Date().getTime()}.${getExtension(breedingPhotos.identification_photo.name)}`;
-  const vaccinePassportName = `${vaccinesPassportFolder}${particularId}-${new Date().getTime()}.${getExtension(breedingPhotos.vaccine_passport.name)}`;
+  const animalPhotoName = path.join(animalPhotosFolder, `${particularId}-${new Date().getTime()}.${getExtension(breedingPhotos.animal_photo.name)}`);
+  const identificationPhotoName = path.join(identificationPhotosFolder, `${particularId}-${new Date().getTime()}.${getExtension(breedingPhotos.identification_photo.name)}`);
+  const vaccinePassportName = path.join(vaccinesPassportFolder, `${particularId}-${new Date().getTime()}.${getExtension(breedingPhotos.vaccine_passport.name)}`);
 
   savePhoto(breedingPhotos.animal_photo, animalPhotoName);
   savePhoto(breedingPhotos.identification_photo, identificationPhotoName);
   savePhoto(breedingPhotos.vaccine_passport, vaccinePassportName);
 
+  // Genre, age and breed not required during creation
   const pubData = {
     animal_photo: animalPhotoName,
     identification_photo: identificationPhotoName,
     document_status: 'In revision',
-    age: breedingData.age,
-    genre: breedingData.genre,
-    breed: breedingData.breed,
+    // age: breedingData.age,
+    // genre: breedingData.genre,
+    // breed: breedingData.breed,
     transaction_status: 'In progress',
     title: breedingData.title,
     particular_id: particularId,
@@ -89,62 +92,55 @@ exports.getMyFavoriteBreedings = async (connection, userId) => {
 };
 
 exports.imInterested = async (userId, breedingId, trx) => {
-  
   // Se comprueba que no se hace
   const pub = await trx('publication')
-  .join('breeding', 'breeding.publication_id', '=', 'publication.id')
-  .where({'breeding.id': breedingId})
-  .first();
+      .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+      .where({'breeding.id': breedingId})
+      .first();
 
-  if(pub.particular_id === userId){
+  if (pub.particular_id === userId) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not make your own publications favorite';
     throw error;
-    
   }
 
   // Se comprueba que esta publicacion no este en los favoritos del particular
   const rqt = await trx('request')
-  .where({publication_id: pub.publication_id})
-  .andWhere({particular_id: userId})
-  .first();
+      .where({publication_id: pub.publication_id})
+      .andWhere({particular_id: userId})
+      .first();
 
-  if(rqt && rqt.is_favorite){
+  if (rqt && rqt.is_favorite) {
     const error = new Error();
     error.status = 404;
     error.message = 'Already favorite';
     throw error;
-    
   }
 
   const wrongPub = await trx('publication')
-  .join('breeding', 'breeding.publication_id', '=', 'publication.id')
-  .where({'publication.document_status': 'Accepted'})
-  .andWhere({'publication.transaction_status': 'In progress'})
-  .andWhere({'breeding.id': breedingId});
+      .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+      .where({'publication.document_status': 'Accepted'})
+      .andWhere({'publication.transaction_status': 'In progress'})
+      .andWhere({'breeding.id': breedingId});
 
-  if(wrongPub.length == 0){
+  if (wrongPub.length == 0) {
     const error = new Error();
     error.status = 404;
     error.message = 'The publication documents or status are wrong';
     throw error;
-    
   }
-  
-  if(rqt){
 
+  if (rqt) {
     await trx('request')
-    .where({id: rqt.id})
-    .update({
-      is_favorite: true
-    });
+        .where({id: rqt.id})
+        .update({
+          is_favorite: true,
+        });
 
     return await trx('request')
-    .where({id: rqt.id}).first();
-
-  }else{
-
+        .where({id: rqt.id}).first();
+  } else {
     const rqtData = {
       status: 'Favorite',
       is_favorite: true,
@@ -154,7 +150,7 @@ exports.imInterested = async (userId, breedingId, trx) => {
 
     const requestId = await trx('request').insert(rqtData);
     return await trx('request')
-    .where({id: requestId}).first();
+        .where({id: requestId}).first();
   }
 
   // Comprobar que la request no sea del propia usuario y que sea visible para todo el mundo

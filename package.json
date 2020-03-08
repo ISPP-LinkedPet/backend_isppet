@@ -23,7 +23,8 @@
     "knex": "^0.20.10",
     "morgan": "^1.9.1",
     "mysql": "^2.18.1",
-    "mysql2": "^2.1.0"
+    "mysql2": "^2.1.0",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "eslint": "^6.8.0",

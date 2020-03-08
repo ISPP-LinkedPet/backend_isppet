@@ -34,9 +34,9 @@ exports.createBreading = async (req, res) => {
     if (
       !breedingPhotos.animal_photo ||
       !breedingPhotos.identification_photo ||
-      !breedingData.age ||
-      !breedingData.genre ||
-      !breedingData.breed ||
+      // breedingData.age ||
+      // breedingData.genre ||
+      // breedingData.breed ||
       !breedingData.title ||
       !breedingPhotos.vaccine_passport ||
       !breedingData.price ||
@@ -90,9 +90,8 @@ exports.getMyFavoriteBreedings = async (req, res) => {
 exports.imInterested = async (req, res) => {
   const connection = req.connection;
   const trx = await connection.transaction();
- 
+
   try {
- 
     // authorization
     const userId = req.user.id;
     const breedingId = req.params.id;
@@ -102,14 +101,13 @@ exports.imInterested = async (req, res) => {
 
     // Ver el formato en el que mandar los mensajes
     return res.status(200).send(request);
-  }catch(error){
-
+  } catch (error) {
     trx.rollback();
 
     if (error.status && error.message) {
       return res.status(error.status).send({error: error.message});
     }
-    
+
     return res.status(500).send({error});
   }
 };

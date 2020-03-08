@@ -47,6 +47,9 @@ app.use('/auth', authRouter);
 app.use('/shelter', shelterRouter);
 app.use('/adoption', adoptionRouter);
 
+// Ruta pública para acceder a las imágenes
+app.use(express.static('public'));
+
 // server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
