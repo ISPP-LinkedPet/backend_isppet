@@ -4,7 +4,7 @@ const breedingController = require('../controllers/breeding');
 const authorization = require('../authorization/index');
 
 router.get('/favorites', authorization.all, (req, res) => breedingController.getMyFavoriteBreedings(req, res));
-router.post('/', authorization.all, (req, res) => breedingController.createBreading(req, res));
-router.get('/:id', authorization.all, (req, res) => breedingController.getBreeding(req, res));
+router.post('/', authorization.particular, breedingController.createBreading);
+router.get('/:id', breedingController.getBreeding);
 
 module.exports = router;

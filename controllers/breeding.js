@@ -5,53 +5,59 @@ exports.getBreeding = async (req, res) => {
     const connection = req.connection;
 
     // params
-    const breadingId = req.params.id || 0;
-    if (isNaN(breadingId)) {
-      return res.status(400).send('ID must be a number');
+    const breedingId = req.params.id;
+    if (isNaN(breedingId)) {
+      return res.status(400).send({error: 'ID must be a number'});
     }
 
-    const breeding = await breedingService.getBreeding(connection, breadingId);
-
-    return res.status(200).send(breeding);
+    const breeding = await breedingService.getBreeding(connection, breedingId);
+    return res.status(200).send({breeding});
   } catch (error) {
-    console.log(error);
-    if (error.status && error.message) return res.status(error.status).send(error.message);
-    return res.status(500).send(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
   }
 };
 
 exports.createBreading = async (req, res) => {
   try {
     const connection = req.connection;
+    const particularId = req.user.id;
+    console.log(particularId);
 
     // body
     const breedingData = req.body;
     if (
-      !breedingData.animal_photo || !breedingData.identification_photo ||
-      !breedingData.age || !breedingData.genre || !breedingData.breed ||
-      !breedingData.title || !breedingData.vaccine_passport || !breedingData.price
+      !breedingData.animal_photo ||
+      !breedingData.identification_photo ||
+      !breedingData.age ||
+      !breedingData.genre ||
+      !breedingData.breed ||
+      !breedingData.title ||
+      !breedingData.vaccine_passport ||
+      !breedingData.price ||
+      !particularId
     ) {
-      return res.status(400).send('Params invalid');
+      return res.status(400).send({error: 'Invalid params'});
     }
 
     // create transaction
     const trx = await connection.transaction();
 
-    const breeding = await breedingService.createBreeding(
-        breedingData,
-        trx,
-    );
+    const breeding = await breedingService.createBreeding(breedingData, particularId, trx);
 
     // commit
     trx.commit();
 
-    return res.status(200).send(breeding);
+    return res.status(200).send({breeding});
   } catch (error) {
-    console.log(error);
     // rollback
     trx.rollback();
-    if (error.status && error.message) return res.status(error.status).send(error.message);
-    return res.status(500).send(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
   }
 };
 
@@ -63,12 +69,17 @@ exports.getMyFavoriteBreedings = async (req, res) => {
     const userId = req.user.id;
     const role = req.user.role;
 
-    const breedings = await breedingService.getMyFavoriteBreedings(connection, userId);
+    const breedings = await breedingService.getMyFavoriteBreedings(
+        connection,
+        userId,
+    );
 
     return res.status(200).send(breedings);
   } catch (error) {
     console.log(error);
-    if (error.status && error.message) return res.status(error.status).send(error.message);
+    if (error.status && error.message) {
+      return res.status(error.status).send(error.message);
+    }
     return res.status(500).send(error);
   }
 };
