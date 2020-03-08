@@ -13,6 +13,10 @@ const breedingFields = ['breeding.id',
   'price',
   'vaccine_passport'];
 
+const animalPhotosFolder = 'images/animal_photos/';
+const identificationPhotosFolder = 'images/identification_photos/';
+const vaccinesPassportFolder = 'images/vaccines_passports/';
+
 exports.getBreeding = async (connection, breedingId) => {
   const breeding = await connection('breeding')
       .select(breedingFields)
@@ -30,18 +34,26 @@ exports.getBreeding = async (connection, breedingId) => {
   return breeding;
 };
 
-exports.createBreeding = async (breedingData, particularId, trx) => {
+exports.createBreeding = async (breedingData, breedingPhotos, particularId, trx) => {
+  const animalPhotoName = `${animalPhotosFolder}${particularId}-${new Date().getTime()}.${getExtension(breedingPhotos.animal_photo.name)}`;
+  const identificationPhotoName = `${identificationPhotosFolder}${particularId}-${new Date().getTime()}.${getExtension(breedingPhotos.identification_photo.name)}`;
+  const vaccinePassportName = `${vaccinesPassportFolder}${particularId}-${new Date().getTime()}.${getExtension(breedingPhotos.vaccine_passport.name)}`;
+
+  savePhoto(breedingPhotos.animal_photo, animalPhotoName);
+  savePhoto(breedingPhotos.identification_photo, identificationPhotoName);
+  savePhoto(breedingPhotos.vaccine_passport, vaccinePassportName);
+
   const pubData = {
-    animal_photo: breedingData.animal_photo,
-    identification_photo: breedingData.identification_photo,
+    animal_photo: animalPhotoName,
+    identification_photo: identificationPhotoName,
     document_status: 'In revision',
     age: breedingData.age,
     genre: breedingData.genre,
     breed: breedingData.breed,
     transaction_status: 'In progress',
     title: breedingData.title,
-    particular_id: particularId, // Hay que pillarlo
-    vaccine_passport: breedingData.vaccine_passport,
+    particular_id: particularId,
+    vaccine_passport: vaccinePassportName,
   };
 
   const publicationId = await trx('publication').insert(pubData);
@@ -74,4 +86,13 @@ exports.getMyFavoriteBreedings = async (connection, userId) => {
       .andWhere({'request.is_favorite': true});
 
   return breedings;
+};
+
+const savePhoto = async (photo, photoRoute) => {
+  await photo.mv(`./${photoRoute}`);
+};
+
+const getExtension = (photo) => {
+  // Hay que ver qué extensiones son válidas
+  return photo.split('.').pop();
 };

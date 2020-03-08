@@ -1,14 +1,17 @@
 const express = require('express');
-const app = express();
 const knex = require('knex');
 const morgan = require('morgan');
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 require('dotenv').config();
+
 // routers
 const breedingRouter = require('./routers/breeding');
 const shelterRouter = require('./routers/shelter');
 const adoptionRouter = require('./routers/adoption');
 const authRouter = require('./routers/auth');
+
+const app = express();
 
 // database
 const connection = {
@@ -26,6 +29,7 @@ exports.connection = connection;
 // middleware
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+app.use(fileUpload());
 app.use(
     cors({
       origin: '*',

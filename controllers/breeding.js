@@ -24,18 +24,21 @@ exports.createBreading = async (req, res) => {
   try {
     const connection = req.connection;
     const particularId = req.user.id;
-    console.log(particularId);
 
     // body
     const breedingData = req.body;
+
+    // photos
+    const breedingPhotos = req.files;
+
     if (
-      !breedingData.animal_photo ||
-      !breedingData.identification_photo ||
+      !breedingPhotos.animal_photo ||
+      !breedingPhotos.identification_photo ||
       !breedingData.age ||
       !breedingData.genre ||
       !breedingData.breed ||
       !breedingData.title ||
-      !breedingData.vaccine_passport ||
+      !breedingPhotos.vaccine_passport ||
       !breedingData.price ||
       !particularId
     ) {
@@ -45,7 +48,7 @@ exports.createBreading = async (req, res) => {
     // create transaction
     const trx = await connection.transaction();
 
-    const breeding = await breedingService.createBreeding(breedingData, particularId, trx);
+    const breeding = await breedingService.createBreeding(breedingData, breedingPhotos, particularId, trx);
 
     // commit
     trx.commit();
