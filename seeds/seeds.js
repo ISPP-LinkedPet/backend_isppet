@@ -86,7 +86,8 @@ exports.seed = async (knex) => {
     {
       id: 7,
       user_name: 'ejemplo7',
-      password: 'ejemplo7',
+      password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a', // hola
+      role: 'moderator',
       activate: true,
       name: 'Ejemplo7',
       email_adress: 'ejemplo7@gmail.com',
