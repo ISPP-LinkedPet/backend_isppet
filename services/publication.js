@@ -1,11 +1,19 @@
 exports.getPublications = async (connection, actorId) => {
   try {
-    const publications = await connection('publication')
-        .innerJoin('publication', 'breeding.publication_id', '=', 'publication.id')
-        .where('publication.id', publicationId)
-        .first();
-
-    if (!publications) {
+    const breedings = await connection('publication')
+        .innerJoin('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where('publication.particular_id', actorId);
+    const adoptionsP = await connection('publication')
+        .innerJoin('adoption', 'adoption.publication_id', '=', 'publication.id')
+        .where('publication.particular_id', actorId);
+    const adoptionsS = await connection('adoption')
+        .innerJoin('publication', 'adoption.publication_id', '=', 'publication.id')
+        .where('adoption.shelter_id', actorId);
+    const publications = [];
+    publications.push(...breedings);
+    publications.push(...adoptionsP);
+    publications.push(...adoptionsS);
+    if (!breedings || !adoptionsP || !adoptionsS) {
       const error = new Error();
       error.status = 400;
       error.message = 'No actor with that ID';
