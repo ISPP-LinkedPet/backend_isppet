@@ -12,9 +12,10 @@ exports.getBreeding = async (req, res) => {
 };
 
 exports.getBreedingsOffers = async (req, res) => {
+  const breedingParams = req.query;
   const connection = req.connection;
   try {
-    const breedings = await breedingService.getBreedingsOffers(connection);
+    const breedings = await breedingService.getBreedingsOffers(breedingParams, connection);
     return res.status(200).send(breedings);
   } catch (error) {
     return res.status(400).send(error);
