@@ -87,8 +87,7 @@ exports.up = (knex) => {
           table.boolean('pedigree');
           table
               .integer('particular_id')
-              .unsigned()
-              .notNullable();
+              .unsigned();
           table
               .foreign('particular_id')
               .references('id')
@@ -174,13 +173,11 @@ exports.up = (knex) => {
               .inTable('publication');
           table
               .integer('shelter_id')
-              .unsigned()
-              .notNullable();
+              .unsigned();
           table
               .foreign('shelter_id')
               .references('id')
               .inTable('shelter');
-          table.unique('shelter_id');
         })
 
     // vet

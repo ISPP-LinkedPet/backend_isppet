@@ -36,7 +36,6 @@ exports.createAdoption = async (adoptionData, adoptionPhotos, shelterId, trx) =>
     document_status: 'In revision',
     transaction_status: 'In progress',
     title: adoptionData.title,
-    shelter_id: shelterId,
     vaccine_passport: vaccinePassportName,
     type: adoptionData.type,
     location: adoptionData.location,
@@ -48,6 +47,7 @@ exports.createAdoption = async (adoptionData, adoptionPhotos, shelterId, trx) =>
     publication_id: publicationId,
     name: adoptionData.name,
     taxes: adoptionData.taxes,
+    shelter_id: shelterId,
   });
 
   return await trx('adoption')
