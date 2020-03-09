@@ -21,12 +21,14 @@ exports.getParticularAdoptions = async (req, res) => {
 exports.createAdoption = async (req, res) => {
   const connection = req.connection;
   const trx = await connection.transaction();
-
   try {
     const shelterId = req.user.id;
 
     const adoptionData = req.body;
     const adoptionPhotos = req.files;
+
+    console.log({adoptionData});
+    console.log({adoptionPhotos});
 
     if (
       !adoptionPhotos.animal_photo ||
@@ -42,6 +44,8 @@ exports.createAdoption = async (req, res) => {
     }
 
     const adoption = await adoptionService.createAdoption(adoptionData, adoptionPhotos, shelterId, trx);
+
+    console.log('Error');
 
     trx.commit();
 
