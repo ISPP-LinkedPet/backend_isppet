@@ -201,7 +201,7 @@ exports.seed = async (knex) => {
       age: 8,
       genre: 'Male',
       breed: 'Doberman',
-      transaction_status: 'In progress',
+      transaction_status: null,
       title: 'Example breeding 1',
       type: 'Dog',
       location: 'Avda. ejemplo, 1',

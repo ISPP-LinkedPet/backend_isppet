@@ -45,7 +45,9 @@ exports.createBreeding = async (breedingData, trx) => {
 };
 
 exports.getMyFavoriteBreedings = async (connection, userId) => {
-  const user = await connection('particular').select('id').where({user_account_id: userId}).first();
+  const user = await connection('user_account').select('id')
+      .where('user_account.id', userId).andWhere('user_account.role', 'particular').first();
+
   if (!user) {
     const error = new Error();
     error.status = 404;
@@ -56,9 +58,45 @@ exports.getMyFavoriteBreedings = async (connection, userId) => {
   const breedings = await connection('breeding')
       .join('publication', 'breeding.publication_id', '=', 'publication.id')
       .join('particular', 'particular.id', '=', 'publication.particular_id')
-      .join('request', 'request.particular_id', '=', 'particular.id')
-      .where({'particular.id': user.id})
-      .andWhere({'request.is_favorite': true});
+      .join('request', 'request.particular_id', '=', 'particular.id') // no va pq el user no tiene request
+      .where('particular.id', user.id);
 
+  return breedings;
+};
+
+exports.getBreedingsOffers = async (breedingParams, connection, userId) => {
+  const user = await connection('user_account').select('id')
+      .where('user_account.id', userId).andWhere('user_account.role', 'particular').first();
+  if (!user) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Not found user';
+    throw error;
+  }
+  const location = breedingParams.location;
+  const age = breedingParams.age;
+  const type = breedingParams.type;
+  const breed = breedingParams.breed;
+  const pedigree = breedingParams.pedigree;
+  const breedings = await connection('breeding')
+      .join('publication', 'breeding.publication_id', '=', 'publication.id')
+      .where('publication.document_status', 'Accepted')
+      .andWhere('publication.transaction_status', 'In progress').modify(function(queryBuilder) {
+        if (location) {
+          queryBuilder.andWhere('publication.location', 'like', `%${location}%`);
+        }
+        if (age) {
+          queryBuilder.andWhere('publication.age', age);
+        }
+        if (type) {
+          queryBuilder.andWhere('publication.type', 'like', `%${type}%`);
+        }
+        if (breed) {
+          queryBuilder.andWhere('publication.breed', 'like', `%${breed}%`);
+        }
+        if (pedigree) {
+          queryBuilder.andWhere('publication.pedigree', pedigree);
+        }
+      });
   return breedings;
 };
