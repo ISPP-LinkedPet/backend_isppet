@@ -1,6 +1,6 @@
 const path = require('path');
 
-const breedingFields = ['breeding.id',
+const BREEDING_FIELDS = ['breeding.id',
   'publication_id',
   'particular_id',
   'creation_date',
@@ -15,13 +15,15 @@ const breedingFields = ['breeding.id',
   'price',
   'vaccine_passport'];
 
-const animalPhotosFolder = path.join('public', 'images', 'animal_photos');
-const identificationPhotosFolder = path.join('public', 'images', 'identification_photos');
-const vaccinesPassportFolder = path.join('public', 'images', 'vaccines_passports');
+const ANIMAL_FOLDER = path.join('images', 'animal_photos');
+const IDENTIFICATION_FOLDER = path.join('images', 'identification_photos');
+const VACCINES_FOLDER = path.join('images', 'vaccines_passports');
+
+const ALLOWED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
 
 exports.getBreeding = async (connection, breedingId) => {
   const breeding = await connection('breeding')
-      .select(breedingFields)
+      .select(BREEDING_FIELDS)
       .join('publication', 'breeding.publication_id', '=', 'publication.id')
       .where('breeding.id', breedingId)
       .first();
@@ -37,9 +39,9 @@ exports.getBreeding = async (connection, breedingId) => {
 };
 
 exports.createBreeding = async (breedingData, breedingPhotos, particularId, trx) => {
-  const animalPhotoName = path.join(animalPhotosFolder, `${particularId}-${new Date().getTime()}.${getExtension(breedingPhotos.animal_photo.name)}`);
-  const identificationPhotoName = path.join(identificationPhotosFolder, `${particularId}-${new Date().getTime()}.${getExtension(breedingPhotos.identification_photo.name)}`);
-  const vaccinePassportName = path.join(vaccinesPassportFolder, `${particularId}-${new Date().getTime()}.${getExtension(breedingPhotos.vaccine_passport.name)}`);
+  const animalPhotoName = path.join(ANIMAL_FOLDER, `${particularId}-${new Date().getTime()}.${getExtension(breedingPhotos.animal_photo.name)}`);
+  const identificationPhotoName = path.join(IDENTIFICATION_FOLDER, `${particularId}-${new Date().getTime()}.${getExtension(breedingPhotos.identification_photo.name)}`);
+  const vaccinePassportName = path.join(VACCINES_FOLDER, `${particularId}-${new Date().getTime()}.${getExtension(breedingPhotos.vaccine_passport.name)}`);
 
   savePhoto(breedingPhotos.animal_photo, animalPhotoName);
   savePhoto(breedingPhotos.identification_photo, identificationPhotoName);
@@ -67,7 +69,7 @@ exports.createBreeding = async (breedingData, breedingPhotos, particularId, trx)
 
   return await trx('breeding')
       .join('publication', 'breeding.publication_id', '=', 'publication.id')
-      .select(breedingFields)
+      .select(BREEDING_FIELDS)
       .where({'breeding.id': breedingId})
       .first();
 };
@@ -157,11 +159,17 @@ exports.imInterested = async (userId, breedingId, trx) => {
 };
 
 const savePhoto = async (photo, photoRoute) => {
-  await photo.mv(`./${photoRoute}`);
+  await photo.mv(path.join('public', photoRoute));
 };
 
 const getExtension = (photo) => {
-  // Hay que ver qué extensiones son válidas
+  const extension = photo.split('.').pop();
+  if (!ALLOWED_EXTENSIONS.includes(extension)) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'No valid extension';
+    throw error;
+  }
   return photo.split('.').pop();
 };
 
