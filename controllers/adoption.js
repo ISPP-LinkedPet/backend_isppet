@@ -19,8 +19,10 @@ exports.getParticularAdoptions = async (req, res) => {
 };
 
 exports.createAdoption = async (req, res) => {
+  const connection = req.connection;
+  const trx = await connection.transaction();
+
   try {
-    const connection = req.connection;
     const shelterId = req.user.id;
 
     const adoptionData = req.body;
@@ -39,7 +41,6 @@ exports.createAdoption = async (req, res) => {
       return res.status(400).send({error: 'Invalid params'});
     }
 
-    const trx = await connection.transaction();
     const adoption = await adoptionService.createAdoption(adoptionData, adoptionPhotos, shelterId, trx);
 
     trx.commit();

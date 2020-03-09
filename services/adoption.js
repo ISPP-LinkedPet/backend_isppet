@@ -9,9 +9,12 @@ exports.getParticularAdoptions = async (connection, page) => {
 };
 
 exports.createAdoption = async (adoptionData, adoptionPhotos, shelterId, trx) => {
+  console.log('Hola 1');
   const animalPhotoName = path.join(animalPhotosFolder, `${shelterId}-${new Date().getTime()}.${getExtension(adoptionPhotos.animal_photo.name)}`);
   const identificationPhotoName = path.join(identificationPhotosFolder, `${shelterId}-${new Date().getTime()}.${getExtension(adoptionPhotos.identification_photo.name)}`);
   const vaccinePassportName = path.join(vaccinesPassportFolder, `${shelterId}-${new Date().getTime()}.${getExtension(adoptionPhotos.vaccine_passport.name)}`);
+
+  console.log('Hola 1');
 
   const pubData = {
     animal_photo: animalPhotoName,
@@ -25,8 +28,9 @@ exports.createAdoption = async (adoptionData, adoptionPhotos, shelterId, trx) =>
     location: adoptionData.location,
     pedigree: adoptionData.pedigree,
   };
-
+  console.log('Hola');
   const publicationId = await trx('publication').insert(pubData);
+  console.log('Hola 2');
   const adoptionId = await trx('adoption').insert({
     publication_id: publicationId,
     name: adoptionData.name,
