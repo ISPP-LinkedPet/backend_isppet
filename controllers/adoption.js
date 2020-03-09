@@ -17,3 +17,40 @@ exports.getParticularAdoptions = async (req, res) => {
     return res.status(500).send(error);
   }
 };
+
+exports.createAdoption = async (req, res) => {
+  try {
+    const connection = req.connection;
+    const shelterId = req.user.id;
+
+    const adoptionData = req.body;
+    const adoptionPhotos = req.files;
+
+    if (
+      !adoptionPhotos.animal_photo ||
+      !adoptionPhotos.identification_photo ||
+      !adoptionData.title ||
+      !adoptionPhotos.vaccine_passport ||
+      !adoptionData.type ||
+      !adoptionData.location ||
+      !adoptionData.pedigree ||
+      !shelterId
+    ) {
+      return res.status(400).send({error: 'Invalid params'});
+    }
+
+    const trx = await connection.transaction();
+    const adoption = await adoptionService.createAdoption(adoptionData, adoptionPhotos, shelterId, trx);
+
+    trx.commit();
+
+    return res.status(200).send({adoption});
+  } catch (error) {
+    trx.rollback();
+
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
