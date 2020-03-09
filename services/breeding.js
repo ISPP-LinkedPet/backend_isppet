@@ -1,4 +1,6 @@
 const path = require('path');
+const fs = require('fs');
+const {v4: uuidv4} = require('uuid');
 
 const BREEDING_FIELDS = ['breeding.id',
   'publication_id',
@@ -39,39 +41,111 @@ exports.getBreeding = async (connection, breedingId) => {
 };
 
 exports.createBreeding = async (breedingData, breedingPhotos, particularId, trx) => {
-  const animalPhotoName = path.join(ANIMAL_FOLDER, `${particularId}-${new Date().getTime()}.${getExtension(breedingPhotos.animal_photo.name)}`);
-  const identificationPhotoName = path.join(IDENTIFICATION_FOLDER, `${particularId}-${new Date().getTime()}.${getExtension(breedingPhotos.identification_photo.name)}`);
-  const vaccinePassportName = path.join(VACCINES_FOLDER, `${particularId}-${new Date().getTime()}.${getExtension(breedingPhotos.vaccine_passport.name)}`);
+  const allPhotos = [];
 
-  savePhoto(breedingPhotos.animal_photo, animalPhotoName);
-  savePhoto(breedingPhotos.identification_photo, identificationPhotoName);
-  savePhoto(breedingPhotos.vaccine_passport, vaccinePassportName);
+  try {
+    // Mínimo 2 fotos del animal
+    const savedAnimalPhotos = [];
+    if (breedingPhotos.animal_photo && breedingPhotos.animal_photo.length >= 2) {
+      breedingPhotos.animal_photo.forEach((photo) => {
+        const photoName = path.join(ANIMAL_FOLDER, `${uuidv4()}.${getExtension(photo.name)}`);
+        savePhoto(photo, photoName);
+        savedAnimalPhotos.push(photoName);
+      });
+    } else {
+      const error = new Error();
+      error.status = 400;
+      error.message = 'It is required to upload at least two photos of the animal';
+      throw error;
+    }
 
-  // Genre, age and breed not required during creation
-  const pubData = {
-    animal_photo: animalPhotoName,
-    identification_photo: identificationPhotoName,
-    document_status: 'In revision',
-    // age: breedingData.age,
-    // genre: breedingData.genre,
-    // breed: breedingData.breed,
-    transaction_status: 'In progress',
-    title: breedingData.title,
-    particular_id: particularId,
-    vaccine_passport: vaccinePassportName,
-  };
+    allPhotos.push(...savedAnimalPhotos);
 
-  const publicationId = await trx('publication').insert(pubData);
-  const breedingId = await trx('breeding').insert({
-    publication_id: publicationId,
-    price: breedingData.price,
-  });
+    // Mínimo una foto identificativa
+    const savedIdentificationPhotos = [];
+    if (breedingPhotos.identification_photo) {
+      if (Array.isArray(breedingPhotos.identification_photo)) {
+        breedingPhotos.identification_photo.forEach((photo) => {
+          const photoName = path.join(IDENTIFICATION_FOLDER, `${uuidv4()}.${getExtension(photo.name)}`);
+          savePhoto(photo, photoName);
+          savedIdentificationPhotos.push(photoName);
+        });
+      } else {
+        const photoName = path.join(IDENTIFICATION_FOLDER, `${uuidv4()}.${getExtension(breedingPhotos.identification_photo.name)}`);
+        savePhoto(breedingPhotos.identification_photo, photoName);
+        savedIdentificationPhotos.push(photoName);
+      }
+    } else {
+      const error = new Error();
+      error.status = 400;
+      error.message = 'It is required to upload at least one identification photo';
+      throw error;
+    }
 
-  return await trx('breeding')
-      .join('publication', 'breeding.publication_id', '=', 'publication.id')
-      .select(BREEDING_FIELDS)
-      .where({'breeding.id': breedingId})
-      .first();
+    allPhotos.push(...savedIdentificationPhotos);
+
+    // Mínimo una foto de las vacunas
+    const savedVaccinePhotos = [];
+    if (breedingPhotos.vaccine_passport) {
+      if (Array.isArray(breedingPhotos.vaccine_passport)) {
+        breedingPhotos.vaccine_passport.forEach((photo) => {
+          const photoName = path.join(VACCINES_FOLDER, `${uuidv4()}.${getExtension(photo.name)}`);
+          savePhoto(photo, photoName);
+          savedVaccinePhotos.push(photoName);
+        });
+      } else {
+        const photoName = path.join(VACCINES_FOLDER, `${uuidv4()}.${getExtension(breedingPhotos.vaccine_passport.name)}`);
+        savePhoto(breedingPhotos.vaccine_passport, photoName);
+        savedVaccinePhotos.push(photoName);
+      }
+    } else {
+      const error = new Error();
+      error.status = 400;
+      error.message = 'It is required to upload at least one photo of the vaccine passport';
+      throw error;
+    }
+
+    allPhotos.push(...savedVaccinePhotos);
+
+    // Genre, age and breed not required during creation
+    const pubData = {
+      animal_photo: savedAnimalPhotos.join(','),
+      identification_photo: savedIdentificationPhotos.join(','),
+      document_status: 'In revision',
+      // age: breedingData.age,
+      // genre: breedingData.genre,
+      // breed: breedingData.breed,
+      transaction_status: 'In progress',
+      title: breedingData.title,
+      particular_id: particularId,
+      vaccine_passport: savedVaccinePhotos.join(','),
+    };
+
+    const publicationId = await trx('publication').insert(pubData);
+    const breedingId = await trx('breeding').insert({
+      publication_id: publicationId,
+      price: breedingData.price,
+    });
+
+    return await trx('breeding')
+        .join('publication', 'breeding.publication_id', '=', 'publication.id')
+        .select(BREEDING_FIELDS)
+        .where({'breeding.id': breedingId})
+        .first();
+  } catch (error) {
+    // Borramos las fotos guardadas en caso de error
+    allPhotos.forEach((photo) => {
+      console.log(photo);
+      fs.unlink(path.join('public', photo), (err) => {
+        // nothing to do
+      });
+    });
+
+    if (error.status && error.message) {
+      throw error;
+    }
+    throw error;
+  }
 };
 
 exports.getMyFavoriteBreedings = async (connection, userId) => {

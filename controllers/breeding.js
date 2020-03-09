@@ -21,22 +21,17 @@ exports.getBreeding = async (req, res) => {
 };
 
 exports.createBreading = async (req, res) => {
+  const trx = await req.connection.transaction();
+
   try {
-    const connection = req.connection;
     const particularId = req.user.id;
-
-    // body
     const breedingData = req.body;
-
-    // photos
     const breedingPhotos = req.files;
 
+    // breed, age and genre not required during creation
     if (
       !breedingPhotos.animal_photo ||
       !breedingPhotos.identification_photo ||
-      // breedingData.age ||
-      // breedingData.genre ||
-      // breedingData.breed ||
       !breedingData.title ||
       !breedingPhotos.vaccine_passport ||
       !breedingData.price ||
@@ -45,17 +40,10 @@ exports.createBreading = async (req, res) => {
       return res.status(400).send({error: 'Invalid params'});
     }
 
-    // create transaction
-    const trx = await connection.transaction();
-
     const breeding = await breedingService.createBreeding(breedingData, breedingPhotos, particularId, trx);
-
-    // commit
     trx.commit();
-
     return res.status(200).send({breeding});
   } catch (error) {
-    // rollback
     trx.rollback();
     if (error.status && error.message) {
       return res.status(error.status).send({error: error.message});
