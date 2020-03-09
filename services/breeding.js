@@ -135,15 +135,10 @@ exports.createBreeding = async (breedingData, breedingPhotos, particularId, trx)
   } catch (error) {
     // Borramos las fotos guardadas en caso de error
     allPhotos.forEach((photo) => {
-      console.log(photo);
       fs.unlink(path.join('public', photo), (err) => {
         // nothing to do
       });
     });
-
-    if (error.status && error.message) {
-      throw error;
-    }
     throw error;
   }
 };
