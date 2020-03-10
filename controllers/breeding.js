@@ -4,7 +4,6 @@ exports.getBreeding = async (req, res) => {
   try {
     const connection = req.connection;
 
-    // params
     const breedingId = req.params.id;
     if (isNaN(breedingId)) {
       return res.status(400).send({error: 'ID must be a number'});
@@ -28,13 +27,15 @@ exports.createBreading = async (req, res) => {
     const breedingData = req.body;
     const breedingPhotos = req.files;
 
-    // breed, age and genre not required during creation
+    // breed, age, pedigree and genre not required during creation
     if (
       !breedingPhotos.animal_photo ||
       !breedingPhotos.identification_photo ||
       !breedingData.title ||
       !breedingPhotos.vaccine_passport ||
       !breedingData.price ||
+      !breedingData.location ||
+      !breedingData.type ||
       !particularId
     ) {
       return res.status(400).send({error: 'Invalid params'});
