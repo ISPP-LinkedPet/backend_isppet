@@ -170,7 +170,7 @@ exports.getPendingAdoptions = async (connection, userId) => {
   }
 
   const adoptions = await connection('adoption')
-    .join('publication', 'adoption.publication_id', '=', 'publication.id')
-    .where({ 'publication.document_status': 'In revision' });
+      .join('publication', 'adoption.publication_id', '=', 'publication.id')
+      .where( 'pblication.document_status', 'In revision');
   return adoptions;
 };

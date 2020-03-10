@@ -15,6 +15,9 @@ const BREEDING_FIELDS = ['breeding.id',
   'transaction_status',
   'title',
   'price',
+  'location',
+  'pedigree',
+  'type',
   'vaccine_passport'];
 
 const ANIMAL_FOLDER = path.join('images', 'animal_photos');
@@ -107,14 +110,18 @@ exports.createBreeding = async (breedingData, breedingPhotos, particularId, trx)
 
     allPhotos.push(...savedVaccinePhotos);
 
-    // Genre, age and breed not required during creation
+    // Some values are not required during creation
+    // Moderators will modify the breeding publication
     const pubData = {
       animal_photo: savedAnimalPhotos.join(','),
       identification_photo: savedIdentificationPhotos.join(','),
       document_status: 'In revision',
-      // age: breedingData.age,
-      // genre: breedingData.genre,
-      // breed: breedingData.breed,
+      age: breedingData.age || null,
+      genre: breedingData.genre || null,
+      breed: breedingData.breed || null,
+      location: breedingData.location || null,
+      type: breedingData.type || null,
+      pedigree: breedingData.pedigree || null,
       transaction_status: 'In progress',
       title: breedingData.title,
       particular_id: particularId,
@@ -246,7 +253,7 @@ exports.getPendingBreedings = async (connection, userId) => {
 };
 
 exports.imInterested = async (userId, breedingId, trx) => {
-  // Se comprueba que no se hace
+  // Se comprueba que no se intenta estar interesado en una publicacion propia
   const pub = await trx('publication')
       .join('breeding', 'breeding.publication_id', '=', 'publication.id')
       .where({'breeding.id': breedingId})
@@ -255,23 +262,24 @@ exports.imInterested = async (userId, breedingId, trx) => {
   if (pub.particular_id === userId) {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not make your own publications favorite';
+    error.message = 'You can not be interested in your own publications';
     throw error;
   }
 
-  // Se comprueba que esta publicacion no este en los favoritos del particular
+  // Se comprueba que esta publicacion no este con una request pendiente del usuario actual
   const rqt = await trx('request')
       .where({publication_id: pub.publication_id})
       .andWhere({particular_id: userId})
       .first();
 
-  if (rqt && rqt.is_favorite) {
+  if (rqt && rqt.status === 'Pending') {
     const error = new Error();
     error.status = 404;
-    error.message = 'Already favorite';
+    error.message = 'Already interested or concluded';
     throw error;
   }
 
+  // Se comprueba que esta publicacion tenga los documentos verificados y todavia este en progreso
   const wrongPub = await trx('publication')
       .join('breeding', 'breeding.publication_id', '=', 'publication.id')
       .where({'publication.document_status': 'Accepted'})
@@ -289,14 +297,13 @@ exports.imInterested = async (userId, breedingId, trx) => {
     await trx('request')
         .where({id: rqt.id})
         .update({
-          is_favorite: true,
+          status: 'Pending',
         });
 
     return await trx('request').where({id: rqt.id}).first();
   } else {
     const rqtData = {
-      status: 'Favorite',
-      is_favorite: true,
+      status: 'Pending',
       publication_id: pub.publication_id,
       particular_id: userId,
     };

@@ -1,9 +1,9 @@
 exports.up = (knex) => {
   return (
     knex.schema
+        .dropTableIfExists('adoption')
         .dropTableIfExists('shelter')
         .dropTableIfExists('administrator')
-        .dropTableIfExists('adoption')
         .dropTableIfExists('breeding')
         .dropTableIfExists('request')
         .dropTableIfExists('publication')
@@ -15,8 +15,16 @@ exports.up = (knex) => {
     // user_account
         .createTable('user_account', function(table) {
           table.increments().primary();
-          table.string('user_name', 100).notNullable().unique('user_name');
-          table.enu('role', ['administrator', 'moderator', 'particular', 'vet', 'shelter']);
+          table
+              .string('user_name', 100)
+              .notNullable()
+              .unique('user_name');
+          table.enu('role', [
+            'administrator',
+            'moderator',
+            'particular',
+            'shelter',
+          ]);
           table.string('password', 70).notNullable();
           table.boolean('activate').notNullable();
           table
@@ -74,10 +82,10 @@ exports.up = (knex) => {
           table.string('breed', 100);
           table.enu('transaction_status', ['In progress', 'Completed']);
           table.string('title', 500);
-          table
-              .integer('particular_id')
-              .unsigned()
-              .notNullable();
+          table.string('type', 100);
+          table.string('location', 500);
+          table.boolean('pedigree');
+          table.integer('particular_id').unsigned();
           table
               .foreign('particular_id')
               .references('id')
@@ -87,8 +95,7 @@ exports.up = (knex) => {
     // request
         .createTable('request', function(table) {
           table.increments().primary();
-          table.enu('status', ['Pending', 'Accepted', 'Rejected', 'Favorite']);
-          table.boolean('is_favorite');
+          table.enu('status', ['Pending', 'Accepted', 'Rejected']);
           table
               .integer('publication_id')
               .unsigned()
@@ -97,7 +104,6 @@ exports.up = (knex) => {
               .foreign('publication_id')
               .references('id')
               .inTable('publication');
-          table.unique('publication_id');
           table
               .integer('particular_id')
               .unsigned()
@@ -136,6 +142,19 @@ exports.up = (knex) => {
               .inTable('publication');
         })
 
+    // shelter
+        .createTable('shelter', function(table) {
+          table.increments().primary();
+          table
+              .integer('user_account_id')
+              .unsigned()
+              .notNullable();
+          table
+              .foreign('user_account_id')
+              .references('id')
+              .inTable('user_account');
+        })
+
     // adoption
         .createTable('adoption', function(table) {
           table.increments().primary();
@@ -149,43 +168,24 @@ exports.up = (knex) => {
               .foreign('publication_id')
               .references('id')
               .inTable('publication');
-        })
-
-    // shelter
-        .createTable('shelter', function(table) {
-          table.increments().primary();
+          table.integer('shelter_id').unsigned();
           table
-              .integer('user_account_id')
-              .unsigned()
-              .notNullable();
-          table
-              .foreign('user_account_id')
+              .foreign('shelter_id')
               .references('id')
-              .inTable('user_account');
-          table
-              .integer('adoption_id')
-              .unsigned()
-              .notNullable();
-          table
-              .foreign('adoption_id')
-              .references('id')
-              .inTable('adoption');
-          table.unique('adoption_id');
+              .inTable('shelter');
+          table.unique('shelter_id');
         })
 
     // vet
         .createTable('vet', function(table) {
           table.increments().primary();
+          table.string('name', 100).notNullable();
           table.string('surname', 200).notNullable();
+          table.string('email_adress', 500).notNullable();
+          table.string('adress', 500).notNullable();
+          table.integer('telephone').notNullable();
+          table.string('optional_photo', 500).nullable();
           table.boolean('is_premium');
-          table
-              .integer('user_account_id')
-              .unsigned()
-              .notNullable();
-          table
-              .foreign('user_account_id')
-              .references('id')
-              .inTable('user_account');
         })
   );
 };
