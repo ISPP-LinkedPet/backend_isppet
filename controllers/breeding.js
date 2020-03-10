@@ -38,8 +38,8 @@ exports.createBreading = async (req, res) => {
     const trx = await connection.transaction();
 
     const breeding = await breedingService.createBreeding(
-        breedingData,
-        trx,
+      breedingData,
+      trx,
     );
 
     // commit
@@ -73,14 +73,34 @@ exports.getMyFavoriteBreedings = async (req, res) => {
   }
 };
 
-exports.getBreedingsOffers = async (req, res) => {
+exports.getPendingBreedings = async (req, res) => {
   try {
+    const connection = req.connection;
+
     // authorization
     const userId = req.user.id;
 
+    const breedings = await breedingService.getPendingBreedings(connection, userId);
+
+    return res.status(200).send(breedings);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) return res.status(error.status).send(error.message);
+    return res.status(500).send(error);
+  }
+};
+
+exports.getBreedingsOffers = async (req, res) => {
+  const connection = req.connection;
+  try {
+    // query
     const breedingParams = req.query;
-    const connection = req.connection;
+
+    // authorization
+    const userId = req.user.id;
+
     const breedings = await breedingService.getBreedingsOffers(breedingParams, connection, userId);
+
     return res.status(200).send(breedings);
   } catch (error) {
     console.log(error);

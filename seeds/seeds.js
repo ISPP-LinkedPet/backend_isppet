@@ -1,8 +1,8 @@
 exports.seed = async (knex) => {
   // Deletes ALL existing entries
-  await knex('adoption').del();
   await knex('shelter').del();
   await knex('administrator').del();
+  await knex('adoption').del();
   await knex('breeding').del();
   await knex('request').del();
   await knex('publication').del();
@@ -18,7 +18,7 @@ exports.seed = async (knex) => {
       id: 1,
       user_name: 'ejemplo1',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a', // hola
-      role: 'shelter',
+      role: 'particular',
       activate: true,
       name: 'Ejemplo1',
       email_adress: 'ejemplo1@gmail.com',
@@ -29,8 +29,7 @@ exports.seed = async (knex) => {
     {
       id: 2,
       user_name: 'ejemplo2',
-      password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
-      role: 'shelter',
+      password: 'ejemplo2',
       activate: true,
       name: 'Ejemplo2',
       email_adress: 'ejemplo2@gmail.com',
@@ -41,8 +40,7 @@ exports.seed = async (knex) => {
     {
       id: 3,
       user_name: 'ejemplo3',
-      password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
-      role: 'shelter',
+      password: 'ejemplo3',
       activate: false,
       name: 'Ejemplo3',
       email_adress: 'ejemplo3@gmail.com',
@@ -54,8 +52,7 @@ exports.seed = async (knex) => {
     {
       id: 4,
       user_name: 'ejemplo4',
-      password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
-      role: 'administrator',
+      password: 'ejemplo4',
       activate: true,
       name: 'Ejemplo4',
       email_adress: 'ejemplo4@gmail.com',
@@ -66,8 +63,7 @@ exports.seed = async (knex) => {
     {
       id: 5,
       user_name: 'ejemplo5',
-      password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
-      role: 'administrator',
+      password: 'ejemplo5',
       activate: true,
       name: 'Ejemplo5',
       email_adress: 'ejemplo5@gmail.com',
@@ -78,8 +74,7 @@ exports.seed = async (knex) => {
     {
       id: 6,
       user_name: 'ejemplo6',
-      password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
-      role: 'administrator',
+      password: 'ejemplo6',
       activate: false,
       name: 'Ejemplo6',
       email_adress: 'ejemplo6@gmail.com',
@@ -91,7 +86,7 @@ exports.seed = async (knex) => {
     {
       id: 7,
       user_name: 'ejemplo7',
-      password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
+      password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a', // hola
       role: 'moderator',
       activate: true,
       name: 'Ejemplo7',
@@ -103,8 +98,7 @@ exports.seed = async (knex) => {
     {
       id: 8,
       user_name: 'ejemplo8',
-      password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
-      role: 'moderator',
+      password: 'ejemplo8',
       activate: true,
       name: 'Ejemplo8',
       email_adress: 'ejemplo8@gmail.com',
@@ -115,8 +109,7 @@ exports.seed = async (knex) => {
     {
       id: 9,
       user_name: 'ejemplo9',
-      password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
-      role: 'moderator',
+      password: 'ejemplo9',
       activate: false,
       name: 'Ejemplo9',
       email_adress: 'ejemplo9@gmail.com',
@@ -140,8 +133,7 @@ exports.seed = async (knex) => {
     {
       id: 11,
       user_name: 'ejemplo11',
-      password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
-      role: 'particular',
+      password: 'ejemplo11',
       activate: true,
       name: 'Ejemplo11',
       email_adress: 'ejemplo11@gmail.com',
@@ -152,14 +144,47 @@ exports.seed = async (knex) => {
     {
       id: 12,
       user_name: 'ejemplo12',
-      password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
-      role: 'particular',
+      password: 'ejemplo12',
       activate: false,
       name: 'Ejemplo12',
       email_adress: 'ejemplo12@gmail.com',
       adress: 'Calle ejemplo 12',
       telephone: '178523694',
       optional_photo: 'http://www.ejemplo12.com/',
+    },
+    // vet
+    {
+      id: 13,
+      user_name: 'ejemplo16',
+      password: 'ejemplo16',
+      activate: true,
+      name: 'Ejemplo16',
+      email_adress: 'ejemplo16@gmail.com',
+      adress: 'Calle ejemplo 16',
+      telephone: '751485326',
+      optional_photo: 'http://www.ejemplo16.com/',
+    },
+    {
+      id: 14,
+      user_name: 'ejemplo17',
+      password: 'ejemplo17',
+      activate: true,
+      name: 'Ejemplo17',
+      email_adress: 'ejemplo17@gmail.com',
+      adress: 'Calle ejemplo 17',
+      telephone: '756318964',
+      optional_photo: null,
+    },
+    {
+      id: 15,
+      user_name: 'ejemplo18',
+      password: 'ejemplo18',
+      activate: false,
+      name: 'Ejemplo18',
+      email_adress: 'ejemplo18@gmail.com',
+      adress: 'Calle ejemplo 18',
+      telephone: '486359625',
+      optional_photo: 'http://www.ejemplo18.com/',
     },
   ]);
 
@@ -196,32 +221,26 @@ exports.seed = async (knex) => {
       id: 1,
       animal_photo: 'http://www.ejemplo1.com/, http://www.ejemplo2.com/',
       identification_photo: 'http://www.ejemplo1.com/',
-      vaccine_passport: 'http://www.ejemplo1.com/',
+      vaccine_passport: 'Vaccine passport 1',
       document_status: 'Accepted',
       age: 8,
       genre: 'Male',
       breed: 'Doberman',
-      transaction_status: null,
+      transaction_status: 'In progress',
       title: 'Example breeding 1',
-      type: 'Dog',
-      location: 'Avda. ejemplo, 1',
-      pedigree: true,
       particular_id: 1,
     },
     {
       id: 2,
       animal_photo: 'http://www.ejemplo3.com/',
       identification_photo: 'http://www.ejemplo2.com/',
-      vaccine_passport: 'http://www.ejemplo2.com/',
+      vaccine_passport: 'Vaccine passport 2',
       document_status: 'In revision',
       age: 3,
       genre: 'Female',
       breed: 'Bulldog Terrier',
       transaction_status: 'Completed',
       title: 'Example breeding 2',
-      type: 'Dog',
-      location: 'Avda. ejemplo, 2',
-      pedigree: true,
       particular_id: 2,
     },
     {
@@ -229,16 +248,13 @@ exports.seed = async (knex) => {
       animal_photo:
         'http://www.ejemplo4.com/, http://www.ejemplo5.com/, http://www.ejemplo6.com/',
       identification_photo: 'http://www.ejemplo3.com/',
-      vaccine_passport: 'http://www.ejemplo3.com/',
+      vaccine_passport: 'Vaccine passport 3',
       document_status: 'Rejected',
       age: 5,
       genre: 'Male',
       breed: 'Yorkshire Terrier',
       transaction_status: 'In progress',
       title: 'Example breeding 3',
-      type: 'Dog',
-      location: 'Avda. ejemplo, 3',
-      pedigree: true,
       particular_id: 3,
     },
 
@@ -247,32 +263,26 @@ exports.seed = async (knex) => {
       id: 4,
       animal_photo: 'http://www.ejemplo5.com/, http://www.ejemplo8.com/',
       identification_photo: 'http://www.ejemplo4.com/',
-      vaccine_passport: 'http://www.ejemplo4.com/',
+      vaccine_passport: 'Vaccine passport 4',
       document_status: 'Accepted',
       age: 6,
       genre: 'Male',
       breed: 'Maine Coon',
       transaction_status: 'Completed',
       title: 'Example adoption 1',
-      type: 'Cat',
-      location: 'Avda. ejemplo, 4',
-      pedigree: false,
       particular_id: 1,
     },
     {
       id: 5,
       animal_photo: 'http://www.ejemplo7.com/',
-      identification_photo: 'http://www.ejemplo5.com/',
-      vaccine_passport: 'http://www.ejemplo5.com/',
+      identification_photo: 'http://www.ejemplo1.com/',
+      vaccine_passport: 'Vaccine passport 5',
       document_status: 'Accepted',
       age: 8,
       genre: 'Female',
       breed: 'Siamés',
       transaction_status: 'In progress',
       title: 'Example adoption 2',
-      type: 'Cat',
-      location: 'Avda. ejemplo, 5',
-      pedigree: true,
       particular_id: 2,
     },
     {
@@ -280,16 +290,13 @@ exports.seed = async (knex) => {
       animal_photo:
         'http://www.ejemplo9.com/, http://www.ejemplo1.com/, http://www.ejemplo2.com/',
       identification_photo: 'http://www.ejemplo6.com/',
-      vaccine_passport: 'http://www.ejemplo6.com/',
+      vaccine_passport: 'Vaccine passport 6',
       document_status: 'Accepted',
       age: 2,
       genre: 'Male',
       breed: 'Árabe',
       transaction_status: 'In progress',
       title: 'Example adoption 3',
-      type: 'Horse',
-      location: 'Avda. ejemplo, 6',
-      pedigree: true,
       particular_id: 3,
     },
   ]);
@@ -300,42 +307,21 @@ exports.seed = async (knex) => {
       id: 1,
       status: 'Favorite',
       is_favorite: true,
-      publication_id: 3,
+      publication_id: 4,
       particular_id: 1,
     },
     {
       id: 2,
       status: 'Pending',
       is_favorite: false,
-      publication_id: 1,
+      publication_id: 5,
       particular_id: 2,
     },
     {
       id: 3,
       status: 'Accepted',
       is_favorite: false,
-      publication_id: 2,
-      particular_id: 3,
-    },
-    {
-      id: 4,
-      status: 'Favorite',
-      is_favorite: true,
       publication_id: 6,
-      particular_id: 1,
-    },
-    {
-      id: 5,
-      status: 'Pending',
-      is_favorite: false,
-      publication_id: 4,
-      particular_id: 2,
-    },
-    {
-      id: 6,
-      status: 'Accepted',
-      is_favorite: false,
-      publication_id: 5,
       particular_id: 3,
     },
   ]);
@@ -354,13 +340,6 @@ exports.seed = async (knex) => {
     {id: 3, price: 44.1, publication_id: 3},
   ]);
 
-  // shelter
-  await knex('shelter').insert([
-    {id: 1, user_account_id: 1},
-    {id: 2, user_account_id: 2},
-    {id: 3, user_account_id: 3},
-  ]);
-
   // adoption
   await knex('adoption').insert([
     {
@@ -368,55 +347,47 @@ exports.seed = async (knex) => {
       name: 'Niko',
       taxes: 390,
       publication_id: 4,
-      shelter_id: 1,
     },
     {
       id: 2,
       name: 'Kiwi',
       taxes: 210,
       publication_id: 5,
-      shelter_id: 2,
     },
     {
       id: 3,
       name: 'Toby',
       taxes: 870,
       publication_id: 6,
-      shelter_id: 3,
     },
+  ]);
+
+  // shelter
+  await knex('shelter').insert([
+    {id: 1, user_account_id: 1, adoption_id: 1},
+    {id: 2, user_account_id: 2, adoption_id: 2},
+    {id: 3, user_account_id: 3, adoption_id: 3},
   ]);
 
   // vet
   await knex('vet').insert([
     {
       id: 1,
-      name: 'Ejemplo16',
       surname: 'Vet1',
-      email_adress: 'ejemplo16@gmail.com',
-      adress: 'Calle ejemplo 16',
-      telephone: '751485326',
-      optional_photo: 'http://www.ejemplo16.com/',
       is_premium: true,
+      user_account_id: 13,
     },
     {
       id: 2,
-      name: 'Ejemplo17',
       surname: 'Vet2',
-      email_adress: 'ejemplo17@gmail.com',
-      adress: 'Calle ejemplo 17',
-      telephone: '756318964',
-      optional_photo: null,
       is_premium: false,
+      user_account_id: 14,
     },
     {
       id: 3,
-      name: 'Ejemplo18',
       surname: 'Vet3',
-      email_adress: 'ejemplo18@gmail.com',
-      adress: 'Calle ejemplo 18',
-      telephone: '486359625',
-      optional_photo: 'http://www.ejemplo18.com/',
       is_premium: false,
+      user_account_id: 15,
     },
   ]);
 };
