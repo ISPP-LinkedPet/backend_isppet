@@ -60,9 +60,9 @@ exports.getMyFavoriteBreedings = async (connection, userId) => {
   const breedings = await connection('breeding')
       .join('publication', 'breeding.publication_id', '=', 'publication.id')
       .join('particular', 'particular.id', '=', 'publication.particular_id')
-      .join('request', 'request.particular_id', '=', 'particular.id') // no va pq el user no tiene request
+      .join('request', 'request.particular_id', '=', 'particular.id')
       .where('particular.id', particular.id)
-      .andWhere('request.is_favorite', true);
+      .andWhere('request.status', 'Pending');
 
   return breedings;
 };
