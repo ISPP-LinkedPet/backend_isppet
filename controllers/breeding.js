@@ -61,7 +61,7 @@ exports.getMyFavoriteBreedings = async (req, res) => {
 
     // authorization
     const userId = req.user.id;
-    const role = req.user.role;
+    // const role = req.user.role;
 
     const breedings = await breedingService.getMyFavoriteBreedings(connection, userId);
 
@@ -79,7 +79,6 @@ exports.getPendingBreedings = async (req, res) => {
 
     // authorization
     const userId = req.user.id;
-    const role = req.user.role;
 
     const breedings = await breedingService.getPendingBreedings(connection, userId);
 
@@ -90,3 +89,23 @@ exports.getPendingBreedings = async (req, res) => {
     return res.status(500).send(error);
   }
 };
+
+exports.getBreedingsOffers = async (req, res) => {
+  const connection = req.connection;
+  try {
+    // query
+    const breedingParams = req.query;
+
+    // authorization
+    const userId = req.user.id;
+
+    const breedings = await breedingService.getBreedingsOffers(breedingParams, connection, userId);
+
+    return res.status(200).send(breedings);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send(error);
+  }
+
+}
+
