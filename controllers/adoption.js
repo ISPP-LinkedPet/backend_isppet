@@ -28,10 +28,9 @@ exports.getPendingAdoptions = async (req, res) => {
   const connection = req.connection;
 
   try {
-
     // authorization
     const userId = req.user.id;
-    const role = req.user.role;
+    // const role = req.user.role;
 
     const adoptions = await adoptionService.getPendingAdoptions(connection, userId);
 
@@ -51,9 +50,12 @@ exports.createAdoption = async (req, res) => {
 
   try {
     const shelterId = req.user.id;
+    console.log(shelterId);
 
     const adoptionData = req.body;
+    console.log(adoptionData);
     const adoptionPhotos = req.files;
+    console.log(adoptionPhotos);
 
     if (
       !adoptionPhotos.animal_photo ||
@@ -62,7 +64,7 @@ exports.createAdoption = async (req, res) => {
       !adoptionPhotos.vaccine_passport ||
       !adoptionData.type ||
       !adoptionData.location ||
-      !adoptionData.pedigree ||
+      !adoptionData.taxes ||
       !shelterId
     ) {
       return res.status(400).send('Invalid params');
