@@ -28,3 +28,6 @@ exports.shelter = (req, res, next) => permission(req, res, next, ['shelter']);
 
 // every body register
 exports.all = (req, res, next) => permission(req, res, next, ['administrator', 'particular', 'moderator', 'shelter']);
+
+// few specific role
+exports.shelter_particular = (req, res, next) => permission(req, res, next, ['shelter', 'particular']);
