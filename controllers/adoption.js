@@ -9,26 +9,27 @@ exports.getParticularAdoptions = async (req, res) => {
 
     const connection = req.connection;
 
-    const adoption = await adoptionService.getParticularAdoptions(connection, page);
+    const adoption = await adoptionService.getParticularAdoptions(
+        connection,
+        page,
+    );
     return res.status(200).send(adoption);
   } catch (error) {
     console.log(error);
-    if (error.status && error.message) return res.status(error.status).send(error.message);
+    if (error.status && error.message) {
+      return res.status(error.status).send(error.message);
+    }
     return res.status(500).send(error);
   }
 };
 
 exports.createAdoption = async (req, res) => {
-  const connection = req.connection;
-  const trx = await connection.transaction();
+  const trx = await req.connection.transaction();
   try {
     const shelterId = req.user.id;
 
     const adoptionData = req.body;
     const adoptionPhotos = req.files;
-
-    console.log({adoptionData});
-    console.log({adoptionPhotos});
 
     if (
       !adoptionPhotos.animal_photo ||
@@ -43,9 +44,12 @@ exports.createAdoption = async (req, res) => {
       return res.status(400).send({error: 'Invalid params'});
     }
 
-    const adoption = await adoptionService.createAdoption(adoptionData, adoptionPhotos, shelterId, trx);
-
-    console.log('Error');
+    const adoption = await adoptionService.createAdoption(
+        adoptionData,
+        adoptionPhotos,
+        shelterId,
+        trx,
+    );
 
     trx.commit();
 
