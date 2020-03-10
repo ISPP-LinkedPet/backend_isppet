@@ -1,4 +1,6 @@
 const path = require('path');
+const fs = require('fs');
+const {v4: uuidv4} = require('uuid');
 
 const ANIMAL_FOLDER = path.join('images', 'animal_photos');
 const IDENTIFICATION_FOLDER = path.join('images', 'identification_photos');
@@ -23,6 +25,9 @@ exports.createAdoption = async (
   shelterId,
   trx,
 ) => {
+  const allPhotos = [];
+
+
   try {
     // Mínimo 2 fotos del animal
     const savedAnimalPhotos = [];
@@ -117,9 +122,12 @@ exports.createAdoption = async (
       transaction_status: 'In progress',
       title: adoptionData.title,
       vaccine_passport: savedVaccinePhotos.join(','),
-      type: adoptionData.type,
-      location: adoptionData.location,
-      pedigree: adoptionData.pedigree,
+      type: adoptionData.type || null,
+      location: adoptionData.location || null,
+      pedigree: adoptionData.pedigree || null,
+      age: adoptionData.age || null,
+      genre: adoptionData.genre || null,
+      breed: adoptionData.breed || null,
     };
 
     const publicationId = await trx('publication').insert(pubData);

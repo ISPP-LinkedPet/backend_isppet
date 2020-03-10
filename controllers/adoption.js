@@ -25,11 +25,15 @@ exports.getParticularAdoptions = async (req, res) => {
 
 exports.createAdoption = async (req, res) => {
   const trx = await req.connection.transaction();
+
   try {
     const shelterId = req.user.id;
+    console.log(shelterId);
 
     const adoptionData = req.body;
+    console.log(adoptionData);
     const adoptionPhotos = req.files;
+    console.log(adoptionPhotos);
 
     if (
       !adoptionPhotos.animal_photo ||
@@ -38,7 +42,7 @@ exports.createAdoption = async (req, res) => {
       !adoptionPhotos.vaccine_passport ||
       !adoptionData.type ||
       !adoptionData.location ||
-      !adoptionData.pedigree ||
+      !adoptionData.taxes ||
       !shelterId
     ) {
       return res.status(400).send({error: 'Invalid params'});
