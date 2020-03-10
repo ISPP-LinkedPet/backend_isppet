@@ -85,9 +85,7 @@ exports.up = (knex) => {
           table.string('type', 100);
           table.string('location', 500);
           table.boolean('pedigree');
-          table
-              .integer('particular_id')
-              .unsigned();
+          table.integer('particular_id').unsigned();
           table
               .foreign('particular_id')
               .references('id')
@@ -97,8 +95,7 @@ exports.up = (knex) => {
     // request
         .createTable('request', function(table) {
           table.increments().primary();
-          table.enu('status', ['Pending', 'Accepted', 'Rejected', 'Favorite']);
-          table.boolean('is_favorite');
+          table.enu('status', ['Pending', 'Accepted', 'Rejected']);
           table
               .integer('publication_id')
               .unsigned()
@@ -171,9 +168,7 @@ exports.up = (knex) => {
               .foreign('publication_id')
               .references('id')
               .inTable('publication');
-          table
-              .integer('shelter_id')
-              .unsigned();
+          table.integer('shelter_id').unsigned();
           table
               .foreign('shelter_id')
               .references('id')
