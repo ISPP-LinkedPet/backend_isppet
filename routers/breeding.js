@@ -8,5 +8,6 @@ router.get('/pending', authorization.moderator, (req, res) => breedingController
 router.get('/offers', authorization.particular, (req, res) => breedingController.getBreedingsOffers(req, res));
 router.post('/', authorization.all, (req, res) => breedingController.createBreading(req, res));
 router.get('/:id', authorization.all, (req, res) => breedingController.getBreeding(req, res));
+router.post('/interested/:id', authorization.particular, (req, res) => breedingController.imInterested(req, res));
 
 module.exports = router;
