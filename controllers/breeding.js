@@ -20,7 +20,10 @@ exports.getBreeding = async (req, res) => {
 };
 
 exports.createBreading = async (req, res) => {
-  const trx = await req.connection.transaction();
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
 
   try {
     const particularId = req.user.id;
@@ -42,10 +45,12 @@ exports.createBreading = async (req, res) => {
     }
 
     const breeding = await breedingService.createBreeding(breedingData, breedingPhotos, particularId, trx);
-    trx.commit();
+    // commit
+    await trx.commit();
     return res.status(200).send({breeding});
   } catch (error) {
-    trx.rollback();
+    // rollback
+    await trx.rollback();
     if (error.status && error.message) {
       return res.status(error.status).send({error: error.message});
     }
