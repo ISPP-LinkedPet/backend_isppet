@@ -20,10 +20,7 @@ exports.getBreeding = async (req, res) => {
 };
 
 exports.createBreading = async (req, res) => {
-  const connection = req.connection;
-
-  // create transaction
-  const trx = await connection.transaction();
+  const trx = await req.connection.transaction();
 
   try {
     const particularId = req.user.id;
@@ -44,25 +41,19 @@ exports.createBreading = async (req, res) => {
       return res.status(400).send({error: 'Invalid params'});
     }
 
-    const breeding = await breedingService.createBreeding(
-        breedingData,
-        trx,
-    );
-
-    // commit
-    await trx.commit();
-
+    const breeding = await breedingService.createBreeding(breedingData, breedingPhotos, particularId, trx);
+    trx.commit();
     return res.status(200).send({breeding});
   } catch (error) {
-    // rollback
-    await trx.rollback();
-
-    if (error.status && error.message) return res.status(error.status).send({error: error.message});
+    trx.rollback();
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
     return res.status(500).send({error});
   }
 };
 
-exports.getMyFavoriteBreedings = async (req, res) => {
+exports.getMyInterestedBreedings = async (req, res) => {
   try {
     const connection = req.connection;
 
@@ -70,7 +61,7 @@ exports.getMyFavoriteBreedings = async (req, res) => {
     const userId = req.user.id;
     // const role = req.user.role;
 
-    const breedings = await breedingService.getMyFavoriteBreedings(
+    const breedings = await breedingService.getMyInterestedBreedings(
         connection,
         userId,
     );
@@ -118,8 +109,7 @@ exports.getBreedingsOffers = async (req, res) => {
     console.log(error);
     return res.status(400).send(error);
   }
-
-}
+};
 
 
 exports.imInterested = async (req, res) => {
