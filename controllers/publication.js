@@ -27,8 +27,13 @@ exports.getPublicationStatus = async (req, res) => {
 
     // params
     const status = req.params.status;
-    // || req.params.status;
+
+    if (!['Accepted', 'In revision', 'Rejected'].includes(status)) { // TODO: resivar si faltan estados, estos estados corresponden a la documentación
+      return res.status(404).send('Status not available');
+    }
+
     const publication = await publicationService.getPublicationsStatus(connection, status);
+
     return res.status(200).send(publication);
   } catch (error) {
     console.log(error);

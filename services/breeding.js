@@ -22,7 +22,7 @@ const BREEDING_FIELDS = ['breeding.id',
 
 const ANIMAL_FOLDER = path.join('images', 'animal_photos');
 const IDENTIFICATION_FOLDER = path.join('images', 'identification_photos');
-const VACCINES_FOLDER = path.join('images', 'vaccines_passports');
+const VACCINES_FOLDER = path.join('images', 'vaccine_passports');
 
 const ALLOWED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
 
@@ -151,16 +151,6 @@ exports.createBreeding = async (breedingData, breedingPhotos, particularId, trx)
 };
 
 exports.getMyInterestedBreedings = async (connection, userId) => {
-  const user = await connection('user_account').select('id')
-      .where('user_account.id', userId).andWhere('user_account.role', 'particular').first();
-
-  if (!user) {
-    const error = new Error();
-    error.status = 404;
-    error.message = 'Not found user';
-    throw error;
-  }
-
   const particular = await connection('particular').select('id')
       .where('user_account_id', userId).first();
   const breedings = await connection('breeding')
@@ -176,6 +166,7 @@ exports.getMyInterestedBreedings = async (connection, userId) => {
 exports.getBreedingsOffers = async (breedingParams, connection, userId) => {
   const user = await connection('user_account').select('id')
       .where('user_account.id', userId).andWhere('user_account.role', 'particular').first();
+
   if (!user) {
     const error = new Error();
     error.status = 404;
@@ -188,10 +179,13 @@ exports.getBreedingsOffers = async (breedingParams, connection, userId) => {
   const type = breedingParams.type;
   const breed = breedingParams.breed;
   const pedigree = breedingParams.pedigree;
+
   const breedings = await connection('breeding')
       .join('publication', 'breeding.publication_id', '=', 'publication.id')
       .where('publication.document_status', 'Accepted')
-      .andWhere('publication.transaction_status', 'In progress').modify(function(queryBuilder) {
+      .andWhere('publication.transaction_status', 'In progress')
+      .andWhereNot('publication.particular_id', user.id)
+      .modify(function(queryBuilder) {
         if (location) {
           queryBuilder.andWhere('publication.location', 'like', `%${location}%`);
         }
@@ -227,13 +221,13 @@ exports.getPendingBreedings = async (connection, userId) => {
 };
 
 exports.imInterested = async (userId, breedingId, trx) => {
-  // Se comprueba que no se intenta estar interesado en una publicacion propia
+  // Se comprueba que no se intenta estar interesado en una publication propia
   const pub = await trx('publication')
       .join('breeding', 'breeding.publication_id', '=', 'publication.id')
-      .where({'breeding.id': breedingId})
+      .where('breeding.id', breedingId)
       .first();
 
-  if (pub.particular_id === userId) {
+  if (pub == undefined || pub.particular_id === userId) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not be interested in your own publications';
@@ -260,20 +254,19 @@ exports.imInterested = async (userId, breedingId, trx) => {
       .andWhere({'publication.transaction_status': 'In progress'})
       .andWhere({'breeding.id': breedingId});
 
-  if (wrongPub.length == 0) {
+  if (!wrongPub.length) {
     const error = new Error();
     error.status = 404;
     error.message = 'The publication documents or status are wrong';
     throw error;
   }
 
-  if (rqt) {
+  if (rqt != undefined) {
     await trx('request')
         .where({id: rqt.id})
         .update({
           status: 'Pending',
         });
-
     return await trx('request').where({id: rqt.id}).first();
   } else {
     const rqtData = {

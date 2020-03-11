@@ -27,9 +27,14 @@ exports.createBreading = async (req, res) => {
 
   try {
     const particularId = req.user.id;
+
+    // body
     const breedingData = req.body;
+
+    // file
     const breedingPhotos = req.files;
 
+    console.log(breedingPhotos, 'A', breedingData);
     // breed, age, pedigree and genre not required during creation
     if (
       !breedingPhotos.animal_photo ||
@@ -38,8 +43,7 @@ exports.createBreading = async (req, res) => {
       !breedingPhotos.vaccine_passport ||
       !breedingData.price ||
       !breedingData.location ||
-      !breedingData.type ||
-      !particularId
+      !breedingData.type
     ) {
       return res.status(400).send({error: 'Invalid params'});
     }
@@ -66,10 +70,7 @@ exports.getMyInterestedBreedings = async (req, res) => {
     const userId = req.user.id;
     // const role = req.user.role;
 
-    const breedings = await breedingService.getMyInterestedBreedings(
-        connection,
-        userId,
-    );
+    const breedings = await breedingService.getMyInterestedBreedings( connection, userId);
 
     return res.status(200).send(breedings);
   } catch (error) {
@@ -141,6 +142,8 @@ exports.imInterested = async (req, res) => {
     // Ver el formato en el que mandar los mensajes
     return res.status(200).send(request);
   } catch (error) {
+    console.log(error);
+
     // rollback
     await trx.rollback();
 

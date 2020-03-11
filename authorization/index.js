@@ -4,17 +4,17 @@ permission = (req, res, next, roles) => {
   try {
     // get token
     const token = req.headers.authorization.replace('Bearer ', '');
-
     // verify token
     const user = jwt.verify(token, process.env.JWT_SECRET); // payload
+
     if (!roles.includes(user.role)) {
-      res.status(500).send('User not allow');
+      res.status(403).send('User role not allow');
     }
 
     req.user = user;
     next();
   } catch (error) {
-    res.status(500).send('Invalid token');
+    res.status(401).send('Invalid token');
   }
 };
 
