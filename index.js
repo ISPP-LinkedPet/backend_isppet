@@ -10,6 +10,7 @@ const shelterRouter = require('./routers/shelter');
 const adoptionRouter = require('./routers/adoption');
 const authRouter = require('./routers/auth');
 const publicationRouter = require('./routers/publication');
+const vetRouter = require('./routers/vet');
 // database
 const connection = {
   client: 'mysql',
@@ -43,6 +44,7 @@ app.use('/auth', authRouter);
 app.use('/shelter', shelterRouter);
 app.use('/adoption', adoptionRouter);
 app.use('/publication', publicationRouter);
+app.use('/vet', vetRouter);
 // server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
