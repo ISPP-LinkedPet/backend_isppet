@@ -359,3 +359,18 @@ const getExtension = (photo) => {
   }
   return photo.split('.').pop();
 };
+
+exports.getPendingAdoptions = async (connection, userId) => {
+  const user = await connection('moderator').select('id').where({user_account_id: userId}).first();
+  if (!user) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Not found user';
+    throw error;
+  }
+
+  const adoptions = await connection('adoption')
+      .join('publication', 'adoption.publication_id', '=', 'publication.id')
+      .where( 'pblication.document_status', 'In revision');
+  return adoptions;
+};

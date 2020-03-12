@@ -4,71 +4,150 @@ exports.getBreeding = async (req, res) => {
   try {
     const connection = req.connection;
 
-    // params
-    const breadingId = req.params.id || 0;
-    if (isNaN(breadingId)) {
-      return res.status(400).send('ID must be a number');
+    const breedingId = req.params.id;
+    if (isNaN(breedingId)) {
+      return res.status(400).send({error: 'ID must be a number'});
     }
 
-    const breeding = await breedingService.getBreeding(connection, breadingId);
-
-    return res.status(200).send(breeding);
+    const breeding = await breedingService.getBreeding(connection, breedingId);
+    return res.status(200).send({breeding});
   } catch (error) {
-    console.log(error);
-    if (error.status && error.message) return res.status(error.status).send(error.message);
-    return res.status(500).send(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
   }
 };
 
 exports.createBreading = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
   try {
-    const connection = req.connection;
+    const particularId = req.user.id;
 
     // body
     const breedingData = req.body;
+
+    // file
+    const breedingPhotos = req.files;
+
+    console.log(breedingPhotos, 'A', breedingData);
+    // breed, age, pedigree and genre not required during creation
     if (
-      !breedingData.animal_photo || !breedingData.identification_photo ||
-      !breedingData.age || !breedingData.genre || !breedingData.breed ||
-      !breedingData.title || !breedingData.vaccine_passport || !breedingData.price
+      !breedingPhotos.animal_photo ||
+      !breedingPhotos.identification_photo ||
+      !breedingData.title ||
+      !breedingPhotos.vaccine_passport ||
+      !breedingData.price ||
+      !breedingData.location ||
+      !breedingData.type
     ) {
-      return res.status(400).send('Params invalid');
+      return res.status(400).send({error: 'Invalid params'});
     }
 
-    // create transaction
-    const trx = await connection.transaction();
-
-    const breeding = await breedingService.createBreeding(
-        breedingData,
-        trx,
-    );
-
+    const breeding = await breedingService.createBreeding(breedingData, breedingPhotos, particularId, trx);
     // commit
-    trx.commit();
-
-    return res.status(200).send(breeding);
+    await trx.commit();
+    return res.status(200).send({breeding});
   } catch (error) {
-    console.log(error);
     // rollback
-    trx.rollback();
-    if (error.status && error.message) return res.status(error.status).send(error.message);
-    return res.status(500).send(error);
+    await trx.rollback();
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
   }
 };
 
-exports.getMyFavoriteBreedings = async (req, res) => {
+exports.getMyInterestedBreedings = async (req, res) => {
   try {
     const connection = req.connection;
 
     // authorization
     const userId = req.user.id;
-    const role = req.user.role;
+    // const role = req.user.role;
 
-    const breedings = await breedingService.getMyFavoriteBreedings(connection, userId);
+    const breedings = await breedingService.getMyInterestedBreedings( connection, userId);
+
+    return res.status(200).send(breedings);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send(error.message);
+    }
+    return res.status(500).send(error);
+  }
+};
+
+exports.getPendingBreedings = async (req, res) => {
+  try {
+    const connection = req.connection;
+
+    // authorization
+    const userId = req.user.id;
+
+    const breedings = await breedingService.getPendingBreedings(connection, userId);
 
     return res.status(200).send(breedings);
   } catch (error) {
     console.log(error);
     if (error.status && error.message) return res.status(error.status).send(error.message);
     return res.status(500).send(error);
+  }
+};
+
+exports.getBreedingsOffers = async (req, res) => {
+  const connection = req.connection;
+  try {
+    // query
+    const breedingParams = req.query;
+
+    // authorization
+    const userId = req.user.id;
+
+    const breedings = await breedingService.getBreedingsOffers(breedingParams, connection, userId);
+
+    return res.status(200).send(breedings);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send(error);
+  }
+};
+
+
+exports.imInterested = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
+  try {
+    // params
+    const breedingId = req.params.id;
+    if (!breedingId) {
+      return res.status(404).send('Miss params');
+    }
+
+    // authorization
+    const userId = req.user.id;
+
+    const request = await breedingService.imInterested(userId, breedingId, trx);
+
+    // commit
+    await trx.commit();
+
+    // Ver el formato en el que mandar los mensajes
+    return res.status(200).send(request);
+  } catch (error) {
+    console.log(error);
+
+    // rollback
+    await trx.rollback();
+
+    if (error.status && error.message) return res.status(error.status).send({error: error.message});
+    return res.status(500).send({error});
   }
 };
