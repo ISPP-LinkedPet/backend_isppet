@@ -284,9 +284,11 @@ exports.imInterested = async (userId, breedingId, trx) => {
 
 exports.editBreeding = async (breedingData, breedingPhotos, breedingId, userId, trx) => {
   // Se comprueba que este editando un breeding propio y en revision
-  const pub = await trx('publication')
+  const pub = await trx('publication').select('*', 'user_account.id AS userId')
       .join('breeding', 'breeding.publication_id', '=', 'publication.id')
-      .where({'breeding.id': breedingId})
+      .join('particular', 'particular.id', '=', 'publication.particular_id')
+      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
+      .where('breeding.id', breedingId)
       .first();
   if (!pub) {
     const error = new Error();
@@ -294,12 +296,13 @@ exports.editBreeding = async (breedingData, breedingPhotos, breedingId, userId, 
     error.message = 'Breeding not found';
     throw error;
   }
-  if (!(pub.particular_id === userId)) {
+  if (!(pub.userId === userId)) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not edit a publication that you do not own';
     throw error;
-  } else if ( !(pub.document_status === 'In revision')) {
+  }
+  if ( !(pub.document_status === 'In revision')) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not edit a publication which is not in revision';

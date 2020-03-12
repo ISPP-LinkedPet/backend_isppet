@@ -172,21 +172,21 @@ exports.editBreeding = async (req, res) => {
       !breedingPhotos.vaccine_passport ||
       !breedingData.price ||
       !breedingData.location ||
-      !breedingData.type ||
-      !userId
+      !breedingData.type
     ) {
       return res.status(400).send({error: 'Invalid params'});
     }
     const breeding = await breedingService.editBreeding(breedingData, breedingPhotos, breedingId, userId, trx);
     // commit
     await trx.commit();
-    return res.status(200).send({breeding});
+    return res.status(200).send(breeding);
   } catch (error) {
+    console.log(error);
     // rollback
     await trx.rollback();
     if (error.status && error.message) {
       return res.status(error.status).send({error: error.message});
     }
-    return res.status(500).send({error});
+    return res.status(500).send(error);
   }
 };
