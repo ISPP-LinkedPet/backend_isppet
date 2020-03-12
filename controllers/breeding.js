@@ -151,3 +151,42 @@ exports.imInterested = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+
+exports.editBreeding = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
+  try {
+    const userId = req.user.id;
+    const breedingData = req.body;
+    const breedingPhotos = req.files;
+    const breedingId = req.params.id;
+
+    // breed, age, pedigree and genre not required during edition from a particular
+    if (
+      !breedingPhotos.animal_photo ||
+      !breedingPhotos.identification_photo ||
+      !breedingData.title ||
+      !breedingPhotos.vaccine_passport ||
+      !breedingData.price ||
+      !breedingData.location ||
+      !breedingData.type ||
+      !userId
+    ) {
+      return res.status(400).send({error: 'Invalid params'});
+    }
+    const breeding = await breedingService.editBreeding(breedingData, breedingPhotos, breedingId, userId, trx);
+    // commit
+    await trx.commit();
+    return res.status(200).send({breeding});
+  } catch (error) {
+    // rollback
+    await trx.rollback();
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
