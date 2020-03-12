@@ -55,17 +55,13 @@ exports.getParticularAdoptions = async (connection, page) => {
   return adoptions;
 };
 
-exports.updateAdoption = async (
-  adoptionData,
-  adoptionPhotos,
-  adoptionId,
-  userId,
-  trx,
-) => {
+exports.updateAdoption = async (adoptionData, adoptionPhotos, adoptionId, userId, trx) => {
   // Se comprueba que este editando un adoption propio y en revision
-  const pub = await trx('publication')
+  const pub = await trx('publication').select('*', 'user_account.id AS userId')
       .join('adoption', 'adoption.publication_id', '=', 'publication.id')
-      .where({'adoption.id': adoptionId})
+      .join('shelter', 'shelter.id', '=', 'adoption.shelter_id')
+      .join('user_account', 'user_account.id', '=', 'shelter.user_account_id')
+      .where('adoption.id', adoptionId)
       .first();
   if (!pub) {
     const error = new Error();
@@ -73,12 +69,13 @@ exports.updateAdoption = async (
     error.message = 'Adoption not found';
     throw error;
   }
-  if (!(pub.shelter_id === userId)) {
+  if (!(pub.userId === userId)) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not edit a publication that you do not own';
     throw error;
-  } else if (!(pub.document_status === 'In revision')) {
+  }
+  if (!(pub.document_status === 'In revision')) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not edit a publication which is not in revision';
