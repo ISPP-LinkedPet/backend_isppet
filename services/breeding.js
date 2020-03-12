@@ -294,7 +294,7 @@ exports.editBreeding = async (breedingData, breedingPhotos, breedingId, userId, 
     error.message = 'Breeding not found';
     throw error;
   }
-  if (pub.particular_id === userId) {
+  if (!(pub.particular_id === userId)) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not edit a publication that you do not own';
