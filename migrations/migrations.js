@@ -182,6 +182,8 @@ exports.up = (knex) => {
           table.string('surname', 200).notNullable();
           table.string('email', 500).notNullable();
           table.string('address', 500).notNullable();
+          table.string('latitude', 500);
+          table.string('longitude', 500);
           table.integer('telephone').notNullable();
           table.string('optional_photo', 500).nullable();
           table.boolean('is_premium');
