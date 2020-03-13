@@ -4,8 +4,6 @@ const API_KEY = '53125aca466345fd809c44468d122456';
 
 exports.getVets = async (connection) => {
   const vets = await connection('vet').orderBy('is_premium', 'desc');
-  const res = [];
-
   const addresses = vets.map((vet) => {
     const address = vet.address.split(' ').join('%20');
     const url = `${BASE_URL}?q=${address}&key=${API_KEY}&language=es&pretty=1`;
@@ -16,8 +14,10 @@ exports.getVets = async (connection) => {
   });
 
   await axios.all(addresses).then(axios.spread((...responses) => {
-    responses.forEach((r) => {
-      res.push(r.data.results[0].geometry);
+    responses.forEach((r, index) => {
+      const vet = vets[index];
+      vet.latitude = r.data.results[0].geometry.lat;
+      vet.longitude = r.data.results[0].geometry.lng;
     });
   }));
 
