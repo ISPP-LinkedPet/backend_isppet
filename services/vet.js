@@ -1,30 +1,25 @@
-getLatAlt=function(address) {
-  const https = require('https');
+const axios = require('axios');
+const BASE_URL = 'https://api.opencagedata.com/geocode/v1/json';
+const API_KEY = '53125aca466345fd809c44468d122456';
 
-  const apiKey = '53125aca466345fd809c44468d122456';
-  const url = 'https://api.opencagedata.com/geocode/v1/json?q='+
-   address+'&key=' + apiKey+ '&language=es&pretty=1';
-  https.get(url, (resp) => {
-    let data = '';
-    // A chunk of data has been recieved.
-    resp.on('data', (chunk) => {
-      data += chunk;
-    });
-    // The whole response has been received. Print out the result.
-    resp.on('end', () => {
-      return JSON.parse(data);
-    });
-  }).on('error', (err) => {
-    console.log('Error: ' + err.message);
-  });
-};
 exports.getVets = async (connection) => {
-  const vets = await connection('vet');
-  //const vetAndAddress = {};
-  for (const vet of vets) {
-    const address = getLatAlt(vet.adress);
-    console.log(vet.adress);
-    console.log(address);
-  }
+  const vets = await connection('vet').orderBy('is_premium', 'desc');
+  const res = [];
+
+  const addresses = vets.map((vet) => {
+    const address = vet.address.split(' ').join('%20');
+    const url = `${BASE_URL}?q=${address}&key=${API_KEY}&language=es&pretty=1`;
+    return axios({
+      method: 'get',
+      url,
+    });
+  });
+
+  await axios.all(addresses).then(axios.spread((...responses) => {
+    responses.forEach((r) => {
+      res.push(r.data.results[0].geometry);
+    });
+  }));
+
   return vets;
 };
