@@ -1,4 +1,4 @@
-exports.getPublications = async (connection, actorId) => {
+exports.getPublicationsByActorId = async (connection, actorId) => {
   try {
     const actor = await connection('user_account').where('user_account.id', actorId).first();
 
@@ -57,4 +57,19 @@ exports.getPublicationsStatus = async (connection, status) => {
   }
 
   return publications;
+};
+
+exports.getPublication = async (connection, publicationId) => {
+  const publication = await connection('publication')
+      .where('id', publicationId)
+      .first();
+
+  if (!publication) {
+    const error = new Error();
+    error.status = 400;
+    error.message = 'No publication with that ID';
+    throw error;
+  }
+
+  return publication;
 };
