@@ -17,3 +17,22 @@ exports.getShelters = async (req, res) => {
     return res.status(500).send(error);
   }
 };
+
+exports.getShelter = async (req, res) => {
+  try {
+    const connection = req.connection;
+
+    const shelterId = req.params.id;
+    if (isNaN(shelterId)) {
+      return res.status(400).send({error: 'ID must be a number'});
+    }
+
+    const shelter = await shelterService.getShelter(connection, shelterId);
+    return res.status(200).send({shelter});
+  } catch (error) {
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
