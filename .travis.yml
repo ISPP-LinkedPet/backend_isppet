@@ -5,10 +5,8 @@ deploy:
   provider: heroku
   app:
     develop: backend-linkedpet_dev
-    master: backend-linkedpet_prod_v0
   strategy: git
   api_key:
     secure: mvW1YrfUoN3Gt17+yen03Zf4JSAdN5aqHV1VlEd+uMsSQjIP8OxKBt1jpcGO3Cg6nMic11YdORwI6qB4ZfhLqXiyt3m/FE7oMYC90aBVbQHBsYKS4o+DG7QJZJhbV/HyAajX/8BQ3ls8HmBGzAy5m9n/CBMPYOmMgomBWPzVfASJIWpEkF4o27qfaAJVO37YOhJTGdqD+ekm0J1Sgo9siF8UMcpqTyjndyCD+Ug7hQuXjxFoqURUwWXu4Uu6dWgPtq0iFwgmTbNXN4XSBwLIa4XcMRKSSYdX6d6Y+92f0GOzhznKfXQLP9g1O80fFIow5M3Fb0QkFtt06f3q2h9tuBkxOAzw981c3Qj2m/LeI/jxjm/c8oDHfpZnauimC4sZRSXUSkpthBiaL8TaPH2EVuqaIbSrFBg1NYiigPxU430iUXjvd50y2BZJtSGYtFtLgYmohOgQrT3UW5TeNR8qrjQfj+2cSWU2QbvHL6BzeDCxwZFU9u78A4Uqg6BHiACqoyN+NF5IAuO5HupayyVqQYSefsJK+98ZleeY2VGpe3u7T51jDZ4FgkmdnU72fL7Forbyeomk4Ksm0i5hyrXBbuTbI6RIyRU7fkhUD+mJclNh4+GM4op3EnYnxLr5nYVDrAPZt+Zs90sXrzfLKYic0vc+o9l9tx1zvcrdFORs9Uc=
   run:
     - npm install
-    - npm run knex migrate:rollback --all && npm run knex migrate:latest && npm run seed
