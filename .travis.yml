@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - "12"
+deploy:
+  provider: heroku
+  app:
+    develop: backend-linkedpet_dev
+    master: backend-linkedpet_prod_v0
+  strategy: git
+  api_key:
+    secure: 2eb81de7-98b2-4624-825a-4158b0891c57
+  run:
+    - "npm install"
+    - "npm run knex migrate:rollback --all && npm run knex migrate:latest && npm run seed"
