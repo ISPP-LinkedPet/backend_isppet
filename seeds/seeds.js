@@ -740,9 +740,12 @@ exports.seed = async (knex) => {
     // breeding
     {
       id: 1,
-      animal_photo: 'images\\animal_photos\\a7795b65-aa9c-40f0-8235-87ea077a9174.jpg,images\\animal_photos\\baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
-      identification_photo: 'images\\identification_photos\\2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
-      vaccine_passport: 'images\\vaccine_passports\\8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+      animal_photo:
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 8,
       genre: 'Male',
@@ -756,9 +759,12 @@ exports.seed = async (knex) => {
     },
     {
       id: 2,
-      animal_photo: 'http://www.ejemplo3.com/',
-      identification_photo: 'http://www.ejemplo2.com/',
-      vaccine_passport: 'http://www.ejemplo2.com/',
+      animal_photo:
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'In revision',
       age: 3,
       genre: 'Female',
@@ -773,9 +779,11 @@ exports.seed = async (knex) => {
     {
       id: 3,
       animal_photo:
-        'http://www.ejemplo4.com/, http://www.ejemplo5.com/, http://www.ejemplo6.com/',
-      identification_photo: 'http://www.ejemplo3.com/',
-      vaccine_passport: 'http://www.ejemplo3.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Rejected',
       age: 5,
       genre: 'Male',
@@ -791,9 +799,12 @@ exports.seed = async (knex) => {
     // adoption
     {
       id: 4,
-      animal_photo: 'http://www.ejemplo5.com/, http://www.ejemplo8.com/',
-      identification_photo: 'http://www.ejemplo4.com/',
-      vaccine_passport: 'http://www.ejemplo4.com/',
+      animal_photo:
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 6,
       genre: 'Male',
@@ -807,9 +818,12 @@ exports.seed = async (knex) => {
     },
     {
       id: 5,
-      animal_photo: 'http://www.ejemplo7.com/',
-      identification_photo: 'http://www.ejemplo5.com/',
-      vaccine_passport: 'http://www.ejemplo5.com/',
+      animal_photo:
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 8,
       genre: 'Female',
@@ -824,9 +838,11 @@ exports.seed = async (knex) => {
     {
       id: 6,
       animal_photo:
-        'http://www.ejemplo9.com/, http://www.ejemplo1.com/, http://www.ejemplo2.com/',
-      identification_photo: 'http://www.ejemplo6.com/',
-      vaccine_passport: 'http://www.ejemplo6.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 2,
       genre: 'Male',
@@ -841,9 +857,11 @@ exports.seed = async (knex) => {
     {
       id: 7,
       animal_photo:
-        'http://www.ejemplo10.com/, http://www.ejemplo33.com/, http://www.ejemplo21.com/',
-      identification_photo: 'http://www.ejemplo7.com/',
-      vaccine_passport: 'http://www.ejemplo7.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 2,
       genre: 'Female',
@@ -858,9 +876,11 @@ exports.seed = async (knex) => {
     {
       id: 8,
       animal_photo:
-        'http://www.ejemplo11.com/, http://www.ejemplo34.com/, http://www.ejemplo22.com/',
-      identification_photo: 'http://www.ejemplo8.com/',
-      vaccine_passport: 'http://www.ejemplo8.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 6,
       genre: 'Female',
@@ -875,9 +895,11 @@ exports.seed = async (knex) => {
     {
       id: 9,
       animal_photo:
-        'http://www.ejemplo13.com/, http://www.ejemplo35.com/, http://www.ejemplo24.com/',
-      identification_photo: 'http://www.ejemplo9.com/',
-      vaccine_passport: 'http://www.ejemplo9.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 1,
       genre: 'Male',
@@ -892,9 +914,11 @@ exports.seed = async (knex) => {
     {
       id: 10,
       animal_photo:
-        'http://www.ejemplo14.com/, http://www.ejemplo36.com/, http://www.ejemplo25.com/',
-      identification_photo: 'http://www.ejemplo10.com/',
-      vaccine_passport: 'http://www.ejemplo10.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 3,
       genre: 'Male',
@@ -909,9 +933,11 @@ exports.seed = async (knex) => {
     {
       id: 11,
       animal_photo:
-        'http://www.ejemplo15.com/, http://www.ejemplo37.com/, http://www.ejemplo26.com/',
-      identification_photo: 'http://www.ejemplo11.com/',
-      vaccine_passport: 'http://www.ejemplo11.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 4,
       genre: 'Male',
@@ -926,9 +952,11 @@ exports.seed = async (knex) => {
     {
       id: 12,
       animal_photo:
-        'http://www.ejemplo16.com/, http://www.ejemplo37.com/, http://www.ejemplo26.com/',
-      identification_photo: 'http://www.ejemplo12.com/',
-      vaccine_passport: 'http://www.ejemplo12.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 4,
       genre: 'Male',
@@ -943,9 +971,11 @@ exports.seed = async (knex) => {
     {
       id: 13,
       animal_photo:
-        'http://www.ejemplo17.com/, http://www.ejemplo38.com/, http://www.ejemplo27.com/',
-      identification_photo: 'http://www.ejemplo13.com/',
-      vaccine_passport: 'http://www.ejemplo13.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 2,
       genre: 'Male',
@@ -960,9 +990,11 @@ exports.seed = async (knex) => {
     {
       id: 14,
       animal_photo:
-        'http://www.ejemplo18.com/, http://www.ejemplo39.com/, http://www.ejemplo28.com/',
-      identification_photo: 'http://www.ejemplo14.com/',
-      vaccine_passport: 'http://www.ejemplo14.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 2,
       genre: 'Male',
@@ -977,9 +1009,11 @@ exports.seed = async (knex) => {
     {
       id: 15,
       animal_photo:
-        'http://www.ejemplo19.com/, http://www.ejemplo40.com/, http://www.ejemplo29.com/',
-      identification_photo: 'http://www.ejemplo15.com/',
-      vaccine_passport: 'http://www.ejemplo15.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 5,
       genre: 'Female',
@@ -994,9 +1028,11 @@ exports.seed = async (knex) => {
     {
       id: 16,
       animal_photo:
-        'http://www.ejemplo20.com/, http://www.ejemplo41.com/, http://www.ejemplo30.com/',
-      identification_photo: 'http://www.ejemplo16.com/',
-      vaccine_passport: 'http://www.ejemplo16.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 3,
       genre: 'Male',
@@ -1011,9 +1047,11 @@ exports.seed = async (knex) => {
     {
       id: 17,
       animal_photo:
-        'http://www.ejemplo56.com/, http://www.ejemplo45.com/, http://www.ejemplo62.com/',
-      identification_photo: 'http://www.ejemplo17.com/',
-      vaccine_passport: 'http://www.ejemplo17.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 3,
       genre: 'Male',
@@ -1028,9 +1066,11 @@ exports.seed = async (knex) => {
     {
       id: 18,
       animal_photo:
-        'http://www.ejemplo57.com/, http://www.ejemplo76.com/, http://www.ejemplo544.com/',
-      identification_photo: 'http://www.ejemplo18.com/',
-      vaccine_passport: 'http://www.ejemplo18.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 8,
       genre: 'Male',
@@ -1045,9 +1085,11 @@ exports.seed = async (knex) => {
     {
       id: 19,
       animal_photo:
-        'http://www.ejemplo60.com/, http://www.ejemplo79.com/, http://www.ejemplo244.com/',
-      identification_photo: 'http://www.ejemplo19.com/',
-      vaccine_passport: 'http://www.ejemplo19.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 4,
       genre: 'Female',
@@ -1062,9 +1104,11 @@ exports.seed = async (knex) => {
     {
       id: 20,
       animal_photo:
-        'http://www.ejemplo610.com/, http://www.ejemplo179.com/, http://www.ejemplo224.com/',
-      identification_photo: 'http://www.ejemplo20.com/',
-      vaccine_passport: 'http://www.ejemplo20.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 4,
       genre: 'Female',
@@ -1079,9 +1123,11 @@ exports.seed = async (knex) => {
     {
       id: 21,
       animal_photo:
-        'http://www.ejemplo610.com/, http://www.ejemplo179.com/, http://www.ejemplo224.com/',
-      identification_photo: 'http://www.ejemplo20.com/',
-      vaccine_passport: 'http://www.ejemplo20.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 3,
       genre: 'Male',
@@ -1096,9 +1142,11 @@ exports.seed = async (knex) => {
     {
       id: 22,
       animal_photo:
-        'http://www.ejemplo610.com/, http://www.ejemplo179.com/, http://www.ejemplo224.com/',
-      identification_photo: 'http://www.ejemplo20.com/',
-      vaccine_passport: 'http://www.ejemplo20.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 2,
       genre: 'Female',
@@ -1113,9 +1161,11 @@ exports.seed = async (knex) => {
     {
       id: 23,
       animal_photo:
-        'http://www.ejemplo610.com/, http://www.ejemplo179.com/, http://www.ejemplo224.com/',
-      identification_photo: 'http://www.ejemplo20.com/',
-      vaccine_passport: 'http://www.ejemplo20.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 4,
       genre: 'Female',
@@ -1130,9 +1180,11 @@ exports.seed = async (knex) => {
     {
       id: 24,
       animal_photo:
-        'http://www.ejemplo610.com/, http://www.ejemplo179.com/, http://www.ejemplo224.com/',
-      identification_photo: 'http://www.ejemplo20.com/',
-      vaccine_passport: 'http://www.ejemplo20.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 6,
       genre: 'Male',
