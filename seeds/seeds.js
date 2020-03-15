@@ -728,32 +728,38 @@ exports.seed = async (knex) => {
     // breeding
     {
       id: 1,
-      animal_photo: 'http://www.ejemplo1.com/, http://www.ejemplo2.com/',
-      identification_photo: 'http://www.ejemplo1.com/',
-      vaccine_passport: 'http://www.ejemplo1.com/',
+      animal_photo:
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 8,
       genre: 'Male',
       breed: 'Doberman',
       transaction_status: 'In progress',
-      title: 'Example breeding 1',
-      type: 'Dog',
+      title: 'Ejemplo de crianza 1',
+      type: 'Perro',
       location: 'Avda. ejemplo, 1',
       pedigree: true,
       particular_id: 1,
     },
     {
       id: 2,
-      animal_photo: 'http://www.ejemplo3.com/',
-      identification_photo: 'http://www.ejemplo2.com/',
-      vaccine_passport: 'http://www.ejemplo2.com/',
+      animal_photo:
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'In revision',
       age: 3,
       genre: 'Female',
       breed: 'Bulldog Terrier',
       transaction_status: 'Completed',
-      title: 'Example breeding 2',
-      type: 'Dog',
+      title: 'Ejemplo de crianza 2',
+      type: 'Perro',
       location: 'Avda. ejemplo, 2',
       pedigree: true,
       particular_id: 2,
@@ -761,16 +767,18 @@ exports.seed = async (knex) => {
     {
       id: 3,
       animal_photo:
-        'http://www.ejemplo4.com/, http://www.ejemplo5.com/, http://www.ejemplo6.com/',
-      identification_photo: 'http://www.ejemplo3.com/',
-      vaccine_passport: 'http://www.ejemplo3.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Rejected',
       age: 5,
       genre: 'Male',
       breed: 'Yorkshire Terrier',
       transaction_status: 'In progress',
-      title: 'Example breeding 3',
-      type: 'Dog',
+      title: 'Ejemplo de crianza 3',
+      type: 'Perro',
       location: 'Avda. ejemplo, 3',
       pedigree: true,
       particular_id: 3,
@@ -779,32 +787,38 @@ exports.seed = async (knex) => {
     // adoption
     {
       id: 4,
-      animal_photo: 'http://www.ejemplo5.com/, http://www.ejemplo8.com/',
-      identification_photo: 'http://www.ejemplo4.com/',
-      vaccine_passport: 'http://www.ejemplo4.com/',
+      animal_photo:
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 6,
       genre: 'Male',
       breed: 'Maine Coon',
       transaction_status: 'Completed',
-      title: 'Example adoption 1',
-      type: 'Cat',
+      title: 'Ejemplo de adopción 1',
+      type: 'Gato',
       location: 'Avda. ejemplo, 4',
       pedigree: false,
       particular_id: 4,
     },
     {
       id: 5,
-      animal_photo: 'http://www.ejemplo7.com/',
-      identification_photo: 'http://www.ejemplo5.com/',
-      vaccine_passport: 'http://www.ejemplo5.com/',
+      animal_photo:
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 8,
       genre: 'Female',
       breed: 'Siamés',
       transaction_status: 'In progress',
-      title: 'Example adoption 2',
-      type: 'Cat',
+      title: 'Ejemplo de adopción 2',
+      type: 'Gato',
       location: 'Avda. ejemplo, 5',
       pedigree: true,
       particular_id: 5,
@@ -812,16 +826,18 @@ exports.seed = async (knex) => {
     {
       id: 6,
       animal_photo:
-        'http://www.ejemplo9.com/, http://www.ejemplo1.com/, http://www.ejemplo2.com/',
-      identification_photo: 'http://www.ejemplo6.com/',
-      vaccine_passport: 'http://www.ejemplo6.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 2,
       genre: 'Male',
       breed: 'Árabe',
       transaction_status: 'In progress',
-      title: 'Example adoption 3',
-      type: 'Horse',
+      title: 'Ejemplo de adopción 3',
+      type: 'Caballo',
       location: 'Avda. ejemplo, 6',
       pedigree: true,
       particular_id: 6,
@@ -829,16 +845,18 @@ exports.seed = async (knex) => {
     {
       id: 7,
       animal_photo:
-        'http://www.ejemplo10.com/, http://www.ejemplo33.com/, http://www.ejemplo21.com/',
-      identification_photo: 'http://www.ejemplo7.com/',
-      vaccine_passport: 'http://www.ejemplo7.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 2,
       genre: 'Female',
       breed: 'Árabe',
       transaction_status: 'In progress',
-      title: 'Example adoption 4',
-      type: 'Horse',
+      title: 'Ejemplo de adopción 5',
+      type: 'Caballo',
       location: 'Avda. ejemplo, 7',
       pedigree: true,
       particular_id: 7,
@@ -846,16 +864,18 @@ exports.seed = async (knex) => {
     {
       id: 8,
       animal_photo:
-        'http://www.ejemplo11.com/, http://www.ejemplo34.com/, http://www.ejemplo22.com/',
-      identification_photo: 'http://www.ejemplo8.com/',
-      vaccine_passport: 'http://www.ejemplo8.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 6,
       genre: 'Female',
       breed: 'Andaluz',
       transaction_status: 'In progress',
-      title: 'Example adoption 10',
-      type: 'Horse',
+      title: 'Ejemplo de adopción 6',
+      type: 'Caballo',
       location: 'Avda. ejemplo, 8',
       pedigree: true,
       particular_id: 8,
@@ -863,16 +883,18 @@ exports.seed = async (knex) => {
     {
       id: 9,
       animal_photo:
-        'http://www.ejemplo13.com/, http://www.ejemplo35.com/, http://www.ejemplo24.com/',
-      identification_photo: 'http://www.ejemplo9.com/',
-      vaccine_passport: 'http://www.ejemplo9.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 1,
       genre: 'Male',
       breed: 'Mustang',
       transaction_status: 'In progress',
-      title: 'Example adoption 6',
-      type: 'Horse',
+      title: 'Ejemplo de adopción 7',
+      type: 'Caballo',
       location: 'Avda. ejemplo, 9',
       pedigree: true,
       particular_id: 9,
@@ -880,16 +902,18 @@ exports.seed = async (knex) => {
     {
       id: 10,
       animal_photo:
-        'http://www.ejemplo14.com/, http://www.ejemplo36.com/, http://www.ejemplo25.com/',
-      identification_photo: 'http://www.ejemplo10.com/',
-      vaccine_passport: 'http://www.ejemplo10.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 3,
       genre: 'Male',
       breed: 'Yorkshire',
       transaction_status: 'In progress',
-      title: 'Example adoption 11',
-      type: 'Dog',
+      title: 'Ejemplo de adopción 8',
+      type: 'Perro',
       location: 'Avda. ejemplo, 11',
       pedigree: true,
       particular_id: 10,
@@ -897,16 +921,18 @@ exports.seed = async (knex) => {
     {
       id: 11,
       animal_photo:
-        'http://www.ejemplo15.com/, http://www.ejemplo37.com/, http://www.ejemplo26.com/',
-      identification_photo: 'http://www.ejemplo11.com/',
-      vaccine_passport: 'http://www.ejemplo11.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 4,
       genre: 'Male',
       breed: 'Husky siberiano',
       transaction_status: 'In progress',
-      title: 'Example adoption 12',
-      type: 'Dog',
+      title: 'Ejemplo de adopción 9',
+      type: 'Perro',
       location: 'Avda. ejemplo, 12',
       pedigree: true,
       particular_id: 11,
@@ -914,16 +940,18 @@ exports.seed = async (knex) => {
     {
       id: 12,
       animal_photo:
-        'http://www.ejemplo16.com/, http://www.ejemplo37.com/, http://www.ejemplo26.com/',
-      identification_photo: 'http://www.ejemplo12.com/',
-      vaccine_passport: 'http://www.ejemplo12.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 4,
       genre: 'Male',
       breed: 'Brabante',
       transaction_status: 'In progress',
-      title: 'Example adoption 12',
-      type: 'Horse',
+      title: 'Ejemplo de adopción 10',
+      type: 'Caballo',
       location: 'Avda. ejemplo, 12',
       pedigree: true,
       particular_id: 12,
@@ -931,16 +959,18 @@ exports.seed = async (knex) => {
     {
       id: 13,
       animal_photo:
-        'http://www.ejemplo17.com/, http://www.ejemplo38.com/, http://www.ejemplo27.com/',
-      identification_photo: 'http://www.ejemplo13.com/',
-      vaccine_passport: 'http://www.ejemplo13.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 2,
       genre: 'Male',
       breed: 'Islandés',
       transaction_status: 'In progress',
-      title: 'Example adoption 13',
-      type: 'Horse',
+      title: 'Ejemplo de adopción 11',
+      type: 'Caballo',
       location: 'Avda. ejemplo, 13',
       pedigree: false,
       particular_id: 13,
@@ -948,16 +978,18 @@ exports.seed = async (knex) => {
     {
       id: 14,
       animal_photo:
-        'http://www.ejemplo18.com/, http://www.ejemplo39.com/, http://www.ejemplo28.com/',
-      identification_photo: 'http://www.ejemplo14.com/',
-      vaccine_passport: 'http://www.ejemplo14.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 2,
       genre: 'Male',
       breed: 'Trakehner',
       transaction_status: 'In progress',
-      title: 'Example adoption 14',
-      type: 'Horse',
+      title: 'Ejemplo de adopción 12',
+      type: 'Caballo',
       location: 'Avda. ejemplo, 14',
       pedigree: true,
       particular_id: 14,
@@ -965,16 +997,18 @@ exports.seed = async (knex) => {
     {
       id: 15,
       animal_photo:
-        'http://www.ejemplo19.com/, http://www.ejemplo40.com/, http://www.ejemplo29.com/',
-      identification_photo: 'http://www.ejemplo15.com/',
-      vaccine_passport: 'http://www.ejemplo15.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 5,
       genre: 'Female',
       breed: 'Andalúz',
       transaction_status: 'In progress',
-      title: 'Example adoption 15',
-      type: 'Horse',
+      title: 'Ejemplo de adopción 13',
+      type: 'Caballo',
       location: 'Avda. ejemplo, 16',
       pedigree: true,
       particular_id: 15,
@@ -982,16 +1016,18 @@ exports.seed = async (knex) => {
     {
       id: 16,
       animal_photo:
-        'http://www.ejemplo20.com/, http://www.ejemplo41.com/, http://www.ejemplo30.com/',
-      identification_photo: 'http://www.ejemplo16.com/',
-      vaccine_passport: 'http://www.ejemplo16.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 3,
       genre: 'Male',
       breed: 'Nórico',
       transaction_status: 'In progress',
-      title: 'Example adoption 15',
-      type: 'Horse',
+      title: 'Ejemplo de adopción 14',
+      type: 'Caballo',
       location: 'Avda. ejemplo, 15',
       pedigree: true,
       particular_id: 16,
@@ -999,16 +1035,18 @@ exports.seed = async (knex) => {
     {
       id: 17,
       animal_photo:
-        'http://www.ejemplo56.com/, http://www.ejemplo45.com/, http://www.ejemplo62.com/',
-      identification_photo: 'http://www.ejemplo17.com/',
-      vaccine_passport: 'http://www.ejemplo17.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 3,
       genre: 'Male',
       breed: 'Nórico',
       transaction_status: 'In progress',
-      title: 'Example adoption 17',
-      type: 'Horse',
+      title: 'Ejemplo de adopción 15',
+      type: 'Caballo',
       location: 'Avda. ejemplo, 17',
       pedigree: true,
       particular_id: 17,
@@ -1016,16 +1054,18 @@ exports.seed = async (knex) => {
     {
       id: 18,
       animal_photo:
-        'http://www.ejemplo57.com/, http://www.ejemplo76.com/, http://www.ejemplo544.com/',
-      identification_photo: 'http://www.ejemplo18.com/',
-      vaccine_passport: 'http://www.ejemplo18.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 8,
       genre: 'Male',
       breed: 'Lipizzano',
       transaction_status: 'In progress',
-      title: 'Example adoption 18',
-      type: 'Horse',
+      title: 'Ejemplo de adopción 16',
+      type: 'Caballo',
       location: 'Avda. ejemplo, 18',
       pedigree: false,
       particular_id: 18,
@@ -1033,16 +1073,18 @@ exports.seed = async (knex) => {
     {
       id: 19,
       animal_photo:
-        'http://www.ejemplo60.com/, http://www.ejemplo79.com/, http://www.ejemplo244.com/',
-      identification_photo: 'http://www.ejemplo19.com/',
-      vaccine_passport: 'http://www.ejemplo19.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 4,
       genre: 'Female',
       breed: 'Lipizzano',
       transaction_status: 'In progress',
-      title: 'Example adoption 19',
-      type: 'Horse',
+      title: 'Ejemplo de adopción 17',
+      type: 'Caballo',
       location: 'Avda. ejemplo, 19',
       pedigree: true,
       particular_id: 19,
@@ -1050,16 +1092,18 @@ exports.seed = async (knex) => {
     {
       id: 20,
       animal_photo:
-        'http://www.ejemplo610.com/, http://www.ejemplo179.com/, http://www.ejemplo224.com/',
-      identification_photo: 'http://www.ejemplo20.com/',
-      vaccine_passport: 'http://www.ejemplo20.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 4,
       genre: 'Female',
       breed: 'Bulldog',
       transaction_status: 'Completed',
-      title: 'Example adoption 20',
-      type: 'Dog',
+      title: 'Ejemplo de adopción 18',
+      type: 'Caballo',
       location: 'Avda. ejemplo, 20',
       pedigree: true,
       particular_id: 20,
@@ -1067,16 +1111,18 @@ exports.seed = async (knex) => {
     {
       id: 21,
       animal_photo:
-        'http://www.ejemplo610.com/, http://www.ejemplo179.com/, http://www.ejemplo224.com/',
-      identification_photo: 'http://www.ejemplo20.com/',
-      vaccine_passport: 'http://www.ejemplo20.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 3,
       genre: 'Male',
       breed: 'Bulldog',
       transaction_status: 'Completed',
-      title: 'Example adoption 21',
-      type: 'Dog',
+      title: 'Ejemplo de adopción 19',
+      type: 'Perro',
       location: 'Avda. ejemplo, 21',
       pedigree: true,
       particular_id: 20,
@@ -1084,16 +1130,18 @@ exports.seed = async (knex) => {
     {
       id: 22,
       animal_photo:
-        'http://www.ejemplo610.com/, http://www.ejemplo179.com/, http://www.ejemplo224.com/',
-      identification_photo: 'http://www.ejemplo20.com/',
-      vaccine_passport: 'http://www.ejemplo20.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 2,
       genre: 'Female',
       breed: 'Yorkshire',
       transaction_status: 'In progress',
-      title: 'Example adoption 22',
-      type: 'Dog',
+      title: 'Ejemplo de adopción 20',
+      type: 'Perro',
       location: 'Avda. ejemplo, 22',
       pedigree: true,
       particular_id: 20,
@@ -1101,16 +1149,18 @@ exports.seed = async (knex) => {
     {
       id: 23,
       animal_photo:
-        'http://www.ejemplo610.com/, http://www.ejemplo179.com/, http://www.ejemplo224.com/',
-      identification_photo: 'http://www.ejemplo20.com/',
-      vaccine_passport: 'http://www.ejemplo20.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 4,
       genre: 'Female',
       breed: 'Caniche',
       transaction_status: 'Completed',
-      title: 'Example adoption 23',
-      type: 'Dog',
+      title: 'Ejemplo de adopción 21',
+      type: 'Perro',
       location: 'Avda. ejemplo, 23',
       pedigree: true,
       particular_id: 20,
@@ -1118,16 +1168,18 @@ exports.seed = async (knex) => {
     {
       id: 24,
       animal_photo:
-        'http://www.ejemplo610.com/, http://www.ejemplo179.com/, http://www.ejemplo224.com/',
-      identification_photo: 'http://www.ejemplo20.com/',
-      vaccine_passport: 'http://www.ejemplo20.com/',
+        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+      identification_photo:
+        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+      vaccine_passport:
+        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
       document_status: 'Accepted',
       age: 6,
       genre: 'Male',
       breed: 'Pastor Alemán',
       transaction_status: 'Completed',
-      title: 'Example adoption 24',
-      type: 'Dog',
+      title: 'Ejemplo de adopción 22',
+      type: 'Perro',
       location: 'Avda. ejemplo, 24',
       pedigree: true,
       particular_id: 20,
