@@ -365,10 +365,7 @@ const getExtension = (photo) => {
 };
 
 exports.getPendingAdoptions = async (connection, userId) => {
-  const user = await connection('moderator')
-      .select('id')
-      .where({user_account_id: userId})
-      .first();
+  const user = await connection('moderator').select('id').where('user_account_id', userId).first();
   if (!user) {
     const error = new Error();
     error.status = 404;
@@ -376,8 +373,9 @@ exports.getPendingAdoptions = async (connection, userId) => {
     throw error;
   }
 
-  const adoptions = await connection('adoption')
+  const breedings = await connection('adoption')
       .join('publication', 'adoption.publication_id', '=', 'publication.id')
-      .where('pblication.document_status', 'In revision');
-  return adoptions;
+      .where('publication.document_status', 'In revision');
+  return breedings;
 };
+
