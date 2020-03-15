@@ -55,9 +55,16 @@ exports.getParticularAdoptions = async (connection, page) => {
   return adoptions;
 };
 
-exports.updateAdoption = async (adoptionData, adoptionPhotos, adoptionId, userId, trx) => {
+exports.updateAdoption = async (
+  adoptionData,
+  adoptionPhotos,
+  adoptionId,
+  userId,
+  trx,
+) => {
   // Se comprueba que este editando un adoption propio y en revision
-  const pub = await trx('publication').select('*', 'user_account.id AS userId')
+  const pub = await trx('publication')
+      .select('*', 'user_account.id AS userId')
       .join('adoption', 'adoption.publication_id', '=', 'publication.id')
       .join('shelter', 'shelter.id', '=', 'adoption.shelter_id')
       .join('user_account', 'user_account.id', '=', 'shelter.user_account_id')
@@ -358,7 +365,10 @@ const getExtension = (photo) => {
 };
 
 exports.getPendingAdoptions = async (connection, userId) => {
-  const user = await connection('moderator').select('id').where({user_account_id: userId}).first();
+  const user = await connection('moderator')
+      .select('id')
+      .where({user_account_id: userId})
+      .first();
   if (!user) {
     const error = new Error();
     error.status = 404;
@@ -368,6 +378,6 @@ exports.getPendingAdoptions = async (connection, userId) => {
 
   const adoptions = await connection('adoption')
       .join('publication', 'adoption.publication_id', '=', 'publication.id')
-      .where( 'pblication.document_status', 'In revision');
+      .where('pblication.document_status', 'In revision');
   return adoptions;
 };
