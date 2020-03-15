@@ -1,5 +1,6 @@
 exports.seed = async (knex) => {
   // Deletes ALL existing entries
+  await knex.raw(`SET FOREIGN_KEY_CHECKS = 0;`);
   await knex('shelter').del();
   await knex('adoption').del();
   await knex('administrator').del();
@@ -10,6 +11,7 @@ exports.seed = async (knex) => {
   await knex('moderator').del();
   await knex('vet').del();
   await knex('user_account').del();
+  await knex.raw(`SET FOREIGN_KEY_CHECKS = 1;`);
 
   // user_account
   await knex('user_account').insert([
