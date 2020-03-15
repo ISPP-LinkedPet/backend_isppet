@@ -9,6 +9,7 @@ exports.getParticularAdoptions = async (req, res) => {
       return res.status(401).send('Invalid params');
     }
 
+
     const adoption = await adoptionService.getParticularAdoptions(
         connection,
         page,
@@ -49,17 +50,12 @@ exports.getPendingAdoptions = async (req, res) => {
     const userId = req.user.id;
     // const role = req.user.role;
 
-    const adoptions = await adoptionService.getPendingAdoptions(
-        connection,
-        userId,
-    );
+    const adoptions = await adoptionService.getPendingAdoptions(connection, userId);
 
     return res.status(200).send(adoptions);
   } catch (error) {
     console.log(error);
-    if (error.status && error.message) {
-      return res.status(error.status).send(error.message);
-    }
+    if (error.status && error.message) return res.status(error.status).send(error.message);
     return res.status(500).send(error);
   }
 };
@@ -74,7 +70,9 @@ exports.createAdoption = async (req, res) => {
     const userId = req.user.id;
     const role = req.user.role;
     const adoptionData = req.body;
+    console.log(adoptionData);
     const adoptionPhotos = req.files;
+    console.log(adoptionPhotos);
 
     if (
       !adoptionPhotos.animal_photo ||
@@ -129,7 +127,8 @@ exports.updateAdoption = async (req, res) => {
       !adoptionPhotos.vaccine_passport ||
       !adoptionData.type ||
       !adoptionData.location ||
-      !adoptionData.taxes
+      !adoptionData.taxes ||
+      !userId
     ) {
       return res.status(400).send({error: 'Invalid params'});
     }
@@ -143,7 +142,7 @@ exports.updateAdoption = async (req, res) => {
     );
 
     await trx.commit();
-    return res.status(200).send(adoption);
+    return res.status(200).send({adoption});
   } catch (error) {
     // rollback
     await trx.rollback();

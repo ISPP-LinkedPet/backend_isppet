@@ -12,7 +12,7 @@ router.get('/pending', authorization.moderator, (req, res) =>
 router.post('/', authorization.shelter_particular, (req, res) =>
   adoptionController.createAdoption(req, res),
 );
-router.put('/edit/:id', authorization.shelter, (req, res) =>
+router.put('/edit/:id', authorization.particular, (req, res) =>
   adoptionController.updateAdoption(req, res),
 );
 router.get('/:id', authorization.all, (req, res) =>

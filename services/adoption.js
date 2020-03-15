@@ -66,8 +66,8 @@ exports.updateAdoption = async (
   const pub = await trx('publication')
       .select('*', 'user_account.id AS userId')
       .join('adoption', 'adoption.publication_id', '=', 'publication.id')
-      .join('shelter', 'shelter.id', '=', 'adoption.shelter_id')
-      .join('user_account', 'user_account.id', '=', 'shelter.user_account_id')
+      .join('particular', 'particular.id', '=', 'publication.particular_id')
+      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
       .where('adoption.id', adoptionId)
       .first();
   if (!pub) {
@@ -180,13 +180,13 @@ exports.updateAdoption = async (
     const pubData = {
       animal_photo: savedAnimalPhotos.join(','),
       identification_photo: savedIdentificationPhotos.join(','),
-      age: adoptionData.age || null,
-      genre: adoptionData.genre || null,
-      breed: adoptionData.breed || null,
+      age: null,
+      genre: null,
+      breed: null,
       location: adoptionData.location || null,
-      type: adoptionData.type || null,
-      pedigree: adoptionData.pedigree || null,
-      title: adoptionData.title,
+      type: null,
+      pedigree: null,
+      title: null,
       vaccine_passport: savedVaccinePhotos.join(','),
     };
 
@@ -320,14 +320,14 @@ exports.createAdoption = async (
         identification_photo: savedIdentificationPhotos.join(','),
         document_status: 'Accepted',
         transaction_status: 'In progress',
-        title: adoptionData.title,
+        title: null,
         vaccine_passport: savedVaccinePhotos.join(','),
-        type: adoptionData.type || null,
+        type: null,
         location: adoptionData.location || null,
-        pedigree: adoptionData.pedigree || null,
-        age: adoptionData.age || null,
-        genre: adoptionData.genre || null,
-        breed: adoptionData.breed || null,
+        pedigree: null,
+        age: null,
+        genre: null,
+        breed: null,
       };
     } else if (role === 'particular') {
       pubData = {
@@ -335,14 +335,14 @@ exports.createAdoption = async (
         identification_photo: savedIdentificationPhotos.join(','),
         document_status: 'In revision',
         transaction_status: 'In progress',
-        title: adoptionData.title,
+        title: null,
         vaccine_passport: savedVaccinePhotos.join(','),
-        type: adoptionData.type || null,
+        type: null,
         location: adoptionData.location || null,
-        pedigree: adoptionData.pedigree || null,
-        age: adoptionData.age || null,
-        genre: adoptionData.genre || null,
-        breed: adoptionData.breed || null,
+        pedigree: null,
+        age: null,
+        genre: null,
+        breed: null,
         particular_id: userId,
       };
     }
