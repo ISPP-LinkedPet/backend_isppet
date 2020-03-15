@@ -347,8 +347,6 @@ exports.createAdoption = async (
       };
     }
 
-    console.log(pubData);
-
     const publicationId = await trx('publication').insert(pubData);
 
     let adoptionId = null;
