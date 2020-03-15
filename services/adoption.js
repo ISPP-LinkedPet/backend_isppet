@@ -219,7 +219,8 @@ exports.updateAdoption = async (
 exports.createAdoption = async (
   adoptionData,
   adoptionPhotos,
-  shelterId,
+  userId,
+  role,
   trx,
 ) => {
   const allPhotos = [];
@@ -311,28 +312,62 @@ exports.createAdoption = async (
 
     allPhotos.push(...savedVaccinePhotos);
 
-    const pubData = {
-      animal_photo: savedAnimalPhotos.join(','),
-      identification_photo: savedIdentificationPhotos.join(','),
-      document_status: 'In revision',
-      transaction_status: 'In progress',
-      title: adoptionData.title,
-      vaccine_passport: savedVaccinePhotos.join(','),
-      type: adoptionData.type || null,
-      location: adoptionData.location || null,
-      pedigree: adoptionData.pedigree || null,
-      age: adoptionData.age || null,
-      genre: adoptionData.genre || null,
-      breed: adoptionData.breed || null,
-    };
+    let pubData = null;
+
+    if (role === 'shelter') {
+      pubData = {
+        animal_photo: savedAnimalPhotos.join(','),
+        identification_photo: savedIdentificationPhotos.join(','),
+        document_status: 'Accepted',
+        transaction_status: 'In progress',
+        title: adoptionData.title,
+        vaccine_passport: savedVaccinePhotos.join(','),
+        type: adoptionData.type || null,
+        location: adoptionData.location || null,
+        pedigree: adoptionData.pedigree || null,
+        age: adoptionData.age || null,
+        genre: adoptionData.genre || null,
+        breed: adoptionData.breed || null,
+      };
+    } else if (role === 'particular') {
+      pubData = {
+        animal_photo: savedAnimalPhotos.join(','),
+        identification_photo: savedIdentificationPhotos.join(','),
+        document_status: 'In revision',
+        transaction_status: 'In progress',
+        title: adoptionData.title,
+        vaccine_passport: savedVaccinePhotos.join(','),
+        type: adoptionData.type || null,
+        location: adoptionData.location || null,
+        pedigree: adoptionData.pedigree || null,
+        age: adoptionData.age || null,
+        genre: adoptionData.genre || null,
+        breed: adoptionData.breed || null,
+        particular_id: userId,
+      };
+    }
+
+    console.log(pubData);
 
     const publicationId = await trx('publication').insert(pubData);
-    const adoptionId = await trx('adoption').insert({
-      publication_id: publicationId,
-      name: adoptionData.name,
-      taxes: adoptionData.taxes,
-      shelter_id: shelterId,
-    });
+
+    let adoptionId = null;
+
+    if (role === 'shelter') {
+      adoptionId = await trx('adoption').insert({
+        publication_id: publicationId,
+        name: adoptionData.name,
+        taxes: adoptionData.taxes,
+        shelter_id: userId,
+      });
+    } else if (role === 'particular') {
+      adoptionId = await trx('adoption').insert({
+        publication_id: publicationId,
+        name: adoptionData.name,
+        taxes: adoptionData.taxes,
+        shelter_id: null,
+      });
+    }
 
     return await trx('adoption')
         .join('publication', 'adoption.publication_id', '=', 'publication.id')
@@ -365,7 +400,10 @@ const getExtension = (photo) => {
 };
 
 exports.getPendingAdoptions = async (connection, userId) => {
-  const user = await connection('moderator').select('id').where('user_account_id', userId).first();
+  const user = await connection('moderator')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
   if (!user) {
     const error = new Error();
     error.status = 404;
@@ -378,4 +416,3 @@ exports.getPendingAdoptions = async (connection, userId) => {
       .where('publication.document_status', 'In revision');
   return breedings;
 };
-
