@@ -3,6 +3,7 @@ const router = new express.Router();
 const breedingController = require('../controllers/breeding');
 const authorization = require('../authorization/index');
 
+router.put('/edit/:id', authorization.particular, (req, res) => breedingController.editBreeding(req, res));
 router.get('/pending', authorization.moderator, (req, res) => breedingController.getPendingBreedings(req, res));
 router.get('/offers', authorization.particular, (req, res) => breedingController.getBreedingsOffers(req, res));
 router.get('/interested', authorization.particular, (req, res) => breedingController.getMyInterestedBreedings(req, res));

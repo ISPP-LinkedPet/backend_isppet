@@ -125,22 +125,15 @@ exports.updateAdoption = async (req, res) => {
       !adoptionPhotos.vaccine_passport ||
       !adoptionData.type ||
       !adoptionData.location ||
-      !adoptionData.taxes ||
-      !userId
+      !adoptionData.taxes
     ) {
       return res.status(400).send({error: 'Invalid params'});
     }
 
-    const adoption = await adoptionService.updateAdoption(
-        adoptionData,
-        adoptionPhotos,
-        adoptionId,
-        userId,
-        trx,
-    );
+    const adoption = await adoptionService.updateAdoption(adoptionData, adoptionPhotos, adoptionId, userId, trx);
 
     await trx.commit();
-    return res.status(200).send({adoption});
+    return res.status(200).send(adoption);
   } catch (error) {
     // rollback
     await trx.rollback();

@@ -7,3 +7,20 @@ exports.getShelters = async (connection, page) => {
 
   return shelters;
 };
+
+exports.getShelter = async (connection, shelterId) => {
+  const shelter = await connection('shelter')
+      .innerJoin('user_account', 'shelter.user_account_id', '=', 'user_account.id')
+      .where('shelter.id', shelterId)
+      .first();
+
+  if (!shelter) {
+    const error = new Error();
+    error.status = 400;
+    error.message = 'No shelters with that ID';
+    throw error;
+  }
+
+  return shelter;
+};
+

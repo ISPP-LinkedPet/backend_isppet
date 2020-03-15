@@ -1,6 +1,7 @@
 exports.up = (knex) => {
   return (
     knex.schema
+        .raw(`SET FOREIGN_KEY_CHECKS = 0;`)
         .dropTableIfExists('adoption')
         .dropTableIfExists('shelter')
         .dropTableIfExists('administrator')
@@ -11,6 +12,7 @@ exports.up = (knex) => {
         .dropTableIfExists('moderator')
         .dropTableIfExists('vet')
         .dropTableIfExists('user_account')
+        .raw(`SET FOREIGN_KEY_CHECKS = 1;`)
 
     // user_account
         .createTable('user_account', function(table) {
@@ -32,8 +34,8 @@ exports.up = (knex) => {
               .defaultTo(knex.fn.now())
               .notNullable();
           table.string('name', 100).notNullable();
-          table.string('email_adress', 500).notNullable();
-          table.string('adress', 500).notNullable();
+          table.string('email', 500).notNullable();
+          table.string('address', 500).notNullable();
           table.integer('telephone').notNullable();
           table.string('optional_photo', 500).nullable();
         })
@@ -180,8 +182,10 @@ exports.up = (knex) => {
           table.increments().primary();
           table.string('name', 100).notNullable();
           table.string('surname', 200).notNullable();
-          table.string('email_adress', 500).notNullable();
-          table.string('adress', 500).notNullable();
+          table.string('email', 500).notNullable();
+          table.string('address', 500).notNullable();
+          table.string('latitude', 500);
+          table.string('longitude', 500);
           table.integer('telephone').notNullable();
           table.string('optional_photo', 500).nullable();
           table.boolean('is_premium');

@@ -34,30 +34,28 @@ exports.createBreading = async (req, res) => {
     // file
     const breedingPhotos = req.files;
 
-    console.log(breedingPhotos, 'A', breedingData);
     // breed, age, pedigree and genre not required during creation
     if (
       !breedingPhotos.animal_photo ||
       !breedingPhotos.identification_photo ||
-      !breedingData.title ||
       !breedingPhotos.vaccine_passport ||
       !breedingData.price ||
-      !breedingData.location ||
-      !breedingData.type
+      !breedingData.location
     ) {
+      console.log(breedingData, breedingPhotos, !breedingData.price || !breedingData.location);
       return res.status(400).send({error: 'Invalid params'});
     }
 
     const breeding = await breedingService.createBreeding(breedingData, breedingPhotos, particularId, trx);
+
     // commit
     await trx.commit();
-    return res.status(200).send({breeding});
+
+    return res.status(200).send(breeding);
   } catch (error) {
     // rollback
     await trx.rollback();
-    if (error.status && error.message) {
-      return res.status(error.status).send({error: error.message});
-    }
+    if (error.status && error.message) return res.status(error.status).send({error: error.message});
     return res.status(500).send({error});
   }
 };
@@ -149,5 +147,32 @@ exports.imInterested = async (req, res) => {
 
     if (error.status && error.message) return res.status(error.status).send({error: error.message});
     return res.status(500).send({error});
+  }
+};
+
+exports.editBreeding = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
+  try {
+    const userId = req.user.id;
+    const breedingData = req.body;
+    const breedingPhotos = req.files;
+    const breedingId = req.params.id;
+
+    const breeding = await breedingService.editBreeding(breedingData, breedingPhotos, breedingId, userId, trx);
+
+    // commit
+    await trx.commit();
+
+    return res.status(200).send(breeding);
+  } catch (error) {
+    console.log(error);
+    // rollback
+    await trx.rollback();
+    if (error.status && error.message) return res.status(error.status).send({error: error.message});
+    return res.status(500).send(error);
   }
 };

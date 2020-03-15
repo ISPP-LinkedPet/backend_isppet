@@ -11,6 +11,7 @@ const shelterRouter = require('./routers/shelter');
 const adoptionRouter = require('./routers/adoption');
 const authRouter = require('./routers/auth');
 const publicationRouter = require('./routers/publication');
+const vetRouter = require('./routers/vet');
 
 const app = express();
 
@@ -23,7 +24,7 @@ const connection = {
     password: process.env.DB_PASS,
     database: process.env.DB_SCHEMA,
   },
-  pool: {min: 2, max: 10},
+  pool: {min: 1, max: 2},
 };
 exports.connection = connection;
 
@@ -48,6 +49,7 @@ app.use('/auth', authRouter);
 app.use('/shelter', shelterRouter);
 app.use('/adoption', adoptionRouter);
 app.use('/publication', publicationRouter);
+app.use('/vet', vetRouter);
 
 // Ruta pública para acceder a las imágenes
 app.use(express.static('public'));

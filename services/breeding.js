@@ -115,17 +115,17 @@ exports.createBreeding = async (breedingData, breedingPhotos, particularId, trx)
     const pubData = {
       animal_photo: savedAnimalPhotos.join(','),
       identification_photo: savedIdentificationPhotos.join(','),
-      document_status: 'In revision',
-      age: breedingData.age || null,
-      genre: breedingData.genre || null,
-      breed: breedingData.breed || null,
-      location: breedingData.location || null,
-      type: breedingData.type || null,
-      pedigree: breedingData.pedigree || null,
-      transaction_status: 'In progress',
-      title: breedingData.title,
-      particular_id: particularId,
       vaccine_passport: savedVaccinePhotos.join(','),
+      document_status: 'In revision',
+      age: null,
+      genre:null,
+      breed: null,
+      location: breedingData.location,
+      type:  null,
+      pedigree: null,
+      transaction_status: 'In progress',
+      title: null,
+      particular_id: particularId,
     };
 
     const publicationId = await trx('publication').insert(pubData);
@@ -280,6 +280,144 @@ exports.imInterested = async (userId, breedingId, trx) => {
   }
 
   // Comprobar que la request no sea del propia usuario y que sea visible para todo el mundo
+};
+
+exports.editBreeding = async (breedingData, breedingPhotos, breedingId, userId, trx) => {
+  // Se comprueba que este editando un breeding propio y en revision
+  const pub = await trx('publication').select('*', 'user_account.id AS userId')
+      .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+      .join('particular', 'particular.id', '=', 'publication.particular_id')
+      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
+      .where('breeding.id', breedingId)
+      .first();
+  if (!pub) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Breeding not found';
+    throw error;
+  }
+  if (!(pub.userId === userId)) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not edit a publication that you do not own';
+    throw error;
+  }
+  if ( !(pub.document_status === 'In revision')) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not edit a publication which is not in revision';
+    throw error;
+  }
+
+  const allPhotos = [];
+
+  try {
+    if (breedingPhotos.animal_photo) {
+      // Mínimo 2 fotos del animal
+      const savedAnimalPhotos = [];
+      if (breedingPhotos.animal_photo && breedingPhotos.animal_photo.length >= 2) {
+        breedingPhotos.animal_photo.forEach((photo) => {
+          const photoName = path.join(ANIMAL_FOLDER, `${uuidv4()}.${getExtension(photo.name)}`);
+          savePhoto(photo, photoName);
+          savedAnimalPhotos.push(photoName);
+        });
+      } else {
+        const error = new Error();
+        error.status = 400;
+        error.message = 'It is required to upload at least two photos of the animal';
+        throw error;
+      }
+      allPhotos.push(...savedAnimalPhotos);
+    }
+
+    if (breedingPhotos.identification_photo) {
+      // Mínimo una foto identificativa
+      const savedIdentificationPhotos = [];
+      if (breedingPhotos.identification_photo) {
+        if (Array.isArray(breedingPhotos.identification_photo)) {
+          breedingPhotos.identification_photo.forEach((photo) => {
+            const photoName = path.join(IDENTIFICATION_FOLDER, `${uuidv4()}.${getExtension(photo.name)}`);
+            savePhoto(photo, photoName);
+            savedIdentificationPhotos.push(photoName);
+          });
+        } else {
+          const photoName = path.join(IDENTIFICATION_FOLDER, `${uuidv4()}.${getExtension(breedingPhotos.identification_photo.name)}`);
+          savePhoto(breedingPhotos.identification_photo, photoName);
+          savedIdentificationPhotos.push(photoName);
+        }
+      } else {
+        const error = new Error();
+        error.status = 400;
+        error.message = 'It is required to upload at least one identification photo';
+        throw error;
+      }
+      allPhotos.push(...savedIdentificationPhotos);
+    }
+
+    if (breedingPhotos.vaccine_passport) {
+      // Mínimo una foto de las vacunas
+      const savedVaccinePhotos = [];
+      if (breedingPhotos.vaccine_passport) {
+        if (Array.isArray(breedingPhotos.vaccine_passport)) {
+          breedingPhotos.vaccine_passport.forEach((photo) => {
+            const photoName = path.join(VACCINES_FOLDER, `${uuidv4()}.${getExtension(photo.name)}`);
+            savePhoto(photo, photoName);
+            savedVaccinePhotos.push(photoName);
+          });
+        } else {
+          const photoName = path.join(VACCINES_FOLDER, `${uuidv4()}.${getExtension(breedingPhotos.vaccine_passport.name)}`);
+          savePhoto(breedingPhotos.vaccine_passport, photoName);
+          savedVaccinePhotos.push(photoName);
+        }
+      } else {
+        const error = new Error();
+        error.status = 400;
+        error.message = 'It is required to upload at least one photo of the vaccine passport';
+        throw error;
+      }
+      allPhotos.push(...savedVaccinePhotos);
+    }
+
+    // Moderators will modify the breeding publication
+    const pubData = {};
+    if (breedingPhotos.animal_photo) pubData.animal_photo = savedAnimalPhotos.join(',');
+    if (breedingPhotos.identification_photo) pubData.identification_photo = savedIdentificationPhotos.join(',');
+    if (breedingPhotos.vaccine_passport) pubData.vaccine_passport = savedVaccinePhotos.join(',');
+    if (breedingData.title) pubData.title = breedingData.title;
+    if (breedingData.age) pubData.age = breedingData.age;
+    if (breedingData.genre) pubData.genre = breedingData.genre;
+    if (breedingData.breed) pubData.breed = breedingData.breed;
+    if (breedingData.location) pubData.location = breedingData.location;
+    if (breedingData.type) pubData.type = breedingData.type;
+    if (breedingData.pedigree) pubData.pedigree = breedingData.pedigree;
+
+    await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .update(pubData);
+
+    // Update price
+    if (breedingData.price) {
+      await trx('breeding')
+          .where({'breeding.id': breedingId})
+          .update({
+            price: breedingData.price,
+          });
+    }
+
+    return await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .first();
+  } catch (error) {
+    // Borramos las fotos guardadas en caso de error
+    allPhotos.forEach((photo) => {
+      fs.unlink(path.join('public', photo), (err) => {
+        // nothing to do
+      });
+    });
+    throw error;
+  }
 };
 
 const savePhoto = async (photo, photoRoute) => {
