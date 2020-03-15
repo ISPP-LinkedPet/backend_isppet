@@ -24,7 +24,7 @@ const connection = {
     password: process.env.DB_PASS,
     database: process.env.DB_SCHEMA,
   },
-  pool: {min: 2, max: 10},
+  pool: {min: 1, max: 2},
 };
 exports.connection = connection;
 

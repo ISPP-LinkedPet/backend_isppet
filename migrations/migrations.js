@@ -1,6 +1,7 @@
 exports.up = (knex) => {
   return (
     knex.schema
+        .raw(`SET FOREIGN_KEY_CHECKS = 0;`)
         .dropTableIfExists('adoption')
         .dropTableIfExists('shelter')
         .dropTableIfExists('administrator')
@@ -11,6 +12,7 @@ exports.up = (knex) => {
         .dropTableIfExists('moderator')
         .dropTableIfExists('vet')
         .dropTableIfExists('user_account')
+        .raw(`SET FOREIGN_KEY_CHECKS = 1;`)
 
     // user_account
         .createTable('user_account', function(table) {

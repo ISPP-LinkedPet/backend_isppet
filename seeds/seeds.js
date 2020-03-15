@@ -1,16 +1,4 @@
 exports.seed = async (knex) => {
-  // Deletes ALL existing entries
-  await knex('shelter').del();
-  await knex('adoption').del();
-  await knex('administrator').del();
-  await knex('breeding').del();
-  await knex('request').del();
-  await knex('publication').del();
-  await knex('particular').del();
-  await knex('moderator').del();
-  await knex('vet').del();
-  await knex('user_account').del();
-
   // user_account
   await knex('user_account').insert([
     // shelter
