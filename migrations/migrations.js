@@ -32,8 +32,8 @@ exports.up = (knex) => {
               .defaultTo(knex.fn.now())
               .notNullable();
           table.string('name', 100).notNullable();
-          table.string('email', 500).notNullable();
-          table.string('address', 500).notNullable();
+          table.string('email_adress', 500).notNullable();
+          table.string('adress', 500).notNullable();
           table.integer('telephone').notNullable();
           table.string('optional_photo', 500).nullable();
         })
@@ -180,8 +180,8 @@ exports.up = (knex) => {
           table.increments().primary();
           table.string('name', 100).notNullable();
           table.string('surname', 200).notNullable();
-          table.string('email', 500).notNullable();
-          table.string('address', 500).notNullable();
+          table.string('email_adress', 500).notNullable();
+          table.string('adress', 500).notNullable();
           table.integer('telephone').notNullable();
           table.string('optional_photo', 500).nullable();
           table.boolean('is_premium');

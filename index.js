@@ -1,5 +1,4 @@
 const express = require('express');
-const app = express();
 const knex = require('knex');
 const morgan = require('morgan');
 const cors = require('cors');
@@ -11,6 +10,9 @@ const breedingRouter = require('./routers/breeding');
 const shelterRouter = require('./routers/shelter');
 const adoptionRouter = require('./routers/adoption');
 const authRouter = require('./routers/auth');
+const publicationRouter = require('./routers/publication');
+
+const app = express();
 
 // database
 const connection = {
@@ -45,6 +47,10 @@ app.use('/breeding', breedingRouter);
 app.use('/auth', authRouter);
 app.use('/shelter', shelterRouter);
 app.use('/adoption', adoptionRouter);
+app.use('/publication', publicationRouter);
+
+// Ruta pública para acceder a las imágenes
+app.use(express.static('public'));
 
 // server
 const port = process.env.PORT || 3000;
