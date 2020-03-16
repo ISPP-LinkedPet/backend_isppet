@@ -419,6 +419,90 @@ exports.editBreeding = async (breedingData, breedingPhotos, breedingId, userId, 
   }
 };
 
+exports.acceptBreeding = async (breedingData, breedingId, trx) => {
+  const pub = await trx('publication').select('*', 'user_account.id AS userId')
+      .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+      .join('particular', 'particular.id', '=', 'publication.particular_id')
+      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
+      .where('breeding.id', breedingId)
+      .first();
+  if (!pub) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Breeding not found';
+    throw error;
+  }
+  if ( !(pub.document_status === 'In revision')) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not accept a publication which is not in revision';
+    throw error;
+  }
+
+  try {
+    // Moderators will modify the breeding publication
+    const pubData = {};
+    pubData.title = breedingData.title;
+    pubData.age = breedingData.age;
+    pubData.genre = breedingData.genre;
+    pubData.breed = breedingData.breed;
+    pubData.type = breedingData.type;
+    pubData.pedigree = breedingData.pedigree;
+    pubData.document_status  = 'Accepted';
+
+    await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .update(pubData);
+
+    return await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .first();
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.rejectBreeding = async (breedingId, trx) => {
+  const pub = await trx('publication').select('*', 'user_account.id AS userId')
+      .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+      .join('particular', 'particular.id', '=', 'publication.particular_id')
+      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
+      .where('breeding.id', breedingId)
+      .first();
+  if (!pub) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Breeding not found';
+    throw error;
+  }
+  if ( !(pub.document_status === 'In revision')) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not reject a publication which is not in revision';
+    throw error;
+  }
+
+  try {
+    // Moderators will modify the breeding publication
+    const pubData = {};
+    pubData.document_status  = 'Rejected';
+
+    await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .update(pubData);
+
+    return await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .first();
+  } catch (error) {
+    throw error;
+  }
+};
+
 const savePhoto = async (photo, photoRoute) => {
   await photo.mv(path.join('public', photoRoute));
 };

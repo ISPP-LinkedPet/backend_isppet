@@ -411,8 +411,93 @@ exports.getPendingAdoptions = async (connection, userId) => {
     throw error;
   }
 
-  const breedings = await connection('adoption')
+  const adoptions = await connection('adoption')
       .join('publication', 'adoption.publication_id', '=', 'publication.id')
       .where('publication.document_status', 'In revision');
-  return breedings;
+  return adoptions;
+};
+
+
+exports.acceptAdoption = async (adoptionData, adoptionId, trx) => {
+  const pub = await trx('publication').select('*', 'user_account.id AS userId')
+      .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+      .join('particular', 'particular.id', '=', 'publication.particular_id')
+      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
+      .where('adoption.id', adoptionId)
+      .first();
+  if (!pub) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Adoption not found';
+    throw error;
+  }
+  if ( !(pub.document_status === 'In revision')) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not accept a publication which is not in revision';
+    throw error;
+  }
+
+  try {
+    // Moderators will modify the adoption publication
+    const pubData = {};
+    pubData.title = adoptionData.title;
+    pubData.age = adoptionData.age;
+    pubData.genre = adoptionData.genre;
+    pubData.breed = adoptionData.breed;
+    pubData.type = adoptionData.type;
+    pubData.pedigree = adoptionData.pedigree;
+    pubData.document_status  = 'Accepted';
+
+    await trx('publication')
+        .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+        .where({'adoption.id': adoptionId})
+        .update(pubData);
+
+    return await trx('publication')
+        .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+        .where({'adoption.id': adoptionId})
+        .first();
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.rejectAdoption = async (adoptionId, trx) => {
+  const pub = await trx('publication').select('*', 'user_account.id AS userId')
+      .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+      .join('particular', 'particular.id', '=', 'publication.particular_id')
+      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
+      .where('adoption.id', adoptionId)
+      .first();
+  if (!pub) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Adoption not found';
+    throw error;
+  }
+  if ( !(pub.document_status === 'In revision')) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not reject a publication which is not in revision';
+    throw error;
+  }
+
+  try {
+    // Moderators will modify the adoption publication
+    const pubData = {};
+    pubData.document_status  = 'Rejected';
+
+    await trx('publication')
+        .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+        .where({'adoption.id': adoptionId})
+        .update(pubData);
+
+    return await trx('publication')
+        .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+        .where({'adoption.id': adoptionId})
+        .first();
+  } catch (error) {
+    throw error;
+  }
 };

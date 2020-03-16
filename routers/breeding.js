@@ -10,5 +10,7 @@ router.get('/interested', authorization.particular, (req, res) => breedingContro
 router.post('/', authorization.particular, (req, res) => breedingController.createBreading(req, res));
 router.get('/:id', authorization.all, (req, res) => breedingController.getBreeding(req, res));
 router.post('/interested/:id', authorization.particular, (req, res) => breedingController.imInterested(req, res));
+router.put('/accept/:id', authorization.moderator, (req, res) => breedingController.acceptBreeding(req, res));
+router.put('/reject/:id', authorization.moderator, (req, res) => breedingController.rejectBreeding(req, res));
 
 module.exports = router;

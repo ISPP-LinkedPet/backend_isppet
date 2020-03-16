@@ -153,3 +153,52 @@ exports.updateAdoption = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+
+exports.acceptAdoption = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
+  try {
+    const adoptionData = req.body;
+    const adoptionId = req.params.id;
+
+    const adoption = await adoptionService.acceptAdoption(adoptionData, adoptionId, trx);
+
+    // commit
+    await trx.commit();
+
+    return res.status(200).send(adoption);
+  } catch (error) {
+    console.log(error);
+    // rollback
+    await trx.rollback();
+    if (error.status && error.message) return res.status(error.status).send({error: error.message});
+    return res.status(500).send(error);
+  }
+};
+
+exports.rejectAdoption = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
+  try {
+    const adoptionId = req.params.id;
+
+    const adoption = await adoptionService.rejectaAdoption(adoptionId, trx);
+
+    // commit
+    await trx.commit();
+
+    return res.status(200).send(adoption);
+  } catch (error) {
+    console.log(error);
+    // rollback
+    await trx.rollback();
+    if (error.status && error.message) return res.status(error.status).send({error: error.message});
+    return res.status(500).send(error);
+  }
+};
