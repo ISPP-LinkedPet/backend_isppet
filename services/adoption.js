@@ -447,7 +447,7 @@ exports.acceptAdoption = async (adoptionData, adoptionId, trx) => {
     pubData.breed = adoptionData.breed;
     pubData.type = adoptionData.type;
     pubData.pedigree = adoptionData.pedigree;
-    pubData.document_status  = 'Accepted';
+    pubData.document_status = 'Accepted';
 
     await trx('publication')
         .join('adoption', 'adoption.publication_id', '=', 'publication.id')
@@ -486,7 +486,7 @@ exports.rejectAdoption = async (adoptionId, trx) => {
   try {
     // Moderators will modify the adoption publication
     const pubData = {};
-    pubData.document_status  = 'Rejected';
+    pubData.document_status = 'Rejected';
 
     await trx('publication')
         .join('adoption', 'adoption.publication_id', '=', 'publication.id')
@@ -500,4 +500,66 @@ exports.rejectAdoption = async (adoptionId, trx) => {
   } catch (error) {
     throw error;
   }
+};
+
+exports.imInterested = async (userId, adoptionId, trx) => {
+  // Se comprueba que no se intenta estar interesado en una publication propia
+  const pub = await trx('publication')
+      .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+      .where({'adoption.id': adoptionId})
+      .first();
+
+  if (pub == undefined || pub.particular_id === userId) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not be interested in your own publications';
+    throw error;
+  }
+
+  // Se comprueba que esta publicacion no este con una request pendiente del usuario actual
+  const rqt = await trx('request')
+      .where({publication_id: pub.publication_id})
+      .andWhere({particular_id: userId})
+      .first();
+
+  if (rqt && rqt.status === 'Pending') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Already interested or concluded';
+    throw error;
+  }
+
+  // Se comprueba que esta publicacion tenga los documentos verificados y todavia este en progreso
+  const wrongPub = await trx('publication')
+      .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+      .where({'publication.document_status': 'Accepted'})
+      .andWhere({'publication.transaction_status': 'In progress'})
+      .andWhere({'adoption.id': adoptionId});
+
+  if (!wrongPub.length) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'The publication documents or status are wrong';
+    throw error;
+  }
+
+  if (rqt != undefined) {
+    await trx('request')
+        .where({id: rqt.id})
+        .update({
+          status: 'Pending',
+        });
+    return await trx('request').where({id: rqt.id}).first();
+  } else {
+    const rqtData = {
+      status: 'Pending',
+      publication_id: pub.publication_id,
+      particular_id: userId,
+    };
+
+    const requestId = await trx('request').insert(rqtData);
+    return await trx('request').where({id: requestId}).first();
+  }
+
+  // Comprobar que la request no sea del propia usuario y que sea visible para todo el mundo
 };

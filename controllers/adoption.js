@@ -202,3 +202,37 @@ exports.rejectAdoption = async (req, res) => {
     return res.status(500).send(error);
   }
 };
+
+exports.imInterested = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
+  try {
+    // params
+    const adoptionId = req.params.id;
+    if (!adoptionId) {
+      return res.status(404).send('Miss params');
+    }
+
+    // authorization
+    const userId = req.user.id;
+
+    const request = await adoptionService.imInterested(userId, adoptionId, trx);
+
+    // commit
+    await trx.commit();
+
+    // Ver el formato en el que mandar los mensajes
+    return res.status(200).send(request);
+  } catch (error) {
+    console.log(error);
+
+    // rollback
+    await trx.rollback();
+
+    if (error.status && error.message) return res.status(error.status).send({error: error.message});
+    return res.status(500).send({error});
+  }
+};
