@@ -448,7 +448,7 @@ exports.acceptBreeding = async (breedingData, breedingId, trx) => {
     pubData.breed = breedingData.breed;
     pubData.type = breedingData.type;
     pubData.pedigree = breedingData.pedigree;
-    pubData.document_status  = 'Accepted';
+    pubData.document_status = 'Accepted';
 
     await trx('publication')
         .join('breeding', 'breeding.publication_id', '=', 'publication.id')
@@ -487,7 +487,7 @@ exports.rejectBreeding = async (breedingId, trx) => {
   try {
     // Moderators will modify the breeding publication
     const pubData = {};
-    pubData.document_status  = 'Rejected';
+    pubData.document_status = 'Rejected';
 
     await trx('publication')
         .join('breeding', 'breeding.publication_id', '=', 'publication.id')
