@@ -518,4 +518,29 @@ const getExtension = (photo) => {
   return photo.split('.').pop();
 };
 
+exports.breedingHasRequest = async (connection, userId, breedingId) => {
+  let hasRequest = false;
+  const particular = await connection('particular').select('id')
+      .where('user_account_id', userId).first();
+  if (particular == undefined) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Particular not found';
+    throw error;
+  }
+
+  const request = await connection('breeding')
+      .join('publication', 'breeding.publication_id', '=', 'publication.id')
+      .join('particular', 'particular.id', '=', 'publication.particular_id')
+      .join('request', 'request.particular_id', '=', 'particular.id')
+      .where('particular.id', particular.id)
+      // .andWhere('request.status', 'Pending')
+      .andWhere('breeding.id', breedingId);
+
+  if (request.length) {
+    hasRequest = true;
+  }
+
+  return hasRequest;
+};
 

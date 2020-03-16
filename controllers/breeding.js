@@ -226,3 +226,25 @@ exports.rejectBreeding = async (req, res) => {
   }
 };
 
+exports.breedingHasRequest = async (req, res) => {
+  const connection = req.connection;
+
+  try {
+
+    // get params
+    const breedingId = req.params.id;
+
+    // authorization
+    const userId = req.user.id;
+
+    const hasRequest = await breedingService.breedingHasRequest(connection, userId, breedingId);
+
+    return res.status(200).send({hasRequest});
+  } catch (error) {
+    console.log(error);
+
+    if (error.status && error.message) return res.status(error.status).send(error.message);
+    return res.status(500).send(error);
+  }
+};
+
