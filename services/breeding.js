@@ -383,6 +383,12 @@ exports.editBreeding = async (breedingData, breedingPhotos, breedingId, userId, 
     if (breedingPhotos.animal_photo) pubData.animal_photo = savedAnimalPhotos.join(',');
     if (breedingPhotos.identification_photo) pubData.identification_photo = savedIdentificationPhotos.join(',');
     if (breedingPhotos.vaccine_passport) pubData.vaccine_passport = savedVaccinePhotos.join(',');
+    if (breedingData.age) pubData.age = breedingData.age;
+    if (breedingData.genre) pubData.genre = breedingData.genre;
+    if (breedingData.breed) pubData.breed = breedingData.breed;
+    if (breedingData.location) pubData.location = breedingData.location;
+    if (breedingData.type) pubData.type = breedingData.type;
+    if (breedingData.pedigree) pubData.pedigree = breedingData.pedigree;
 
     await trx('publication')
         .join('breeding', 'breeding.publication_id', '=', 'publication.id')
