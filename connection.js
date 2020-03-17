@@ -10,7 +10,7 @@ module.exports = () => {
     },
     pool: {
       min: 0,
-      max: 1,
+      max: 5,
       idleTimeoutMillis: 5000,
     },
   });
