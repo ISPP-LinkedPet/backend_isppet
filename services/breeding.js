@@ -118,10 +118,10 @@ exports.createBreeding = async (breedingData, breedingPhotos, particularId, trx)
       vaccine_passport: savedVaccinePhotos.join(','),
       document_status: 'In revision',
       age: null,
-      genre:null,
+      genre: null,
       breed: null,
       location: breedingData.location,
-      type:  null,
+      type: null,
       pedigree: null,
       transaction_status: 'In progress',
       title: null,
@@ -221,13 +221,21 @@ exports.getPendingBreedings = async (connection, userId) => {
 };
 
 exports.imInterested = async (userId, breedingId, trx) => {
+  // se obtine el id del particular
+  const particularId = await connection('particular').select('id').where('user_account_id', userId).first();
+  if (!particularId) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Not found user';
+    throw error;
+  }
   // Se comprueba que no se intenta estar interesado en una publication propia
   const pub = await trx('publication')
       .join('breeding', 'breeding.publication_id', '=', 'publication.id')
       .where('breeding.id', breedingId)
       .first();
 
-  if (pub == undefined || pub.particular_id === userId) {
+  if (pub == undefined || pub.particular_id === particularId) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not be interested in your own publications';
@@ -383,7 +391,6 @@ exports.editBreeding = async (breedingData, breedingPhotos, breedingId, userId, 
     if (breedingPhotos.animal_photo) pubData.animal_photo = savedAnimalPhotos.join(',');
     if (breedingPhotos.identification_photo) pubData.identification_photo = savedIdentificationPhotos.join(',');
     if (breedingPhotos.vaccine_passport) pubData.vaccine_passport = savedVaccinePhotos.join(',');
-    if (breedingData.title) pubData.title = breedingData.title;
     if (breedingData.age) pubData.age = breedingData.age;
     if (breedingData.genre) pubData.genre = breedingData.genre;
     if (breedingData.breed) pubData.breed = breedingData.breed;
@@ -420,6 +427,90 @@ exports.editBreeding = async (breedingData, breedingPhotos, breedingId, userId, 
   }
 };
 
+exports.acceptBreeding = async (breedingData, breedingId, trx) => {
+  const pub = await trx('publication').select('*', 'user_account.id AS userId')
+      .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+      .join('particular', 'particular.id', '=', 'publication.particular_id')
+      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
+      .where('breeding.id', breedingId)
+      .first();
+  if (!pub) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Breeding not found';
+    throw error;
+  }
+  if ( !(pub.document_status === 'In revision')) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not accept a publication which is not in revision';
+    throw error;
+  }
+
+  try {
+    // Moderators will modify the breeding publication
+    const pubData = {};
+    pubData.title = breedingData.title;
+    pubData.age = breedingData.age;
+    pubData.genre = breedingData.genre;
+    pubData.breed = breedingData.breed;
+    pubData.type = breedingData.type;
+    pubData.pedigree = breedingData.pedigree;
+    pubData.document_status = 'Accepted';
+
+    await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .update(pubData);
+
+    return await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .first();
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.rejectBreeding = async (breedingId, trx) => {
+  const pub = await trx('publication').select('*', 'user_account.id AS userId')
+      .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+      .join('particular', 'particular.id', '=', 'publication.particular_id')
+      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
+      .where('breeding.id', breedingId)
+      .first();
+  if (!pub) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Breeding not found';
+    throw error;
+  }
+  if ( !(pub.document_status === 'In revision')) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not reject a publication which is not in revision';
+    throw error;
+  }
+
+  try {
+    // Moderators will modify the breeding publication
+    const pubData = {};
+    pubData.document_status = 'Rejected';
+
+    await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .update(pubData);
+
+    return await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .first();
+  } catch (error) {
+    throw error;
+  }
+};
+
 const savePhoto = async (photo, photoRoute) => {
   await photo.mv(path.join('public', photoRoute));
 };
@@ -435,4 +526,29 @@ const getExtension = (photo) => {
   return photo.split('.').pop();
 };
 
+exports.breedingHasRequest = async (connection, userId, breedingId) => {
+  let hasRequest = false;
+  const particular = await connection('particular').select('id')
+      .where('user_account_id', userId).first();
+  if (particular == undefined) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Particular not found';
+    throw error;
+  }
+
+  const request = await connection('breeding')
+      .join('publication', 'breeding.publication_id', '=', 'publication.id')
+      .join('particular', 'particular.id', '=', 'publication.particular_id')
+      .join('request', 'request.particular_id', '=', 'particular.id')
+      .where('particular.id', particular.id)
+      // .andWhere('request.status', 'Pending')
+      .andWhere('breeding.id', breedingId);
+
+  if (request.length) {
+    hasRequest = true;
+  }
+
+  return hasRequest;
+};
 

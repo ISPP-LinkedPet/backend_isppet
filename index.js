@@ -24,7 +24,7 @@ const connection = {
     password: process.env.DB_PASS,
     database: process.env.DB_SCHEMA,
   },
-  pool: {min: 1, max: 2},
+  pool: {min: 1, max: 5},
 };
 exports.connection = connection;
 
@@ -39,7 +39,7 @@ app.use(
 );
 app.use(morgan('common'));
 app.use((req, res, next) => {
-  req.connection = knex(connection);
+  req.connection = require('./connection')();
   next();
 });
 
