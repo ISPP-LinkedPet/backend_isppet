@@ -415,9 +415,9 @@ exports.getPendingAdoptions = async (connection, userId) => {
   return adoptions;
 };
 
-
 exports.acceptAdoption = async (adoptionData, adoptionId, trx) => {
-  const pub = await trx('publication').select('*', 'user_account.id AS userId')
+  const pub = await trx('publication')
+      .select('*', 'user_account.id AS userId')
       .join('adoption', 'adoption.publication_id', '=', 'publication.id')
       .join('particular', 'particular.id', '=', 'publication.particular_id')
       .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
@@ -429,7 +429,7 @@ exports.acceptAdoption = async (adoptionData, adoptionId, trx) => {
     error.message = 'Adoption not found';
     throw error;
   }
-  if ( !(pub.document_status === 'In revision')) {
+  if (!(pub.document_status === 'In revision')) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not accept a publication which is not in revision';
@@ -462,7 +462,8 @@ exports.acceptAdoption = async (adoptionData, adoptionId, trx) => {
 };
 
 exports.rejectAdoption = async (adoptionId, trx) => {
-  const pub = await trx('publication').select('*', 'user_account.id AS userId')
+  const pub = await trx('publication')
+      .select('*', 'user_account.id AS userId')
       .join('adoption', 'adoption.publication_id', '=', 'publication.id')
       .join('particular', 'particular.id', '=', 'publication.particular_id')
       .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
@@ -474,7 +475,7 @@ exports.rejectAdoption = async (adoptionId, trx) => {
     error.message = 'Adoption not found';
     throw error;
   }
-  if ( !(pub.document_status === 'In revision')) {
+  if (!(pub.document_status === 'In revision')) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not reject a publication which is not in revision';
@@ -547,7 +548,9 @@ exports.imInterested = async (userId, adoptionId, trx) => {
         .update({
           status: 'Pending',
         });
-    return await trx('request').where({id: rqt.id}).first();
+    return await trx('request')
+        .where({id: rqt.id})
+        .first();
   } else {
     const rqtData = {
       status: 'Pending',
@@ -556,7 +559,9 @@ exports.imInterested = async (userId, adoptionId, trx) => {
     };
 
     const requestId = await trx('request').insert(rqtData);
-    return await trx('request').where({id: requestId}).first();
+    return await trx('request')
+        .where({id: requestId})
+        .first();
   }
 
   // Comprobar que la request no sea del propia usuario y que sea visible para todo el mundo
