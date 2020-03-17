@@ -79,11 +79,8 @@ exports.createAdoption = async (req, res) => {
     if (
       !adoptionPhotos.animal_photo ||
       !adoptionPhotos.identification_photo ||
-      !adoptionData.title ||
       !adoptionPhotos.vaccine_passport ||
-      !adoptionData.type ||
-      !adoptionData.location ||
-      !adoptionData.taxes ||
+      !adoptionData.name ||
       !userId
     ) {
       return res.status(400).send('Invalid params');
@@ -125,11 +122,8 @@ exports.updateAdoption = async (req, res) => {
     if (
       !adoptionPhotos.animal_photo ||
       !adoptionPhotos.identification_photo ||
-      !adoptionData.title ||
       !adoptionPhotos.vaccine_passport ||
-      !adoptionData.type ||
-      !adoptionData.location ||
-      !adoptionData.taxes ||
+      !adoptionData.name ||
       !userId
     ) {
       return res.status(400).send({error: 'Invalid params'});

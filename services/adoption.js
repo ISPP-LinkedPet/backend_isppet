@@ -362,7 +362,7 @@ exports.createAdoption = async (
       adoptionId = await trx('adoption').insert({
         publication_id: publicationId,
         name: adoptionData.name,
-        taxes: adoptionData.taxes,
+        taxes: null,
         shelter_id: null,
       });
     }
