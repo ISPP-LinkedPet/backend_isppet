@@ -221,13 +221,21 @@ exports.getPendingBreedings = async (connection, userId) => {
 };
 
 exports.imInterested = async (userId, breedingId, trx) => {
+  // se obtine el id del particular
+  const particularId = await connection('particular').select('id').where('user_account_id', userId).first();
+  if (!particularId) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Not found user';
+    throw error;
+  }
   // Se comprueba que no se intenta estar interesado en una publication propia
   const pub = await trx('publication')
       .join('breeding', 'breeding.publication_id', '=', 'publication.id')
       .where('breeding.id', breedingId)
       .first();
 
-  if (pub == undefined || pub.particular_id === userId) {
+  if (pub == undefined || pub.particular_id === particularId) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not be interested in your own publications';
