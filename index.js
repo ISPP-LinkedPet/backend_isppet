@@ -39,7 +39,7 @@ app.use(
 );
 app.use(morgan('common'));
 app.use((req, res, next) => {
-  req.connection = knex(connection);
+  req.connection = require('./connection')();
   next();
 });
 
