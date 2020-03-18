@@ -79,11 +79,8 @@ exports.createAdoption = async (req, res) => {
     if (
       !adoptionPhotos.animal_photo ||
       !adoptionPhotos.identification_photo ||
-      !adoptionData.title ||
       !adoptionPhotos.vaccine_passport ||
-      !adoptionData.type ||
-      !adoptionData.location ||
-      !adoptionData.taxes ||
+      !adoptionData.name |
       !userId
     ) {
       return res.status(400).send('Invalid params');
@@ -125,11 +122,9 @@ exports.updateAdoption = async (req, res) => {
     if (
       !adoptionPhotos.animal_photo ||
       !adoptionPhotos.identification_photo ||
-      !adoptionData.title ||
       !adoptionPhotos.vaccine_passport ||
-      !adoptionData.type ||
-      !adoptionData.location ||
-      !adoptionData.taxes
+      !adoptionData.name ||
+      !userId
     ) {
       return res.status(400).send({error: 'Invalid params'});
     }
@@ -143,7 +138,7 @@ exports.updateAdoption = async (req, res) => {
     );
 
     await trx.commit();
-    return res.status(200).send(adoption);
+    return res.status(200).send({adoption});
   } catch (error) {
     // rollback
     await trx.rollback();
@@ -164,7 +159,11 @@ exports.acceptAdoption = async (req, res) => {
     const adoptionData = req.body;
     const adoptionId = req.params.id;
 
-    const adoption = await adoptionService.acceptAdoption(adoptionData, adoptionId, trx);
+    const adoption = await adoptionService.acceptAdoption(
+        adoptionData,
+        adoptionId,
+        trx,
+    );
 
     // commit
     await trx.commit();
@@ -174,7 +173,9 @@ exports.acceptAdoption = async (req, res) => {
     console.log(error);
     // rollback
     await trx.rollback();
-    if (error.status && error.message) return res.status(error.status).send({error: error.message});
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
     return res.status(500).send(error);
   }
 };
@@ -198,7 +199,9 @@ exports.rejectAdoption = async (req, res) => {
     console.log(error);
     // rollback
     await trx.rollback();
-    if (error.status && error.message) return res.status(error.status).send({error: error.message});
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
     return res.status(500).send(error);
   }
 };
@@ -232,7 +235,9 @@ exports.imInterested = async (req, res) => {
     // rollback
     await trx.rollback();
 
-    if (error.status && error.message) return res.status(error.status).send({error: error.message});
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
     return res.status(500).send({error});
   }
 };

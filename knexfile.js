@@ -1,3 +1,3 @@
 const index = require('./index');
 
-module.exports = index.connection;
+module.exports = index.config;

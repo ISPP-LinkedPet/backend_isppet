@@ -43,7 +43,7 @@ exports.getBreeding = async (connection, breedingId) => {
   return breeding;
 };
 
-exports.createBreeding = async (breedingData, breedingPhotos, particularId, trx) => {
+exports.createBreeding = async (breedingData, breedingPhotos, userId, trx) => {
   const allPhotos = [];
 
   try {
@@ -110,6 +110,10 @@ exports.createBreeding = async (breedingData, breedingPhotos, particularId, trx)
 
     allPhotos.push(...savedVaccinePhotos);
 
+    // Get particular by user account id
+    const particular = await trx('particular').select('id')
+        .where('user_account_id', userId).first();
+
     // Some values are not required during creation
     // Moderators will modify the breeding publication
     const pubData = {
@@ -125,7 +129,7 @@ exports.createBreeding = async (breedingData, breedingPhotos, particularId, trx)
       pedigree: null,
       transaction_status: 'In progress',
       title: null,
-      particular_id: particularId,
+      particular_id: particular.id,
     };
 
     const publicationId = await trx('publication').insert(pubData);

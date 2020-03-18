@@ -15,8 +15,7 @@ const vetRouter = require('./routers/vet');
 
 const app = express();
 
-// database
-const connection = {
+const config = {
   client: 'mysql',
   connection: {
     host: process.env.DB_HOST,
@@ -24,9 +23,10 @@ const connection = {
     password: process.env.DB_PASS,
     database: process.env.DB_SCHEMA,
   },
-  pool: {min: 1, max: 5},
+  pool: {min: 1, max: 5, idleTimeoutMillis: 2000},
 };
-exports.connection = connection;
+exports.config = config;
+const connection = knex(config);
 
 // middleware
 app.use(express.urlencoded({extended: true}));
@@ -39,7 +39,7 @@ app.use(
 );
 app.use(morgan('common'));
 app.use((req, res, next) => {
-  req.connection = knex(connection);
+  req.connection = connection;
   next();
 });
 
