@@ -78,11 +78,15 @@ exports.up = (knex) => {
               .notNullable();
           table.string('identification_photo', 200);
           table.string('vaccine_passport', 500);
-          table.enu('document_status', ['In revision', 'Accepted', 'Rejected']).notNullable();
+          table
+              .enu('document_status', ['In revision', 'Accepted', 'Rejected'])
+              .notNullable();
           table.date('birth_date').notNullable();
           table.enu('genre', ['Male', 'Female']).notNullable();
           table.string('breed', 100).notNullable();
-          table.enu('transaction_status', ['In progress', 'Completed']).notNullable();
+          table
+              .enu('transaction_status', ['In progress', 'Completed'])
+              .notNullable();
           table.string('type', 100).notNullable();
           table.string('location', 500).notNullable();
           table.boolean('pedigree').notNullable();
