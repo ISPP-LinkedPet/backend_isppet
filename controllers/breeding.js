@@ -42,11 +42,20 @@ exports.createBreading = async (req, res) => {
       !breedingData.price ||
       !breedingData.location
     ) {
-      console.log(breedingData, breedingPhotos, !breedingData.price || !breedingData.location);
+      console.log(
+          breedingData,
+          breedingPhotos,
+          !breedingData.price || !breedingData.location,
+      );
       return res.status(400).send({error: 'Invalid params'});
     }
 
-    const breeding = await breedingService.createBreeding(breedingData, breedingPhotos, particularId, trx);
+    const breeding = await breedingService.createBreeding(
+        breedingData,
+        breedingPhotos,
+        particularId,
+        trx,
+    );
 
     // commit
     await trx.commit();
@@ -55,7 +64,9 @@ exports.createBreading = async (req, res) => {
   } catch (error) {
     // rollback
     await trx.rollback();
-    if (error.status && error.message) return res.status(error.status).send({error: error.message});
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
     return res.status(500).send({error});
   }
 };
@@ -68,7 +79,10 @@ exports.getMyInterestedBreedings = async (req, res) => {
     const userId = req.user.id;
     // const role = req.user.role;
 
-    const breedings = await breedingService.getMyInterestedBreedings( connection, userId);
+    const breedings = await breedingService.getMyInterestedBreedings(
+        connection,
+        userId,
+    );
 
     return res.status(200).send(breedings);
   } catch (error) {
@@ -87,12 +101,17 @@ exports.getPendingBreedings = async (req, res) => {
     // authorization
     const userId = req.user.id;
 
-    const breedings = await breedingService.getPendingBreedings(connection, userId);
+    const breedings = await breedingService.getPendingBreedings(
+        connection,
+        userId,
+    );
 
     return res.status(200).send(breedings);
   } catch (error) {
     console.log(error);
-    if (error.status && error.message) return res.status(error.status).send(error.message);
+    if (error.status && error.message) {
+      return res.status(error.status).send(error.message);
+    }
     return res.status(500).send(error);
   }
 };
@@ -106,7 +125,11 @@ exports.getBreedingsOffers = async (req, res) => {
     // authorization
     const userId = req.user.id;
 
-    const breedings = await breedingService.getBreedingsOffers(breedingParams, connection, userId);
+    const breedings = await breedingService.getBreedingsOffers(
+        breedingParams,
+        connection,
+        userId,
+    );
 
     return res.status(200).send(breedings);
   } catch (error) {
@@ -114,7 +137,6 @@ exports.getBreedingsOffers = async (req, res) => {
     return res.status(400).send(error);
   }
 };
-
 
 exports.imInterested = async (req, res) => {
   const connection = req.connection;
@@ -145,7 +167,9 @@ exports.imInterested = async (req, res) => {
     // rollback
     await trx.rollback();
 
-    if (error.status && error.message) return res.status(error.status).send({error: error.message});
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
     return res.status(500).send({error});
   }
 };
@@ -162,7 +186,13 @@ exports.editBreeding = async (req, res) => {
     const breedingPhotos = req.files;
     const breedingId = req.params.id;
 
-    const breeding = await breedingService.editBreeding(breedingData, breedingPhotos, breedingId, userId, trx);
+    const breeding = await breedingService.editBreeding(
+        breedingData,
+        breedingPhotos,
+        breedingId,
+        userId,
+        trx,
+    );
 
     // commit
     await trx.commit();
@@ -172,7 +202,9 @@ exports.editBreeding = async (req, res) => {
     console.log(error);
     // rollback
     await trx.rollback();
-    if (error.status && error.message) return res.status(error.status).send({error: error.message});
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
     return res.status(500).send(error);
   }
 };
@@ -187,7 +219,11 @@ exports.acceptBreeding = async (req, res) => {
     const breedingData = req.body;
     const breedingId = req.params.id;
 
-    const breeding = await breedingService.acceptBreeding(breedingData, breedingId, trx);
+    const breeding = await breedingService.acceptBreeding(
+        breedingData,
+        breedingId,
+        trx,
+    );
 
     // commit
     await trx.commit();
@@ -197,7 +233,9 @@ exports.acceptBreeding = async (req, res) => {
     console.log(error);
     // rollback
     await trx.rollback();
-    if (error.status && error.message) return res.status(error.status).send({error: error.message});
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
     return res.status(500).send(error);
   }
 };
@@ -221,7 +259,9 @@ exports.rejectBreeding = async (req, res) => {
     console.log(error);
     // rollback
     await trx.rollback();
-    if (error.status && error.message) return res.status(error.status).send({error: error.message});
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
     return res.status(500).send(error);
   }
 };
@@ -230,21 +270,25 @@ exports.breedingHasRequest = async (req, res) => {
   const connection = req.connection;
 
   try {
-
     // get params
     const breedingId = req.params.id;
 
     // authorization
     const userId = req.user.id;
 
-    const hasRequest = await breedingService.breedingHasRequest(connection, userId, breedingId);
+    const hasRequest = await breedingService.breedingHasRequest(
+        connection,
+        userId,
+        breedingId,
+    );
 
     return res.status(200).send({hasRequest});
   } catch (error) {
     console.log(error);
 
-    if (error.status && error.message) return res.status(error.status).send(error.message);
+    if (error.status && error.message) {
+      return res.status(error.status).send(error.message);
+    }
     return res.status(500).send(error);
   }
 };
-

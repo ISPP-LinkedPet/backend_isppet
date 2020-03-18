@@ -13,7 +13,6 @@ const ADOPTION_FIELDS = [
   'genre',
   'breed',
   'transaction_status',
-  'title',
   'taxes',
   'location',
   'name',
@@ -45,7 +44,8 @@ exports.getAdoption = async (connection, adoptionId) => {
 };
 
 exports.getParticularAdoptions = async (connection, page) => {
-  const adoptions = await connection('adoption').select('*', 'adoption.id as adoption_id')
+  const adoptions = await connection('adoption')
+      .select('*', 'adoption.id as adoption_id')
       .innerJoin('publication', 'adoption.publication_id', '=', 'publication.id')
       .innerJoin('particular', 'particular.id', '=', 'publication.particular_id')
       .where('publication.transaction_status', 'Completed')
@@ -64,30 +64,48 @@ exports.updateAdoption = async (
 ) => {
   // Se comprueba que este editando un adoption propio y en revision
   const pub = await trx('publication')
-      .select('*', 'user_account.id AS userId')
       .join('adoption', 'adoption.publication_id', '=', 'publication.id')
-      .join('particular', 'particular.id', '=', 'publication.particular_id')
-      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
       .where('adoption.id', adoptionId)
       .first();
+  console.log(pub);
+
   if (!pub) {
     const error = new Error();
     error.status = 404;
     error.message = 'Adoption not found';
     throw error;
   }
-  if (!(pub.userId === userId)) {
+
+  if (pub.shelter_id === null && !(pub.particular_id === userId)) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not edit a publication that you do not own';
+    throw error;
+  } else if (pub.particular_id === null && !(pub.shelter_id === userId)) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not edit a publication that you do not own';
     throw error;
   }
-  if (!(pub.document_status === 'In revision')) {
+
+  if (
+    !(pub.document_status === 'In revision') &&
+    !(pub.particular_id === null)
+  ) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not edit a publication which is not in revision';
+    throw error;
+  } else if (
+    !(pub.document_status === 'Accepted') &&
+    !(pub.shelter_id === null)
+  ) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not edit a publication which is not in revision';
     throw error;
   }
+
   const allPhotos = [];
 
   try {
@@ -114,6 +132,7 @@ exports.updateAdoption = async (
     }
 
     allPhotos.push(...savedAnimalPhotos);
+
     // Mínimo una foto identificativa
     const savedIdentificationPhotos = [];
     if (adoptionPhotos.identification_photo) {
@@ -136,13 +155,8 @@ exports.updateAdoption = async (
         savePhoto(adoptionPhotos.identification_photo, photoName);
         savedIdentificationPhotos.push(photoName);
       }
-    } else {
-      const error = new Error();
-      error.status = 400;
-      error.message =
-        'It is required to upload at least one identification photo';
-      throw error;
     }
+
     allPhotos.push(...savedIdentificationPhotos);
 
     // Mínimo una foto de las vacunas
@@ -165,12 +179,6 @@ exports.updateAdoption = async (
         savePhoto(adoptionPhotos.vaccine_passport, photoName);
         savedVaccinePhotos.push(photoName);
       }
-    } else {
-      const error = new Error();
-      error.status = 400;
-      error.message =
-        'It is required to upload at least one photo of the vaccine passport';
-      throw error;
     }
 
     allPhotos.push(...savedVaccinePhotos);
@@ -180,7 +188,6 @@ exports.updateAdoption = async (
     const pubData = {
       animal_photo: savedAnimalPhotos.join(','),
       identification_photo: savedIdentificationPhotos.join(',') || null,
-      title: null,
       vaccine_passport: savedVaccinePhotos.join(',') || null,
       type: adoptionData.type,
       location: adoptionData.location,
@@ -202,6 +209,7 @@ exports.updateAdoption = async (
         });
 
     return await trx('publication')
+        .select('*', 'adoption.id as id')
         .join('adoption', 'adoption.publication_id', '=', 'publication.id')
         .where({'adoption.id': adoptionId})
         .first();
@@ -272,12 +280,6 @@ exports.createAdoption = async (
         savePhoto(adoptionPhotos.identification_photo, photoName);
         savedIdentificationPhotos.push(photoName);
       }
-    } else {
-      const error = new Error();
-      error.status = 400;
-      error.message =
-        'It is required to upload at least one identification photo';
-      throw error;
     }
 
     allPhotos.push(...savedIdentificationPhotos);
@@ -302,12 +304,6 @@ exports.createAdoption = async (
         savePhoto(adoptionPhotos.vaccine_passport, photoName);
         savedVaccinePhotos.push(photoName);
       }
-    } else {
-      const error = new Error();
-      error.status = 400;
-      error.message =
-        'It is required to upload at least one photo of the vaccine passport';
-      throw error;
     }
 
     allPhotos.push(...savedVaccinePhotos);
@@ -320,7 +316,6 @@ exports.createAdoption = async (
         identification_photo: savedIdentificationPhotos.join(',') || null,
         document_status: 'Accepted',
         transaction_status: 'In progress',
-        title: null,
         vaccine_passport: savedVaccinePhotos.join(',') || null,
         type: adoptionData.type,
         location: adoptionData.location,
@@ -335,7 +330,6 @@ exports.createAdoption = async (
         identification_photo: savedIdentificationPhotos.join(',') || null,
         document_status: 'In revision',
         transaction_status: 'In progress',
-        title: null,
         vaccine_passport: savedVaccinePhotos.join(',') || null,
         type: adoptionData.type,
         location: adoptionData.location,
@@ -368,6 +362,7 @@ exports.createAdoption = async (
     }
 
     return await trx('adoption')
+        .select('*', 'adoption.id as id')
         .join('publication', 'adoption.publication_id', '=', 'publication.id')
         .where({'adoption.id': adoptionId})
         .first();
@@ -439,7 +434,6 @@ exports.acceptAdoption = async (adoptionData, adoptionId, trx) => {
   try {
     // Moderators will modify the adoption publication
     const pubData = {};
-    pubData.title = adoptionData.title;
     pubData.age = adoptionData.age;
     pubData.genre = adoptionData.genre;
     pubData.breed = adoptionData.breed;
@@ -567,10 +561,12 @@ exports.imInterested = async (userId, adoptionId, trx) => {
   // Comprobar que la request no sea del propia usuario y que sea visible para todo el mundo
 };
 
-
 exports.getAdoptionsOffers = async (adoptionParams, connection, userId) => {
-  const user = await connection('user_account').select('id')
-      .where('user_account.id', userId).andWhere('user_account.role', 'particular').first();
+  const user = await connection('user_account')
+      .select('id')
+      .where('user_account.id', userId)
+      .andWhere('user_account.role', 'particular')
+      .first();
 
   if (!user) {
     const error = new Error();

@@ -71,15 +71,21 @@ exports.createAdoption = async (req, res) => {
   const trx = await connection.transaction();
 
   try {
-    const userId = null;
+    let user = null;
     const role = req.user.role;
     const adoptionData = req.body;
     const adoptionPhotos = req.files;
 
     if (role === 'shelter') {
-      userId = await connection('shelter').select('id').where('user_account_id', req.user.id).first();
+      user = await connection('shelter')
+          .select('id')
+          .where('user_account_id', req.user.id)
+          .first();
     } else if (role === 'particular') {
-      userId = await connection('particular').select('id').where('user_account_id', req.user.id).first();
+      user = await connection('particular')
+          .select('id')
+          .where('user_account_id', req.user.id)
+          .first();
     }
 
     if (
@@ -91,7 +97,7 @@ exports.createAdoption = async (req, res) => {
       !adoptionData.genre ||
       !adoptionData.breed ||
       !adoptionData.name ||
-      !userId
+      !user.id
     ) {
       return res.status(400).send('Invalid params');
     }
@@ -99,7 +105,7 @@ exports.createAdoption = async (req, res) => {
     const adoption = await adoptionService.createAdoption(
         adoptionData,
         adoptionPhotos,
-        userId,
+        user.id,
         role,
         trx,
     );
@@ -124,15 +130,22 @@ exports.updateAdoption = async (req, res) => {
   const trx = await connection.transaction();
 
   try {
-    const userId = null;
+    let user = null;
+    const role = req.user.role;
     const adoptionData = req.body;
     const adoptionPhotos = req.files;
     const adoptionId = req.params.id;
 
     if (role === 'shelter') {
-      userId = await connection('shelter').select('id').where('user_account_id', req.user.id).first();
+      user = await connection('shelter')
+          .select('id')
+          .where('user_account_id', req.user.id)
+          .first();
     } else if (role === 'particular') {
-      userId = await connection('particular').select('id').where('user_account_id', req.user.id).first();
+      user = await connection('particular')
+          .select('id')
+          .where('user_account_id', req.user.id)
+          .first();
     }
 
     if (
@@ -144,7 +157,7 @@ exports.updateAdoption = async (req, res) => {
       !adoptionData.genre ||
       !adoptionData.breed ||
       !adoptionData.name ||
-      !userId
+      !user.id
     ) {
       return res.status(400).send({error: 'Invalid params'});
     }
@@ -153,7 +166,7 @@ exports.updateAdoption = async (req, res) => {
         adoptionData,
         adoptionPhotos,
         adoptionId,
-        userId,
+        user.id,
         trx,
     );
 
@@ -271,7 +284,11 @@ exports.getAdoptionsOffers = async (req, res) => {
     // authorization
     const userId = req.user.id;
 
-    const adoptions = await adoptionService.getAdoptionsOffers(adoptionParams, connection, userId);
+    const adoptions = await adoptionService.getAdoptionsOffers(
+        adoptionParams,
+        connection,
+        userId,
+    );
 
     return res.status(200).send(adoptions);
   } catch (error) {
@@ -279,4 +296,3 @@ exports.getAdoptionsOffers = async (req, res) => {
     return res.status(400).send(error);
   }
 };
-
