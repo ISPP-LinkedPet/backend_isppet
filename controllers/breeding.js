@@ -34,7 +34,7 @@ exports.createBreading = async (req, res) => {
     // file
     const breedingPhotos = req.files;
 
-    // breed, age, pedigree and genre not required during creation
+    // breed, birth_date, pedigree and genre not required during creation
     if (
       !breedingPhotos.animal_photo ||
       !breedingPhotos.identification_photo ||

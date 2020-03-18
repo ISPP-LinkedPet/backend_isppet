@@ -93,7 +93,7 @@ exports.createAdoption = async (req, res) => {
       !adoptionData.type ||
       !adoptionData.location ||
       !adoptionData.pedigree ||
-      !adoptionData.age ||
+      !adoptionData.birth_date ||
       !adoptionData.genre ||
       !adoptionData.breed ||
       !adoptionData.name ||
@@ -153,7 +153,7 @@ exports.updateAdoption = async (req, res) => {
       !adoptionData.type ||
       !adoptionData.location ||
       !adoptionData.pedigree ||
-      !adoptionData.age ||
+      !adoptionData.birth_date ||
       !adoptionData.genre ||
       !adoptionData.breed ||
       !adoptionData.name ||
