@@ -2,14 +2,15 @@ const path = require('path');
 const fs = require('fs');
 const {v4: uuidv4} = require('uuid');
 
-const BREEDING_FIELDS = ['breeding.id',
+const BREEDING_FIELDS = [
+  'breeding.id',
   'publication_id',
   'particular_id',
   'creation_date',
   'animal_photo',
   'identification_photo',
   'document_status',
-  'age',
+  'birth_date',
   'genre',
   'breed',
   'transaction_status',
@@ -17,7 +18,8 @@ const BREEDING_FIELDS = ['breeding.id',
   'location',
   'pedigree',
   'type',
-  'vaccine_passport'];
+  'vaccine_passport',
+];
 
 const ANIMAL_FOLDER = path.join('images', 'animal_photos');
 const IDENTIFICATION_FOLDER = path.join('images', 'identification_photos');
@@ -48,16 +50,23 @@ exports.createBreeding = async (breedingData, breedingPhotos, userId, trx) => {
   try {
     // Mínimo 2 fotos del animal
     const savedAnimalPhotos = [];
-    if (breedingPhotos.animal_photo && breedingPhotos.animal_photo.length >= 2) {
+    if (
+      breedingPhotos.animal_photo &&
+      breedingPhotos.animal_photo.length >= 2
+    ) {
       breedingPhotos.animal_photo.forEach((photo) => {
-        const photoName = path.join(ANIMAL_FOLDER, `${uuidv4()}.${getExtension(photo.name)}`);
+        const photoName = path.join(
+            ANIMAL_FOLDER,
+            `${uuidv4()}.${getExtension(photo.name)}`,
+        );
         savePhoto(photo, photoName);
         savedAnimalPhotos.push(photoName);
       });
     } else {
       const error = new Error();
       error.status = 400;
-      error.message = 'It is required to upload at least two photos of the animal';
+      error.message =
+        'It is required to upload at least two photos of the animal';
       throw error;
     }
 
@@ -68,19 +77,28 @@ exports.createBreeding = async (breedingData, breedingPhotos, userId, trx) => {
     if (breedingPhotos.identification_photo) {
       if (Array.isArray(breedingPhotos.identification_photo)) {
         breedingPhotos.identification_photo.forEach((photo) => {
-          const photoName = path.join(IDENTIFICATION_FOLDER, `${uuidv4()}.${getExtension(photo.name)}`);
+          const photoName = path.join(
+              IDENTIFICATION_FOLDER,
+              `${uuidv4()}.${getExtension(photo.name)}`,
+          );
           savePhoto(photo, photoName);
           savedIdentificationPhotos.push(photoName);
         });
       } else {
-        const photoName = path.join(IDENTIFICATION_FOLDER, `${uuidv4()}.${getExtension(breedingPhotos.identification_photo.name)}`);
+        const photoName = path.join(
+            IDENTIFICATION_FOLDER,
+            `${uuidv4()}.${getExtension(
+                breedingPhotos.identification_photo.name,
+            )}`,
+        );
         savePhoto(breedingPhotos.identification_photo, photoName);
         savedIdentificationPhotos.push(photoName);
       }
     } else {
       const error = new Error();
       error.status = 400;
-      error.message = 'It is required to upload at least one identification photo';
+      error.message =
+        'It is required to upload at least one identification photo';
       throw error;
     }
 
@@ -91,27 +109,36 @@ exports.createBreeding = async (breedingData, breedingPhotos, userId, trx) => {
     if (breedingPhotos.vaccine_passport) {
       if (Array.isArray(breedingPhotos.vaccine_passport)) {
         breedingPhotos.vaccine_passport.forEach((photo) => {
-          const photoName = path.join(VACCINES_FOLDER, `${uuidv4()}.${getExtension(photo.name)}`);
+          const photoName = path.join(
+              VACCINES_FOLDER,
+              `${uuidv4()}.${getExtension(photo.name)}`,
+          );
           savePhoto(photo, photoName);
           savedVaccinePhotos.push(photoName);
         });
       } else {
-        const photoName = path.join(VACCINES_FOLDER, `${uuidv4()}.${getExtension(breedingPhotos.vaccine_passport.name)}`);
+        const photoName = path.join(
+            VACCINES_FOLDER,
+            `${uuidv4()}.${getExtension(breedingPhotos.vaccine_passport.name)}`,
+        );
         savePhoto(breedingPhotos.vaccine_passport, photoName);
         savedVaccinePhotos.push(photoName);
       }
     } else {
       const error = new Error();
       error.status = 400;
-      error.message = 'It is required to upload at least one photo of the vaccine passport';
+      error.message =
+        'It is required to upload at least one photo of the vaccine passport';
       throw error;
     }
 
     allPhotos.push(...savedVaccinePhotos);
 
     // Get particular by user account id
-    const particular = await trx('particular').select('id')
-        .where('user_account_id', userId).first();
+    const particular = await trx('particular')
+        .select('id')
+        .where('user_account_id', userId)
+        .first();
 
     // Some values are not required during creation
     // Moderators will modify the breeding publication
@@ -120,7 +147,7 @@ exports.createBreeding = async (breedingData, breedingPhotos, userId, trx) => {
       identification_photo: savedIdentificationPhotos.join(','),
       vaccine_passport: savedVaccinePhotos.join(','),
       document_status: 'In revision',
-      age: null,
+      birth_date: null,
       genre: null,
       breed: null,
       location: breedingData.location,
@@ -153,8 +180,10 @@ exports.createBreeding = async (breedingData, breedingPhotos, userId, trx) => {
 };
 
 exports.getMyInterestedBreedings = async (connection, userId) => {
-  const particular = await connection('particular').select('id')
-      .where('user_account_id', userId).first();
+  const particular = await connection('particular')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
   const breedings = await connection('breeding')
       .join('publication', 'breeding.publication_id', '=', 'publication.id')
       .join('particular', 'particular.id', '=', 'publication.particular_id')
@@ -166,8 +195,11 @@ exports.getMyInterestedBreedings = async (connection, userId) => {
 };
 
 exports.getBreedingsOffers = async (breedingParams, connection, userId) => {
-  const user = await connection('user_account').select('id')
-      .where('user_account.id', userId).andWhere('user_account.role', 'particular').first();
+  const user = await connection('user_account')
+      .select('id')
+      .where('user_account.id', userId)
+      .andWhere('user_account.role', 'particular')
+      .first();
 
   if (!user) {
     const error = new Error();
@@ -177,7 +209,7 @@ exports.getBreedingsOffers = async (breedingParams, connection, userId) => {
   }
 
   const location = breedingParams.location;
-  const age = breedingParams.age;
+  const birthDate = breedingParams.birth_date;
   const type = breedingParams.type;
   const breed = breedingParams.breed;
   const pedigree = breedingParams.pedigree;
@@ -191,8 +223,8 @@ exports.getBreedingsOffers = async (breedingParams, connection, userId) => {
         if (location) {
           queryBuilder.andWhere('publication.location', 'like', `%${location}%`);
         }
-        if (age) {
-          queryBuilder.andWhere('publication.age', age);
+        if (birthDate) {
+          queryBuilder.andWhere('publication.birth_date', birthDate);
         }
         if (type) {
           queryBuilder.andWhere('publication.type', 'like', `%${type}%`);
@@ -208,7 +240,10 @@ exports.getBreedingsOffers = async (breedingParams, connection, userId) => {
 };
 
 exports.getPendingBreedings = async (connection, userId) => {
-  const user = await connection('moderator').select('id').where('user_account_id', userId).first();
+  const user = await connection('moderator')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
   if (!user) {
     const error = new Error();
     error.status = 404;
@@ -224,7 +259,10 @@ exports.getPendingBreedings = async (connection, userId) => {
 
 exports.imInterested = async (userId, breedingId, trx) => {
   // se obtine el id del particular
-  const particularId = await connection('particular').select('id').where('user_account_id', userId).first();
+  const particularId = await connection('particular')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
   if (!particularId) {
     const error = new Error();
     error.status = 404;
@@ -277,7 +315,9 @@ exports.imInterested = async (userId, breedingId, trx) => {
         .update({
           status: 'Pending',
         });
-    return await trx('request').where({id: rqt.id}).first();
+    return await trx('request')
+        .where({id: rqt.id})
+        .first();
   } else {
     const rqtData = {
       status: 'Pending',
@@ -286,15 +326,24 @@ exports.imInterested = async (userId, breedingId, trx) => {
     };
 
     const requestId = await trx('request').insert(rqtData);
-    return await trx('request').where({id: requestId}).first();
+    return await trx('request')
+        .where({id: requestId})
+        .first();
   }
 
   // Comprobar que la request no sea del propia usuario y que sea visible para todo el mundo
 };
 
-exports.editBreeding = async (breedingData, breedingPhotos, breedingId, userId, trx) => {
+exports.editBreeding = async (
+  breedingData,
+  breedingPhotos,
+  breedingId,
+  userId,
+  trx,
+) => {
   // Se comprueba que este editando un breeding propio y en revision
-  const pub = await trx('publication').select('*', 'user_account.id AS userId')
+  const pub = await trx('publication')
+      .select('*', 'user_account.id AS userId')
       .join('breeding', 'breeding.publication_id', '=', 'publication.id')
       .join('particular', 'particular.id', '=', 'publication.particular_id')
       .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
@@ -312,7 +361,7 @@ exports.editBreeding = async (breedingData, breedingPhotos, breedingId, userId, 
     error.message = 'You can not edit a publication that you do not own';
     throw error;
   }
-  if ( !(pub.document_status === 'In revision')) {
+  if (!(pub.document_status === 'In revision')) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not edit a publication which is not in revision';
@@ -325,16 +374,23 @@ exports.editBreeding = async (breedingData, breedingPhotos, breedingId, userId, 
     if (breedingPhotos.animal_photo) {
       // Mínimo 2 fotos del animal
       const savedAnimalPhotos = [];
-      if (breedingPhotos.animal_photo && breedingPhotos.animal_photo.length >= 2) {
+      if (
+        breedingPhotos.animal_photo &&
+        breedingPhotos.animal_photo.length >= 2
+      ) {
         breedingPhotos.animal_photo.forEach((photo) => {
-          const photoName = path.join(ANIMAL_FOLDER, `${uuidv4()}.${getExtension(photo.name)}`);
+          const photoName = path.join(
+              ANIMAL_FOLDER,
+              `${uuidv4()}.${getExtension(photo.name)}`,
+          );
           savePhoto(photo, photoName);
           savedAnimalPhotos.push(photoName);
         });
       } else {
         const error = new Error();
         error.status = 400;
-        error.message = 'It is required to upload at least two photos of the animal';
+        error.message =
+          'It is required to upload at least two photos of the animal';
         throw error;
       }
       allPhotos.push(...savedAnimalPhotos);
@@ -346,19 +402,28 @@ exports.editBreeding = async (breedingData, breedingPhotos, breedingId, userId, 
       if (breedingPhotos.identification_photo) {
         if (Array.isArray(breedingPhotos.identification_photo)) {
           breedingPhotos.identification_photo.forEach((photo) => {
-            const photoName = path.join(IDENTIFICATION_FOLDER, `${uuidv4()}.${getExtension(photo.name)}`);
+            const photoName = path.join(
+                IDENTIFICATION_FOLDER,
+                `${uuidv4()}.${getExtension(photo.name)}`,
+            );
             savePhoto(photo, photoName);
             savedIdentificationPhotos.push(photoName);
           });
         } else {
-          const photoName = path.join(IDENTIFICATION_FOLDER, `${uuidv4()}.${getExtension(breedingPhotos.identification_photo.name)}`);
+          const photoName = path.join(
+              IDENTIFICATION_FOLDER,
+              `${uuidv4()}.${getExtension(
+                  breedingPhotos.identification_photo.name,
+              )}`,
+          );
           savePhoto(breedingPhotos.identification_photo, photoName);
           savedIdentificationPhotos.push(photoName);
         }
       } else {
         const error = new Error();
         error.status = 400;
-        error.message = 'It is required to upload at least one identification photo';
+        error.message =
+          'It is required to upload at least one identification photo';
         throw error;
       }
       allPhotos.push(...savedIdentificationPhotos);
@@ -370,19 +435,26 @@ exports.editBreeding = async (breedingData, breedingPhotos, breedingId, userId, 
       if (breedingPhotos.vaccine_passport) {
         if (Array.isArray(breedingPhotos.vaccine_passport)) {
           breedingPhotos.vaccine_passport.forEach((photo) => {
-            const photoName = path.join(VACCINES_FOLDER, `${uuidv4()}.${getExtension(photo.name)}`);
+            const photoName = path.join(
+                VACCINES_FOLDER,
+                `${uuidv4()}.${getExtension(photo.name)}`,
+            );
             savePhoto(photo, photoName);
             savedVaccinePhotos.push(photoName);
           });
         } else {
-          const photoName = path.join(VACCINES_FOLDER, `${uuidv4()}.${getExtension(breedingPhotos.vaccine_passport.name)}`);
+          const photoName = path.join(
+              VACCINES_FOLDER,
+              `${uuidv4()}.${getExtension(breedingPhotos.vaccine_passport.name)}`,
+          );
           savePhoto(breedingPhotos.vaccine_passport, photoName);
           savedVaccinePhotos.push(photoName);
         }
       } else {
         const error = new Error();
         error.status = 400;
-        error.message = 'It is required to upload at least one photo of the vaccine passport';
+        error.message =
+          'It is required to upload at least one photo of the vaccine passport';
         throw error;
       }
       allPhotos.push(...savedVaccinePhotos);
@@ -390,10 +462,16 @@ exports.editBreeding = async (breedingData, breedingPhotos, breedingId, userId, 
 
     // Moderators will modify the breeding publication
     const pubData = {};
-    if (breedingPhotos.animal_photo) pubData.animal_photo = savedAnimalPhotos.join(',');
-    if (breedingPhotos.identification_photo) pubData.identification_photo = savedIdentificationPhotos.join(',');
-    if (breedingPhotos.vaccine_passport) pubData.vaccine_passport = savedVaccinePhotos.join(',');
-    if (breedingData.age) pubData.age = breedingData.age;
+    if (breedingPhotos.animal_photo) {
+      pubData.animal_photo = savedAnimalPhotos.join(',');
+    }
+    if (breedingPhotos.identification_photo) {
+      pubData.identification_photo = savedIdentificationPhotos.join(',');
+    }
+    if (breedingPhotos.vaccine_passport) {
+      pubData.vaccine_passport = savedVaccinePhotos.join(',');
+    }
+    if (breedingData.birth_date) pubData.birth_date = breedingData.birth_date;
     if (breedingData.genre) pubData.genre = breedingData.genre;
     if (breedingData.breed) pubData.breed = breedingData.breed;
     if (breedingData.location) pubData.location = breedingData.location;
@@ -430,7 +508,8 @@ exports.editBreeding = async (breedingData, breedingPhotos, breedingId, userId, 
 };
 
 exports.acceptBreeding = async (breedingData, breedingId, trx) => {
-  const pub = await trx('publication').select('*', 'user_account.id AS userId')
+  const pub = await trx('publication')
+      .select('*', 'user_account.id AS userId')
       .join('breeding', 'breeding.publication_id', '=', 'publication.id')
       .join('particular', 'particular.id', '=', 'publication.particular_id')
       .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
@@ -442,7 +521,7 @@ exports.acceptBreeding = async (breedingData, breedingId, trx) => {
     error.message = 'Breeding not found';
     throw error;
   }
-  if ( !(pub.document_status === 'In revision')) {
+  if (!(pub.document_status === 'In revision')) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not accept a publication which is not in revision';
@@ -452,7 +531,7 @@ exports.acceptBreeding = async (breedingData, breedingId, trx) => {
   try {
     // Moderators will modify the breeding publication
     const pubData = {};
-    pubData.age = breedingData.age;
+    pubData.birth_date = breedingData.birth_date;
     pubData.genre = breedingData.genre;
     pubData.breed = breedingData.breed;
     pubData.type = breedingData.type;
@@ -474,7 +553,8 @@ exports.acceptBreeding = async (breedingData, breedingId, trx) => {
 };
 
 exports.rejectBreeding = async (breedingId, trx) => {
-  const pub = await trx('publication').select('*', 'user_account.id AS userId')
+  const pub = await trx('publication')
+      .select('*', 'user_account.id AS userId')
       .join('breeding', 'breeding.publication_id', '=', 'publication.id')
       .join('particular', 'particular.id', '=', 'publication.particular_id')
       .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
@@ -486,7 +566,7 @@ exports.rejectBreeding = async (breedingId, trx) => {
     error.message = 'Breeding not found';
     throw error;
   }
-  if ( !(pub.document_status === 'In revision')) {
+  if (!(pub.document_status === 'In revision')) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not reject a publication which is not in revision';
@@ -529,8 +609,10 @@ const getExtension = (photo) => {
 
 exports.breedingHasRequest = async (connection, userId, breedingId) => {
   let hasRequest = false;
-  const particular = await connection('particular').select('id')
-      .where('user_account_id', userId).first();
+  const particular = await connection('particular')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
   if (particular == undefined) {
     const error = new Error();
     error.status = 404;
@@ -543,7 +625,7 @@ exports.breedingHasRequest = async (connection, userId, breedingId) => {
       .join('particular', 'particular.id', '=', 'publication.particular_id')
       .join('request', 'request.particular_id', '=', 'particular.id')
       .where('particular.id', particular.id)
-      // .andWhere('request.status', 'Pending')
+  // .andWhere('request.status', 'Pending')
       .andWhere('breeding.id', breedingId);
 
   if (request.length) {
@@ -552,4 +634,3 @@ exports.breedingHasRequest = async (connection, userId, breedingId) => {
 
   return hasRequest;
 };
-

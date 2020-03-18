@@ -9,7 +9,7 @@ const ADOPTION_FIELDS = [
   'animal_photo',
   'identification_photo',
   'document_status',
-  'age',
+  'birth_date',
   'genre',
   'breed',
   'transaction_status',
@@ -192,7 +192,7 @@ exports.updateAdoption = async (
       type: adoptionData.type,
       location: adoptionData.location,
       pedigree: adoptionData.pedigree,
-      age: adoptionData.age,
+      birth_date: adoptionData.birth_date,
       genre: adoptionData.genre,
       breed: adoptionData.breed,
     };
@@ -320,7 +320,7 @@ exports.createAdoption = async (
         type: adoptionData.type,
         location: adoptionData.location,
         pedigree: adoptionData.pedigree,
-        age: adoptionData.age,
+        birth_date: adoptionData.birth_date,
         genre: adoptionData.genre,
         breed: adoptionData.breed,
       };
@@ -334,7 +334,7 @@ exports.createAdoption = async (
         type: adoptionData.type,
         location: adoptionData.location,
         pedigree: adoptionData.pedigree,
-        age: adoptionData.age,
+        birth_date: adoptionData.birth_date,
         genre: adoptionData.genre,
         breed: adoptionData.breed,
         particular_id: userId,
@@ -434,7 +434,7 @@ exports.acceptAdoption = async (adoptionData, adoptionId, trx) => {
   try {
     // Moderators will modify the adoption publication
     const pubData = {};
-    pubData.age = adoptionData.age;
+    pubData.birth_date = adoptionData.birth_date;
     pubData.genre = adoptionData.genre;
     pubData.breed = adoptionData.breed;
     pubData.type = adoptionData.type;
@@ -576,7 +576,7 @@ exports.getAdoptionsOffers = async (adoptionParams, connection, userId) => {
   }
 
   const location = adoptionParams.location;
-  const age = adoptionParams.age;
+  const birthDate = adoptionParams.birth_date;
   const type = adoptionParams.type;
   const breed = adoptionParams.breed;
   const pedigree = adoptionParams.pedigree;
@@ -590,8 +590,8 @@ exports.getAdoptionsOffers = async (adoptionParams, connection, userId) => {
         if (location) {
           queryBuilder.andWhere('publication.location', 'like', `%${location}%`);
         }
-        if (age) {
-          queryBuilder.andWhere('publication.age', age);
+        if (birthDate) {
+          queryBuilder.andWhere('publication.birth_date', birthDate);
         }
         if (type) {
           queryBuilder.andWhere('publication.type', 'like', `%${type}%`);
