@@ -79,11 +79,10 @@ exports.up = (knex) => {
           table.string('identification_photo', 200);
           table.string('vaccine_passport', 500);
           table.enu('document_status', ['In revision', 'Accepted', 'Rejected']);
-          table.integer('age');
+          table.date('birth_date');
           table.enu('genre', ['Male', 'Female']);
           table.string('breed', 100);
           table.enu('transaction_status', ['In progress', 'Completed']);
-          table.string('title', 500);
           table.string('type', 100);
           table.string('location', 500);
           table.boolean('pedigree');
