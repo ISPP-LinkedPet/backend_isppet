@@ -45,7 +45,7 @@ exports.getAdoption = async (connection, adoptionId) => {
 };
 
 exports.getParticularAdoptions = async (connection, page) => {
-  const adoptions = await connection('adoption')
+  const adoptions = await connection('adoption').select('*', 'adoption.id as adoption_id')
       .innerJoin('publication', 'adoption.publication_id', '=', 'publication.id')
       .innerJoin('particular', 'particular.id', '=', 'publication.particular_id')
       .where('publication.transaction_status', 'Completed')
@@ -565,4 +565,47 @@ exports.imInterested = async (userId, adoptionId, trx) => {
   }
 
   // Comprobar que la request no sea del propia usuario y que sea visible para todo el mundo
+};
+
+
+exports.getAdoptionsOffers = async (adoptionParams, connection, userId) => {
+  const user = await connection('user_account').select('id')
+      .where('user_account.id', userId).andWhere('user_account.role', 'particular').first();
+
+  if (!user) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Not found user';
+    throw error;
+  }
+
+  const location = adoptionParams.location;
+  const age = adoptionParams.age;
+  const type = adoptionParams.type;
+  const breed = adoptionParams.breed;
+  const pedigree = adoptionParams.pedigree;
+
+  const adoptions = await connection('adoption')
+      .join('publication', 'adoption.publication_id', '=', 'publication.id')
+      .where('publication.document_status', 'Accepted')
+      .andWhere('publication.transaction_status', 'In progress')
+      .andWhereNot('publication.particular_id', user.id)
+      .modify(function(queryBuilder) {
+        if (location) {
+          queryBuilder.andWhere('publication.location', 'like', `%${location}%`);
+        }
+        if (age) {
+          queryBuilder.andWhere('publication.age', age);
+        }
+        if (type) {
+          queryBuilder.andWhere('publication.type', 'like', `%${type}%`);
+        }
+        if (breed) {
+          queryBuilder.andWhere('publication.breed', 'like', `%${breed}%`);
+        }
+        if (pedigree) {
+          queryBuilder.andWhere('publication.pedigree', pedigree);
+        }
+      });
+  return adoptions;
 };

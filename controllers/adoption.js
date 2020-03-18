@@ -261,3 +261,22 @@ exports.imInterested = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+
+exports.getAdoptionsOffers = async (req, res) => {
+  const connection = req.connection;
+  try {
+    // query
+    const adoptionParams = req.query;
+
+    // authorization
+    const userId = req.user.id;
+
+    const adoptions = await adoptionService.getAdoptionsOffers(adoptionParams, connection, userId);
+
+    return res.status(200).send(adoptions);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send(error);
+  }
+};
+
