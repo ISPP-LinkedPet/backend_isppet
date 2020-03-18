@@ -179,15 +179,15 @@ exports.updateAdoption = async (
     // Moderators will modify the adoption publication
     const pubData = {
       animal_photo: savedAnimalPhotos.join(','),
-      identification_photo: savedIdentificationPhotos.join(','),
-      age: null,
-      genre: null,
-      breed: null,
-      location: adoptionData.location || null,
-      type: null,
-      pedigree: null,
+      identification_photo: savedIdentificationPhotos.join(',') || null,
       title: null,
-      vaccine_passport: savedVaccinePhotos.join(','),
+      vaccine_passport: savedVaccinePhotos.join(',') || null,
+      type: adoptionData.type,
+      location: adoptionData.location,
+      pedigree: adoptionData.pedigree,
+      age: adoptionData.age,
+      genre: adoptionData.genre,
+      breed: adoptionData.breed,
     };
 
     await trx('publication')
@@ -317,32 +317,32 @@ exports.createAdoption = async (
     if (role === 'shelter') {
       pubData = {
         animal_photo: savedAnimalPhotos.join(','),
-        identification_photo: savedIdentificationPhotos.join(','),
+        identification_photo: savedIdentificationPhotos.join(',') || null,
         document_status: 'Accepted',
         transaction_status: 'In progress',
         title: null,
-        vaccine_passport: savedVaccinePhotos.join(','),
-        type: null,
-        location: adoptionData.location || null,
-        pedigree: null,
-        age: null,
-        genre: null,
-        breed: null,
+        vaccine_passport: savedVaccinePhotos.join(',') || null,
+        type: adoptionData.type,
+        location: adoptionData.location,
+        pedigree: adoptionData.pedigree,
+        age: adoptionData.age,
+        genre: adoptionData.genre,
+        breed: adoptionData.breed,
       };
     } else if (role === 'particular') {
       pubData = {
         animal_photo: savedAnimalPhotos.join(','),
-        identification_photo: savedIdentificationPhotos.join(','),
+        identification_photo: savedIdentificationPhotos.join(',') || null,
         document_status: 'In revision',
         transaction_status: 'In progress',
         title: null,
-        vaccine_passport: savedVaccinePhotos.join(','),
-        type: null,
-        location: adoptionData.location || null,
-        pedigree: null,
-        age: null,
-        genre: null,
-        breed: null,
+        vaccine_passport: savedVaccinePhotos.join(',') || null,
+        type: adoptionData.type,
+        location: adoptionData.location,
+        pedigree: adoptionData.pedigree,
+        age: adoptionData.age,
+        genre: adoptionData.genre,
+        breed: adoptionData.breed,
         particular_id: userId,
       };
     }

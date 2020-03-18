@@ -71,16 +71,26 @@ exports.createAdoption = async (req, res) => {
   const trx = await connection.transaction();
 
   try {
-    const userId = req.user.id;
+    const userId = null;
     const role = req.user.role;
     const adoptionData = req.body;
     const adoptionPhotos = req.files;
 
+    if (role === 'shelter') {
+      userId = await connection('shelter').select('id').where('user_account_id', req.user.id).first();
+    } else if (role === 'particular') {
+      userId = await connection('particular').select('id').where('user_account_id', req.user.id).first();
+    }
+
     if (
       !adoptionPhotos.animal_photo ||
-      !adoptionPhotos.identification_photo ||
-      !adoptionPhotos.vaccine_passport ||
-      !adoptionData.name |
+      !adoptionData.type ||
+      !adoptionData.location ||
+      !adoptionData.pedigree ||
+      !adoptionData.age ||
+      !adoptionData.genre ||
+      !adoptionData.breed ||
+      !adoptionData.name ||
       !userId
     ) {
       return res.status(400).send('Invalid params');
@@ -114,15 +124,25 @@ exports.updateAdoption = async (req, res) => {
   const trx = await connection.transaction();
 
   try {
-    const userId = req.user.id;
+    const userId = null;
     const adoptionData = req.body;
     const adoptionPhotos = req.files;
     const adoptionId = req.params.id;
 
+    if (role === 'shelter') {
+      userId = await connection('shelter').select('id').where('user_account_id', req.user.id).first();
+    } else if (role === 'particular') {
+      userId = await connection('particular').select('id').where('user_account_id', req.user.id).first();
+    }
+
     if (
       !adoptionPhotos.animal_photo ||
-      !adoptionPhotos.identification_photo ||
-      !adoptionPhotos.vaccine_passport ||
+      !adoptionData.type ||
+      !adoptionData.location ||
+      !adoptionData.pedigree ||
+      !adoptionData.age ||
+      !adoptionData.genre ||
+      !adoptionData.breed ||
       !adoptionData.name ||
       !userId
     ) {
