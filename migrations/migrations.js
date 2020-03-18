@@ -78,14 +78,14 @@ exports.up = (knex) => {
               .notNullable();
           table.string('identification_photo', 200);
           table.string('vaccine_passport', 500);
-          table.enu('document_status', ['In revision', 'Accepted', 'Rejected']);
-          table.date('birth_date');
-          table.enu('genre', ['Male', 'Female']);
-          table.string('breed', 100);
-          table.enu('transaction_status', ['In progress', 'Completed']);
-          table.string('type', 100);
-          table.string('location', 500);
-          table.boolean('pedigree');
+          table.enu('document_status', ['In revision', 'Accepted', 'Rejected']).notNullable();
+          table.date('birth_date').notNullable();
+          table.enu('genre', ['Male', 'Female']).notNullable();
+          table.string('breed', 100).notNullable();
+          table.enu('transaction_status', ['In progress', 'Completed']).notNullable();
+          table.string('type', 100).notNullable();
+          table.string('location', 500).notNullable();
+          table.boolean('pedigree').notNullable();
           table.integer('particular_id').unsigned();
           table
               .foreign('particular_id')
@@ -159,7 +159,7 @@ exports.up = (knex) => {
     // adoption
         .createTable('adoption', function(table) {
           table.increments().primary();
-          table.string('name');
+          table.string('name').notNullable();
           table.double('taxes');
           table
               .integer('publication_id')
