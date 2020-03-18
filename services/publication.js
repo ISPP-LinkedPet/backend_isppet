@@ -75,7 +75,6 @@ exports.getPublication = async (connection, publicationId) => {
 };
 
 exports.getAcceptedRequestListByActorId = async (connection, userId) => {
-
   const particular = await connection('particular').select('particular.id')
       .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
       .where('user_account.id', userId).first();
@@ -91,7 +90,6 @@ exports.getAcceptedRequestListByActorId = async (connection, userId) => {
 };
 
 exports.getRejectedRequestListByActorId = async (connection, userId) => {
-
   const particular = await connection('particular').select('particular.id')
       .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
       .where('user_account.id', userId).first();
@@ -107,16 +105,26 @@ exports.getRejectedRequestListByActorId = async (connection, userId) => {
 };
 
 exports.getRequestsToMyPublications = async (connection, userId) => {
-  const user = await connection('particular').select('id').where('user_account_id', userId).first();
-  if (!user) {
+  const actor = await connection('user_account').where('user_account.id', userId).first();
+  if (!actor) {
     const error = new Error();
     error.status = 404;
     error.message = 'Not found user';
     throw error;
   }
 
-  const requests = await connection('publication')
-      .join('request', 'publication.id', '=', 'request.publication_id')
-      .where('publication.particular_id', user.id);
+  let requests = [];
+  if (actor.role === 'particular') {
+    const user = await connection('particular').select('id').where('user_account_id', userId).first();
+    requests = await connection('publication')
+        .join('request', 'publication.id', '=', 'request.publication_id')
+        .where('publication.particular_id', user.id);
+  } else if (actor.role === 'shelter') {
+    const user = await connection('shelter').select('id').where('user_account_id', userId).first();
+    requests = await connection('publication')
+        .join('request', 'publication.id', '=', 'request.publication_id')
+        .join('adoption', 'publication.id', '=', 'adoption.publication_id')
+        .where('adoption.shelter_id', user.id);
+  }
   return requests;
 };
