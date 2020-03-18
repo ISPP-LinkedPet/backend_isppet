@@ -81,7 +81,6 @@ exports.up = (knex) => {
           table.enu('genre', ['Male', 'Female']);
           table.string('breed', 100);
           table.enu('transaction_status', ['In progress', 'Completed']);
-          table.string('title', 500);
           table.string('type', 100);
           table.string('location', 500);
           table.boolean('pedigree');
