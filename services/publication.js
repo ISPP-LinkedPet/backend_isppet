@@ -15,18 +15,18 @@ exports.getPublicationsByActorId = async (connection, actorId) => {
     let adoptionsS = [];
     if (actor.role === 'particular') {
       const particular = await connection('particular').where('particular.user_account_id', actor.id).first();
-      breedings = await connection('publication')
-          .innerJoin('breeding', 'breeding.publication_id', '=', 'publication.id')
+      breedings = await connection('breeding').select('*', 'breeding.id as breeding_id')
+          .join('publication', 'breeding.publication_id', '=', 'publication.id')
           .where('publication.particular_id', particular.id);
-      adoptionsP = await connection('publication')
-          .innerJoin('adoption', 'adoption.publication_id', '=', 'publication.id')
+      adoptionsP = await connection('adoption').select('*', 'adoption.id as adoption_id')
+          .join('publication', 'adoption.publication_id', '=', 'publication.id')
           .where('publication.particular_id', particular.id);
       publications.push(...breedings);
       publications.push(...adoptionsP);
     } else if (actor.role === 'shelter') {
       const shelter = await connection('shelter').where('shelter.user_account_id', actor.id).first();
-      adoptionsS = await connection('adoption')
-          .innerJoin('publication', 'adoption.publication_id', '=', 'publication.id')
+      adoptionsS = await connection('adoption').select('*', 'adoption.id as adoption_id')
+          .join('publication', 'adoption.publication_id', '=', 'publication.id')
           .where('adoption.shelter_id', shelter.id);
       publications.push(...adoptionsS);
     }

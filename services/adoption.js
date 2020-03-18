@@ -45,7 +45,7 @@ exports.getAdoption = async (connection, adoptionId) => {
 };
 
 exports.getParticularAdoptions = async (connection, page) => {
-  const adoptions = await connection('adoption')
+  const adoptions = await connection('adoption').select('*', 'adoption.id as adoption_id')
       .innerJoin('publication', 'adoption.publication_id', '=', 'publication.id')
       .innerJoin('particular', 'particular.id', '=', 'publication.particular_id')
       .where('publication.transaction_status', 'Completed')
