@@ -105,3 +105,18 @@ exports.getRejectedRequestListByActorId = async (connection, userId) => {
 
   return acceptedRequest;
 };
+
+exports.getRequestsToMyPublications = async (connection, userId) => {
+  const user = await connection('particular').select('id').where('user_account_id', userId).first();
+  if (!user) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Not found user';
+    throw error;
+  }
+
+  const requests = await connection('publication')
+      .join('request', 'publication.id', '=', 'request.publication_id')
+      .where('publication.particular_id', user.id);
+  return requests;
+};
