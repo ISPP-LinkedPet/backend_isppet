@@ -161,7 +161,7 @@ exports.up = (knex) => {
         .createTable('adoption', function(table) {
           table.increments().primary();
           table.string('name');
-          table.double('taxes').notNullable();
+          table.double('taxes');
           table
               .integer('publication_id')
               .unsigned()

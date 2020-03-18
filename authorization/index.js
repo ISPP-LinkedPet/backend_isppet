@@ -20,13 +20,23 @@ permission = (req, res, next, roles) => {
 
 // a user with a specific role
 exports.vet = (req, res, next) => permission(req, res, next, ['vet']);
-exports.administrator = (req, res, next) => permission(req, res, next, ['administrator']);
-exports.moderator = (req, res, next) => permission(req, res, next, ['moderator']);
-exports.particular = (req, res, next) => permission(req, res, next, ['particular']);
+exports.administrator = (req, res, next) =>
+  permission(req, res, next, ['administrator']);
+exports.moderator = (req, res, next) =>
+  permission(req, res, next, ['moderator']);
+exports.particular = (req, res, next) =>
+  permission(req, res, next, ['particular']);
 exports.shelter = (req, res, next) => permission(req, res, next, ['shelter']);
 
 // every body register
-exports.all = (req, res, next) => permission(req, res, next, ['administrator', 'particular', 'moderator', 'shelter']);
+exports.all = (req, res, next) =>
+  permission(req, res, next, [
+    'administrator',
+    'particular',
+    'moderator',
+    'shelter',
+  ]);
 
 // few specific role
-exports.shelter_particular = (req, res, next) => permission(req, res, next, ['shelter', 'particular']);
+exports.shelter_particular = (req, res, next) =>
+  permission(req, res, next, ['shelter', 'particular']);
