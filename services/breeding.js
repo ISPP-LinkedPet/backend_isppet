@@ -13,7 +13,6 @@ const BREEDING_FIELDS = ['breeding.id',
   'genre',
   'breed',
   'transaction_status',
-  'title',
   'price',
   'location',
   'pedigree',
@@ -128,7 +127,6 @@ exports.createBreeding = async (breedingData, breedingPhotos, userId, trx) => {
       type: null,
       pedigree: null,
       transaction_status: 'In progress',
-      title: null,
       particular_id: particular.id,
     };
 
@@ -454,7 +452,6 @@ exports.acceptBreeding = async (breedingData, breedingId, trx) => {
   try {
     // Moderators will modify the breeding publication
     const pubData = {};
-    pubData.title = breedingData.title;
     pubData.age = breedingData.age;
     pubData.genre = breedingData.genre;
     pubData.breed = breedingData.breed;
