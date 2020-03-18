@@ -2,11 +2,23 @@ language: node_js
 node_js:
   - '12'
 deploy:
-  provider: heroku
-  app:
-    develop: backend-linkedpet_dev
-  strategy: git
-  api_key:
-    secure: YSLelnAPtIBETMaocAL4I0scaoL7pCS8MNaXHUqLw4Tc5p/13kL7iSk1i6/zuS/eXevtzOBWJzqlqdf/6KkRaywB8XGZlh3m4QxqjCFmu5o/pYODr9a/04HsIWY/o/K53OKOrMmSy6AxvZ5D454YDpE4efYGNRDf69hjSWKlC0qlOLe7730mvR7Qy04ejNS8JmRYHXRte5lAuNvPdiJeVqToYlKjaDnHuK1IhlYn77pH+6ShyFK8woYcb5c+TxAYQq5wo5ErCY8syKSB8+lng6d3SyB9kkmUy+dZXkNsOTldsHIbCurAUvVjrN4D2DeLI3F80uYcQ7AhyV3mEJ2xeDcF961ft+vqgotXgHTJsHt32RpuwfUnOkW2NVgvCtL8QxWfvDMTpm1vNIsn7dYqqtsc1A2oW9zrQ0Uk3OedFiyQaMdn1ndIpyviSXE8AGupPjfC6QHkHvyL0/0S4V0CnBhGIPH4ed2bVF/j95bQNIxaJD/cLcr8C4eOTBw8RxU8XfY57H7JbZfZnpvDi7aeRxjRT3pfISW+CNpEqKdg2sbdhgGi83gtH05aspAGavmJe3HHW4cW5824pvb8LMyUgcbxitjft88UHTXcZIc0F2fQlcOuztwS9UBzLaCHGi08AkzEFKrW0DfLXGAyMaGkoSoYMHN5O6yuFoP2lE8M+1Q=
-  run:
-  - npm install
+  - provider: heroku
+    app: backend-linkedpet-dev
+    strategy: git
+    run:
+    - knex migrate:latest && knex seed:run
+    api_key:
+      secure: uF4gvAp05IjDTHbRazcHQW3qHfo3/n6ksR150IcfnDRSIy5cFMHRvT1N3RNpLaHci64eWHXR3V/FbrhPYU1r1jRa2S4ZLcqOuC8YoDOD2BtNHytF0jGE8NEBi0QtlZ3D5aDl0195jOk0D10+p2qMyLhbIBJSv+D3T1UzpZ9i9fxTnDSAa5n72tqvYkMGbaqz8UyRD3akSi8TfmVYP52PN/ItXZVwjPaevWGiEOK2jU3yqXLvYSk5ktuCvcQQ574dLu6MDrqdCspdHrjY4J7u/mu7Rh5INHkPcm3p5QMGxGGbGWQPF5u2bsWZCnbRqjt/f+5T+FwEMC6QRzcDKHS3SAwsTp2bVyCmYQY5+uO55JLBdhqfJWLxDsG9IM1TXHkUvxIurMq9oBh/DpCJGxgEYK4ULij4p5AjDGGjhtYTPQSYYZEVFxqi9LOzpsHOID+SLB5E/sZi7pCtAyZTJWI2/PPPRblafH/+jE+wBaOP+WfOdx+rFyh3RLvGGo+X52UvKV/PFT1qjcm7ewrRJcUaYR8SYGXr9hL1KiWN/VNIRW69svkyRZpXrlU/eD76YLxs6YzIuVq1roWYjHwTZWduobPleNV13JbD/7h5W55SZ0rv49LAfYw9XQTcOqIgQTkaQdzA9UWLm/y0ipGJ1V+aAjSNiAlNJHJMXVubmN3HWLA=
+    on:
+      branch: develop
+
+  - provider: heroku
+    app: backend-linkedpet-prod-$TRAVIS_TAG
+    strategy: git
+    run:
+    - knex migrate:latest && knex seed:run
+    api_key:
+      secure: uF4gvAp05IjDTHbRazcHQW3qHfo3/n6ksR150IcfnDRSIy5cFMHRvT1N3RNpLaHci64eWHXR3V/FbrhPYU1r1jRa2S4ZLcqOuC8YoDOD2BtNHytF0jGE8NEBi0QtlZ3D5aDl0195jOk0D10+p2qMyLhbIBJSv+D3T1UzpZ9i9fxTnDSAa5n72tqvYkMGbaqz8UyRD3akSi8TfmVYP52PN/ItXZVwjPaevWGiEOK2jU3yqXLvYSk5ktuCvcQQ574dLu6MDrqdCspdHrjY4J7u/mu7Rh5INHkPcm3p5QMGxGGbGWQPF5u2bsWZCnbRqjt/f+5T+FwEMC6QRzcDKHS3SAwsTp2bVyCmYQY5+uO55JLBdhqfJWLxDsG9IM1TXHkUvxIurMq9oBh/DpCJGxgEYK4ULij4p5AjDGGjhtYTPQSYYZEVFxqi9LOzpsHOID+SLB5E/sZi7pCtAyZTJWI2/PPPRblafH/+jE+wBaOP+WfOdx+rFyh3RLvGGo+X52UvKV/PFT1qjcm7ewrRJcUaYR8SYGXr9hL1KiWN/VNIRW69svkyRZpXrlU/eD76YLxs6YzIuVq1roWYjHwTZWduobPleNV13JbD/7h5W55SZ0rv49LAfYw9XQTcOqIgQTkaQdzA9UWLm/y0ipGJ1V+aAjSNiAlNJHJMXVubmN3HWLA=
+    on:
+      branch: master
+      tags: true

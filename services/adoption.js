@@ -66,8 +66,8 @@ exports.updateAdoption = async (
   const pub = await trx('publication')
       .select('*', 'user_account.id AS userId')
       .join('adoption', 'adoption.publication_id', '=', 'publication.id')
-      .join('shelter', 'shelter.id', '=', 'adoption.shelter_id')
-      .join('user_account', 'user_account.id', '=', 'shelter.user_account_id')
+      .join('particular', 'particular.id', '=', 'publication.particular_id')
+      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
       .where('adoption.id', adoptionId)
       .first();
   if (!pub) {
@@ -180,13 +180,13 @@ exports.updateAdoption = async (
     const pubData = {
       animal_photo: savedAnimalPhotos.join(','),
       identification_photo: savedIdentificationPhotos.join(','),
-      age: adoptionData.age || null,
-      genre: adoptionData.genre || null,
-      breed: adoptionData.breed || null,
+      age: null,
+      genre: null,
+      breed: null,
       location: adoptionData.location || null,
-      type: adoptionData.type || null,
-      pedigree: adoptionData.pedigree || null,
-      title: adoptionData.title,
+      type: null,
+      pedigree: null,
+      title: null,
       vaccine_passport: savedVaccinePhotos.join(','),
     };
 
@@ -219,7 +219,8 @@ exports.updateAdoption = async (
 exports.createAdoption = async (
   adoptionData,
   adoptionPhotos,
-  shelterId,
+  userId,
+  role,
   trx,
 ) => {
   const allPhotos = [];
@@ -311,28 +312,60 @@ exports.createAdoption = async (
 
     allPhotos.push(...savedVaccinePhotos);
 
-    const pubData = {
-      animal_photo: savedAnimalPhotos.join(','),
-      identification_photo: savedIdentificationPhotos.join(','),
-      document_status: 'In revision',
-      transaction_status: 'In progress',
-      title: adoptionData.title,
-      vaccine_passport: savedVaccinePhotos.join(','),
-      type: adoptionData.type || null,
-      location: adoptionData.location || null,
-      pedigree: adoptionData.pedigree || null,
-      age: adoptionData.age || null,
-      genre: adoptionData.genre || null,
-      breed: adoptionData.breed || null,
-    };
+    let pubData = null;
+
+    if (role === 'shelter') {
+      pubData = {
+        animal_photo: savedAnimalPhotos.join(','),
+        identification_photo: savedIdentificationPhotos.join(','),
+        document_status: 'Accepted',
+        transaction_status: 'In progress',
+        title: null,
+        vaccine_passport: savedVaccinePhotos.join(','),
+        type: null,
+        location: adoptionData.location || null,
+        pedigree: null,
+        age: null,
+        genre: null,
+        breed: null,
+      };
+    } else if (role === 'particular') {
+      pubData = {
+        animal_photo: savedAnimalPhotos.join(','),
+        identification_photo: savedIdentificationPhotos.join(','),
+        document_status: 'In revision',
+        transaction_status: 'In progress',
+        title: null,
+        vaccine_passport: savedVaccinePhotos.join(','),
+        type: null,
+        location: adoptionData.location || null,
+        pedigree: null,
+        age: null,
+        genre: null,
+        breed: null,
+        particular_id: userId,
+      };
+    }
 
     const publicationId = await trx('publication').insert(pubData);
-    const adoptionId = await trx('adoption').insert({
-      publication_id: publicationId,
-      name: adoptionData.name,
-      taxes: adoptionData.taxes,
-      shelter_id: shelterId,
-    });
+
+    let adoptionId = null;
+
+    if (role === 'shelter') {
+      adoptionId = await trx('adoption').insert({
+        publication_id: publicationId,
+        name: adoptionData.name,
+        taxes: adoptionData.taxes,
+        shelter_id: userId,
+      });
+    } else if (role === 'particular') {
+      adoptionId = await trx('adoption').insert({
+        publication_id: publicationId,
+        name: adoptionData.name,
+        taxes: null,
+        shelter_id: null,
+      });
+    }
 
     return await trx('adoption')
         .join('publication', 'adoption.publication_id', '=', 'publication.id')
@@ -367,7 +400,7 @@ const getExtension = (photo) => {
 exports.getPendingAdoptions = async (connection, userId) => {
   const user = await connection('moderator')
       .select('id')
-      .where({user_account_id: userId})
+      .where('user_account_id', userId)
       .first();
   if (!user) {
     const error = new Error();
@@ -378,6 +411,158 @@ exports.getPendingAdoptions = async (connection, userId) => {
 
   const adoptions = await connection('adoption')
       .join('publication', 'adoption.publication_id', '=', 'publication.id')
-      .where('pblication.document_status', 'In revision');
+      .where('publication.document_status', 'In revision');
   return adoptions;
+};
+
+exports.acceptAdoption = async (adoptionData, adoptionId, trx) => {
+  const pub = await trx('publication')
+      .select('*', 'user_account.id AS userId')
+      .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+      .join('particular', 'particular.id', '=', 'publication.particular_id')
+      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
+      .where('adoption.id', adoptionId)
+      .first();
+  if (!pub) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Adoption not found';
+    throw error;
+  }
+  if (!(pub.document_status === 'In revision')) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not accept a publication which is not in revision';
+    throw error;
+  }
+
+  try {
+    // Moderators will modify the adoption publication
+    const pubData = {};
+    pubData.title = adoptionData.title;
+    pubData.age = adoptionData.age;
+    pubData.genre = adoptionData.genre;
+    pubData.breed = adoptionData.breed;
+    pubData.type = adoptionData.type;
+    pubData.pedigree = adoptionData.pedigree;
+    pubData.document_status = 'Accepted';
+
+    await trx('publication')
+        .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+        .where({'adoption.id': adoptionId})
+        .update(pubData);
+
+    return await trx('publication')
+        .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+        .where({'adoption.id': adoptionId})
+        .first();
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.rejectAdoption = async (adoptionId, trx) => {
+  const pub = await trx('publication')
+      .select('*', 'user_account.id AS userId')
+      .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+      .join('particular', 'particular.id', '=', 'publication.particular_id')
+      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
+      .where('adoption.id', adoptionId)
+      .first();
+  if (!pub) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Adoption not found';
+    throw error;
+  }
+  if (!(pub.document_status === 'In revision')) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not reject a publication which is not in revision';
+    throw error;
+  }
+
+  try {
+    // Moderators will modify the adoption publication
+    const pubData = {};
+    pubData.document_status = 'Rejected';
+
+    await trx('publication')
+        .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+        .where({'adoption.id': adoptionId})
+        .update(pubData);
+
+    return await trx('publication')
+        .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+        .where({'adoption.id': adoptionId})
+        .first();
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.imInterested = async (userId, adoptionId, trx) => {
+  // Se comprueba que no se intenta estar interesado en una publication propia
+  const pub = await trx('publication')
+      .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+      .where({'adoption.id': adoptionId})
+      .first();
+
+  if (pub == undefined || pub.particular_id === userId) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not be interested in your own publications';
+    throw error;
+  }
+
+  // Se comprueba que esta publicacion no este con una request pendiente del usuario actual
+  const rqt = await trx('request')
+      .where({publication_id: pub.publication_id})
+      .andWhere({particular_id: userId})
+      .first();
+
+  if (rqt && rqt.status === 'Pending') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Already interested or concluded';
+    throw error;
+  }
+
+  // Se comprueba que esta publicacion tenga los documentos verificados y todavia este en progreso
+  const wrongPub = await trx('publication')
+      .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+      .where({'publication.document_status': 'Accepted'})
+      .andWhere({'publication.transaction_status': 'In progress'})
+      .andWhere({'adoption.id': adoptionId});
+
+  if (!wrongPub.length) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'The publication documents or status are wrong';
+    throw error;
+  }
+
+  if (rqt != undefined) {
+    await trx('request')
+        .where({id: rqt.id})
+        .update({
+          status: 'Pending',
+        });
+    return await trx('request')
+        .where({id: rqt.id})
+        .first();
+  } else {
+    const rqtData = {
+      status: 'Pending',
+      publication_id: pub.publication_id,
+      particular_id: userId,
+    };
+
+    const requestId = await trx('request').insert(rqtData);
+    return await trx('request')
+        .where({id: requestId})
+        .first();
+  }
+
+  // Comprobar que la request no sea del propia usuario y que sea visible para todo el mundo
 };

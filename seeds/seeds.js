@@ -1,5 +1,7 @@
+/* eslint-disable max-len */
 exports.seed = async (knex) => {
   // Deletes ALL existing entries
+  await knex.raw(`SET FOREIGN_KEY_CHECKS = 0;`);
   await knex('shelter').del();
   await knex('adoption').del();
   await knex('administrator').del();
@@ -10,6 +12,7 @@ exports.seed = async (knex) => {
   await knex('moderator').del();
   await knex('vet').del();
   await knex('user_account').del();
+  await knex.raw(`SET FOREIGN_KEY_CHECKS = 1;`);
 
   // user_account
   await knex('user_account').insert([
@@ -803,17 +806,17 @@ exports.seed = async (knex) => {
     {
       id: 1,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg, https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       document_status: 'Accepted',
-      age: 8,
+      birth_date: '2020-01-01',
       genre: 'Male',
       breed: 'Doberman',
       transaction_status: 'In progress',
-      type: 'Perro',
+      type: 'Dog',
       location: 'Avda. ejemplo, 1',
       pedigree: true,
       particular_id: 1,
@@ -821,17 +824,17 @@ exports.seed = async (knex) => {
     {
       id: 2,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg, https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       document_status: 'In revision',
-      age: 3,
+      birth_date: '2015-06-30',
       genre: 'Female',
       breed: 'Bulldog Terrier',
       transaction_status: 'Completed',
-      type: 'Perro',
+      type: 'Dog',
       location: 'Avda. ejemplo, 2',
       pedigree: true,
       particular_id: 2,
@@ -839,17 +842,17 @@ exports.seed = async (knex) => {
     {
       id: 3,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg, https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       document_status: 'Rejected',
-      age: 5,
+      birth_date: '2018-09-24',
       genre: 'Male',
       breed: 'Yorkshire Terrier',
       transaction_status: 'In progress',
-      type: 'Perro',
+      type: 'Dog',
       location: 'Avda. ejemplo, 3',
       pedigree: true,
       particular_id: 3,
@@ -859,17 +862,17 @@ exports.seed = async (knex) => {
     {
       id: 4,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg, https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       document_status: 'Accepted',
-      age: 6,
+      birth_date: '2018-11-15',
       genre: 'Male',
       breed: 'Maine Coon',
       transaction_status: 'Completed',
-      type: 'Gato',
+      type: 'Cat',
       location: 'Avda. ejemplo, 4',
       pedigree: false,
       particular_id: null,
@@ -877,17 +880,17 @@ exports.seed = async (knex) => {
     {
       id: 5,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg, https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       document_status: 'Accepted',
-      age: 8,
+      birth_date: '2019-12-01',
       genre: 'Female',
       breed: 'Siamés',
       transaction_status: 'In progress',
-      type: 'Gato',
+      type: 'Cat',
       location: 'Avda. ejemplo, 5',
       pedigree: true,
       particular_id: 5,
@@ -895,17 +898,17 @@ exports.seed = async (knex) => {
     {
       id: 6,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg, https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       document_status: 'Accepted',
-      age: 2,
+      birth_date: '2015-08-23',
       genre: 'Male',
       breed: 'Árabe',
       transaction_status: 'In progress',
-      type: 'Caballo',
+      type: 'Horse',
       location: 'Avda. ejemplo, 6',
       pedigree: true,
       particular_id: 6,
@@ -913,17 +916,17 @@ exports.seed = async (knex) => {
     {
       id: 7,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg, https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       document_status: 'Accepted',
-      age: 2,
+      birth_date: '2016-12-12',
       genre: 'Female',
       breed: 'Árabe',
       transaction_status: 'In progress',
-      type: 'Caballo',
+      type: 'Horse',
       location: 'Avda. ejemplo, 7',
       pedigree: true,
       particular_id: 7,
@@ -931,17 +934,17 @@ exports.seed = async (knex) => {
     {
       id: 8,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg, https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       document_status: 'Accepted',
-      age: 6,
+      birth_date: '2015-07-07',
       genre: 'Female',
       breed: 'Andaluz',
       transaction_status: 'In progress',
-      type: 'Caballo',
+      type: 'Horse',
       location: 'Avda. ejemplo, 8',
       pedigree: true,
       particular_id: 8,
@@ -949,17 +952,17 @@ exports.seed = async (knex) => {
     {
       id: 9,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg, https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       document_status: 'Accepted',
-      age: 1,
+      birth_date: '2017-11-03',
       genre: 'Male',
       breed: 'Mustang',
       transaction_status: 'In progress',
-      type: 'Caballo',
+      type: 'Horse',
       location: 'Avda. ejemplo, 9',
       pedigree: true,
       particular_id: 9,
@@ -967,17 +970,17 @@ exports.seed = async (knex) => {
     {
       id: 10,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg, https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       document_status: 'Accepted',
-      age: 3,
+      birth_date: '2018-11-04',
       genre: 'Male',
       breed: 'Yorkshire',
       transaction_status: 'In progress',
-      type: 'Perro',
+      type: 'Dog',
       location: 'Avda. ejemplo, 11',
       pedigree: true,
       particular_id: 10,
@@ -985,17 +988,17 @@ exports.seed = async (knex) => {
     {
       id: 11,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg, https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       document_status: 'Accepted',
-      age: 4,
+      birth_date: '2013-02-04',
       genre: 'Male',
       breed: 'Husky siberiano',
       transaction_status: 'In progress',
-      type: 'Perro',
+      type: 'Dog',
       location: 'Avda. ejemplo, 12',
       pedigree: true,
       particular_id: 11,
@@ -1003,17 +1006,17 @@ exports.seed = async (knex) => {
     {
       id: 12,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg, https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       document_status: 'Accepted',
-      age: 4,
+      birth_date: '2013-12-04',
       genre: 'Male',
       breed: 'Brabante',
       transaction_status: 'In progress',
-      type: 'Caballo',
+      type: 'Horse',
       location: 'Avda. ejemplo, 12',
       pedigree: true,
       particular_id: 12,
@@ -1021,17 +1024,17 @@ exports.seed = async (knex) => {
     {
       id: 13,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg, https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       document_status: 'Accepted',
-      age: 2,
+      birth_date: '2015-12-04',
       genre: 'Male',
       breed: 'Islandés',
       transaction_status: 'In progress',
-      type: 'Caballo',
+      type: 'Horse',
       location: 'Avda. ejemplo, 13',
       pedigree: false,
       particular_id: 13,
@@ -1039,17 +1042,17 @@ exports.seed = async (knex) => {
     {
       id: 14,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg, https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       document_status: 'Accepted',
-      age: 2,
+      birth_date: '2010-10-06',
       genre: 'Male',
       breed: 'Trakehner',
       transaction_status: 'In progress',
-      type: 'Caballo',
+      type: 'Horse',
       location: 'Avda. ejemplo, 14',
       pedigree: true,
       particular_id: 14,
@@ -1057,17 +1060,17 @@ exports.seed = async (knex) => {
     {
       id: 15,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg, https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       document_status: 'Accepted',
-      age: 5,
+      birth_date: '2012-10-02',
       genre: 'Female',
       breed: 'Andalúz',
       transaction_status: 'In progress',
-      type: 'Caballo',
+      type: 'Horse',
       location: 'Avda. ejemplo, 16',
       pedigree: true,
       particular_id: 15,
@@ -1075,17 +1078,17 @@ exports.seed = async (knex) => {
     {
       id: 16,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg, https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       document_status: 'Accepted',
-      age: 3,
+      birth_date: '2012-10-09',
       genre: 'Male',
       breed: 'Nórico',
       transaction_status: 'In progress',
-      type: 'Caballo',
+      type: 'Horse',
       location: 'Avda. ejemplo, 15',
       pedigree: true,
       particular_id: 16,
@@ -1093,17 +1096,17 @@ exports.seed = async (knex) => {
     {
       id: 17,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg, https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       document_status: 'Accepted',
-      age: 3,
+      birth_date: '2011-11-01',
       genre: 'Male',
       breed: 'Nórico',
       transaction_status: 'In progress',
-      type: 'Caballo',
+      type: 'Horse',
       location: 'Avda. ejemplo, 17',
       pedigree: true,
       particular_id: 17,
@@ -1111,17 +1114,17 @@ exports.seed = async (knex) => {
     {
       id: 18,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg, https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       document_status: 'Accepted',
-      age: 8,
+      birth_date: '2019-12-04',
       genre: 'Male',
       breed: 'Lipizzano',
       transaction_status: 'In progress',
-      type: 'Caballo',
+      type: 'Horse',
       location: 'Avda. ejemplo, 18',
       pedigree: false,
       particular_id: 18,
@@ -1129,17 +1132,17 @@ exports.seed = async (knex) => {
     {
       id: 19,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg, https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       document_status: 'Accepted',
-      age: 4,
+      birth_date: '2013-10-09',
       genre: 'Female',
       breed: 'Lipizzano',
       transaction_status: 'In progress',
-      type: 'Caballo',
+      type: 'Horse',
       location: 'Avda. ejemplo, 19',
       pedigree: true,
       particular_id: 19,
@@ -1147,17 +1150,17 @@ exports.seed = async (knex) => {
     {
       id: 20,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg, https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       document_status: 'Accepted',
-      age: 4,
+      birth_date: '2013-06-03',
       genre: 'Female',
       breed: 'Bulldog',
       transaction_status: 'Completed',
-      type: 'Caballo',
+      type: 'Dog',
       location: 'Avda. ejemplo, 20',
       pedigree: true,
       particular_id: 20,
@@ -1165,17 +1168,17 @@ exports.seed = async (knex) => {
     {
       id: 21,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg, https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       document_status: 'Accepted',
-      age: 3,
+      birth_date: '2019-01-01',
       genre: 'Male',
       breed: 'Bulldog',
       transaction_status: 'Completed',
-      type: 'Perro',
+      type: 'Dog',
       location: 'Avda. ejemplo, 21',
       pedigree: true,
       particular_id: null,
@@ -1183,17 +1186,17 @@ exports.seed = async (knex) => {
     {
       id: 22,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg, https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       document_status: 'Accepted',
-      age: 2,
+      birth_date: '2016-04-06',
       genre: 'Female',
       breed: 'Yorkshire',
       transaction_status: 'In progress',
-      type: 'Perro',
+      type: 'Dog',
       location: 'Avda. ejemplo, 22',
       pedigree: true,
       particular_id: null,
@@ -1201,17 +1204,17 @@ exports.seed = async (knex) => {
     {
       id: 23,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg, https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       document_status: 'Accepted',
-      age: 4,
+      birth_date: '2017-12-06',
       genre: 'Female',
       breed: 'Caniche',
       transaction_status: 'Completed',
-      type: 'Perro',
+      type: 'Dog',
       location: 'Avda. ejemplo, 23',
       pedigree: true,
       particular_id: null,
@@ -1219,17 +1222,17 @@ exports.seed = async (knex) => {
     {
       id: 24,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg, https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       document_status: 'Accepted',
-      age: 6,
+      birth_date: '2014-10-04',
       genre: 'Male',
       breed: 'Pastor Alemán',
       transaction_status: 'Completed',
-      type: 'Perro',
+      type: 'Dog',
       location: 'Avda. ejemplo, 24',
       pedigree: true,
       particular_id: null,
@@ -1237,13 +1240,13 @@ exports.seed = async (knex) => {
     {
       id: 25,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg, https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       document_status: 'Accepted',
-      age: 4,
+      birth_date: '2010-04-12',
       genre: 'Male',
       breed: 'Pastor Alemán',
       transaction_status: 'Completed',
@@ -1255,13 +1258,13 @@ exports.seed = async (knex) => {
     {
       id: 26,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg, https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       document_status: 'In revision',
-      age: null,
+      birth_date: null,
       genre: null,
       breed: null,
       transaction_status: 'In progress',
@@ -1273,13 +1276,13 @@ exports.seed = async (knex) => {
     {
       id: 27,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg, https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       document_status: 'In revision',
-      age: null,
+      birth_date: null,
       genre: null,
       breed: null,
       transaction_status: 'In progress',
@@ -1291,13 +1294,13 @@ exports.seed = async (knex) => {
     {
       id: 28,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg, https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       document_status: 'In revision',
-      age: null,
+      birth_date: null,
       genre: null,
       breed: null,
       transaction_status: 'In progress',
@@ -1309,13 +1312,13 @@ exports.seed = async (knex) => {
     {
       id: 29,
       animal_photo:
-        'images/animal_photos/a7795b65-aa9c-40f0-8235-87ea077a9174.jpg, images/animal_photos/baf83c25-a358-42b3-ab0d-bb8fa169304d.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg, https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       identification_photo:
-        'images/identification_photos/2d783a8f-bae9-4bd4-8c0e-61b5ec85f691.jpg',
+        'https://www.65ymas.com/uploads/s1/65/73/5/bigstock-dog-beagle-having-fun-running-294325987-1.jpeg',
       vaccine_passport:
-        'images/vaccine_passports/8cd4925b-44f6-4962-b004-76892fa201d0.jpeg',
+        'https://cdn.hispantv.com/hispanmedia/files/images/thumbnail/20200201/08320156_xl.jpg',
       document_status: 'In revision',
-      age: null,
+      birth_date: null,
       genre: null,
       breed: null,
       transaction_status: 'In progress',

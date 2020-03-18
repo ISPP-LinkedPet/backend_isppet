@@ -9,7 +9,6 @@ exports.getParticularAdoptions = async (req, res) => {
       return res.status(401).send('Invalid params');
     }
 
-
     const adoption = await adoptionService.getParticularAdoptions(
         connection,
         page,
@@ -50,12 +49,17 @@ exports.getPendingAdoptions = async (req, res) => {
     const userId = req.user.id;
     // const role = req.user.role;
 
-    const adoptions = await adoptionService.getPendingAdoptions(connection, userId);
+    const adoptions = await adoptionService.getPendingAdoptions(
+        connection,
+        userId,
+    );
 
     return res.status(200).send(adoptions);
   } catch (error) {
     console.log(error);
-    if (error.status && error.message) return res.status(error.status).send(error.message);
+    if (error.status && error.message) {
+      return res.status(error.status).send(error.message);
+    }
     return res.status(500).send(error);
   }
 };
@@ -67,23 +71,17 @@ exports.createAdoption = async (req, res) => {
   const trx = await connection.transaction();
 
   try {
-    const shelterId = req.user.id;
-    console.log(shelterId);
-
+    const userId = req.user.id;
+    const role = req.user.role;
     const adoptionData = req.body;
-    console.log(adoptionData);
     const adoptionPhotos = req.files;
-    console.log(adoptionPhotos);
 
     if (
       !adoptionPhotos.animal_photo ||
       !adoptionPhotos.identification_photo ||
-      !adoptionData.title ||
       !adoptionPhotos.vaccine_passport ||
-      !adoptionData.type ||
-      !adoptionData.location ||
-      !adoptionData.taxes ||
-      !shelterId
+      !adoptionData.name |
+      !userId
     ) {
       return res.status(400).send('Invalid params');
     }
@@ -91,7 +89,8 @@ exports.createAdoption = async (req, res) => {
     const adoption = await adoptionService.createAdoption(
         adoptionData,
         adoptionPhotos,
-        shelterId,
+        userId,
+        role,
         trx,
     );
 
@@ -103,7 +102,9 @@ exports.createAdoption = async (req, res) => {
     // rollback
     await trx.rollback();
 
-    if (error.status && error.message) res.status(error.status).send({error: error.message});
+    if (error.status && error.message) {
+      res.status(error.status).send({error: error.message});
+    }
     return res.status(500).send({error});
   }
 };
@@ -121,22 +122,119 @@ exports.updateAdoption = async (req, res) => {
     if (
       !adoptionPhotos.animal_photo ||
       !adoptionPhotos.identification_photo ||
-      !adoptionData.title ||
       !adoptionPhotos.vaccine_passport ||
-      !adoptionData.type ||
-      !adoptionData.location ||
-      !adoptionData.taxes
+      !adoptionData.name ||
+      !userId
     ) {
       return res.status(400).send({error: 'Invalid params'});
     }
 
-    const adoption = await adoptionService.updateAdoption(adoptionData, adoptionPhotos, adoptionId, userId, trx);
+    const adoption = await adoptionService.updateAdoption(
+        adoptionData,
+        adoptionPhotos,
+        adoptionId,
+        userId,
+        trx,
+    );
 
     await trx.commit();
-    return res.status(200).send(adoption);
+    return res.status(200).send({adoption});
   } catch (error) {
     // rollback
     await trx.rollback();
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
+
+exports.acceptAdoption = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
+  try {
+    const adoptionData = req.body;
+    const adoptionId = req.params.id;
+
+    const adoption = await adoptionService.acceptAdoption(
+        adoptionData,
+        adoptionId,
+        trx,
+    );
+
+    // commit
+    await trx.commit();
+
+    return res.status(200).send(adoption);
+  } catch (error) {
+    console.log(error);
+    // rollback
+    await trx.rollback();
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send(error);
+  }
+};
+
+exports.rejectAdoption = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
+  try {
+    const adoptionId = req.params.id;
+
+    const adoption = await adoptionService.rejectaAdoption(adoptionId, trx);
+
+    // commit
+    await trx.commit();
+
+    return res.status(200).send(adoption);
+  } catch (error) {
+    console.log(error);
+    // rollback
+    await trx.rollback();
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send(error);
+  }
+};
+
+exports.imInterested = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
+  try {
+    // params
+    const adoptionId = req.params.id;
+    if (!adoptionId) {
+      return res.status(404).send('Miss params');
+    }
+
+    // authorization
+    const userId = req.user.id;
+
+    const request = await adoptionService.imInterested(userId, adoptionId, trx);
+
+    // commit
+    await trx.commit();
+
+    // Ver el formato en el que mandar los mensajes
+    return res.status(200).send(request);
+  } catch (error) {
+    console.log(error);
+
+    // rollback
+    await trx.rollback();
+
     if (error.status && error.message) {
       return res.status(error.status).send({error: error.message});
     }
