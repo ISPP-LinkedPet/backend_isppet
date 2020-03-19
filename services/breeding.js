@@ -216,6 +216,7 @@ exports.getBreedingsOffers = async (breedingParams, connection, userId) => {
   const pedigree = breedingParams.pedigree;
 
   const breedings = await connection('breeding')
+      .select('*', 'breeding.id as breeding_id')
       .join('publication', 'breeding.publication_id', '=', 'publication.id')
       .where('publication.document_status', 'Accepted')
       .andWhere('publication.transaction_status', 'In progress')
