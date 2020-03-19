@@ -5,7 +5,7 @@ const API_KEY = '53125aca466345fd809c44468d122456';
 exports.getVets = async (connection) => {
   const vets = await connection('vet').orderBy('is_premium', 'desc');
   const addresses = vets.map((vet) => {
-    const address = vet.address.split(' ').join('%20');
+    const address = encodeURI(vet.address);
     const url = `${BASE_URL}?q=${address}&key=${API_KEY}&language=es&pretty=1`;
     return axios({
       method: 'get',
