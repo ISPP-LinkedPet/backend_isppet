@@ -104,7 +104,7 @@ exports.getRejectedRequestListByActorId = async (connection, userId) => {
   return acceptedRequest;
 };
 
-exports.getRequestsToMyPublications = async (connection, userId) => {
+exports.getAcceptedRequestsToMyPublications = async (connection, userId) => {
   const actor = await connection('user_account').where('user_account.id', userId).first();
   if (!actor) {
     const error = new Error();
@@ -118,13 +118,44 @@ exports.getRequestsToMyPublications = async (connection, userId) => {
     const user = await connection('particular').select('id').where('user_account_id', userId).first();
     requests = await connection('publication')
         .join('request', 'publication.id', '=', 'request.publication_id')
-        .where('publication.particular_id', user.id);
+        .where('publication.particular_id', user.id)
+        .andWhere('request.status', 'Accepted');
   } else if (actor.role === 'shelter') {
     const user = await connection('shelter').select('id').where('user_account_id', userId).first();
     requests = await connection('publication')
         .join('request', 'publication.id', '=', 'request.publication_id')
         .join('adoption', 'publication.id', '=', 'adoption.publication_id')
-        .where('adoption.shelter_id', user.id);
+        .where('adoption.shelter_id', user.id)
+        .andWhere('request.status', 'Accepted');
+  }
+  return requests;
+};
+
+exports.getPendingRequestsToMyPublications = async (connection, userId) => {
+  const actor = await connection('user_account').where('user_account.id', userId).first();
+  if (!actor) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Not found user';
+    throw error;
+  }
+
+  let requests = [];
+  if (actor.role === 'particular') {
+    const user = await connection('particular').select('id').where('user_account_id', userId).first();
+    requests = await connection('publication')
+        .join('request', 'publication.id', '=', 'request.publication_id')
+        .where('publication.particular_id', user.id)
+        .andWhere('request.status', 'Pending')
+        .andWhere('publication.transaction_status', 'In progress');
+  } else if (actor.role === 'shelter') {
+    const user = await connection('shelter').select('id').where('user_account_id', userId).first();
+    requests = await connection('publication')
+        .join('request', 'publication.id', '=', 'request.publication_id')
+        .join('adoption', 'publication.id', '=', 'adoption.publication_id')
+        .where('adoption.shelter_id', user.id)
+        .andWhere('request.status', 'Pending')
+        .andWhere('publication.transaction_status', 'In progress');
   }
   return requests;
 };

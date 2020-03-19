@@ -95,14 +95,36 @@ exports.getRejectedRequestListByActorId = async (req, res) => {
   }
 };
 
-exports.getRequestsToMyPublications = async (req, res) => {
+exports.getAcceptedRequestsToMyPublications = async (req, res) => {
   try {
     const connection = req.connection;
 
     // authorization
     const userId = req.user.id;
 
-    const requests = await publicationService.getRequestsToMyPublications(
+    const requests = await publicationService.getAcceptedRequestsToMyPublications(
+        connection,
+        userId,
+    );
+
+    return res.status(200).send(requests);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send(error.message);
+    }
+    return res.status(500).send(error);
+  }
+};
+
+exports.getPendingRequestsToMyPublications = async (req, res) => {
+  try {
+    const connection = req.connection;
+
+    // authorization
+    const userId = req.user.id;
+
+    const requests = await publicationService.getPendingRequestsToMyPublications(
         connection,
         userId,
     );
