@@ -605,3 +605,14 @@ exports.getAdoptionsOffers = async (adoptionParams, connection, userId) => {
       });
   return adoptions;
 };
+
+exports.getAdoptions = async (connection, page) => {
+  const adoptions = await connection('adoption')
+      .select('*')
+      .innerJoin('publication', 'adoption.publication_id', '=', 'publication.id')
+      .where('publication.transaction_status', 'Completed')
+      .limit(10)
+      .offset(10 * page);
+
+  return adoptions;
+};

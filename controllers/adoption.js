@@ -22,6 +22,7 @@ exports.getParticularAdoptions = async (req, res) => {
     return res.status(500).send(error);
   }
 };
+
 exports.getAdoption = async (req, res) => {
   try {
     const connection = req.connection;
@@ -294,5 +295,26 @@ exports.getAdoptionsOffers = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(400).send(error);
+  }
+};
+
+exports.getAdoptions = async (req, res) => {
+  const connection = req.connection;
+
+  try {
+    const page = req.query.page || 0;
+    if (isNaN(page)) {
+      return res.status(401).send('Invalid params');
+    }
+
+    const adoptions = await adoptionService.getAdoptions(connection, page);
+
+    return res.status(200).send(adoptions);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send(error.message);
+    }
+    return res.status(500).send(error);
   }
 };
