@@ -190,11 +190,9 @@ exports.acceptAdoption = async (req, res) => {
   const trx = await connection.transaction();
 
   try {
-    const adoptionData = req.body;
     const adoptionId = req.params.id;
 
     const adoption = await adoptionService.acceptAdoption(
-        adoptionData,
         adoptionId,
         trx,
     );

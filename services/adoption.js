@@ -410,7 +410,7 @@ exports.getPendingAdoptions = async (connection, userId) => {
   return adoptions;
 };
 
-exports.acceptAdoption = async (adoptionData, adoptionId, trx) => {
+exports.acceptAdoption = async (adoptionId, trx) => {
   const pub = await trx('publication')
       .select('*', 'user_account.id AS userId')
       .join('adoption', 'adoption.publication_id', '=', 'publication.id')
@@ -434,11 +434,6 @@ exports.acceptAdoption = async (adoptionData, adoptionId, trx) => {
   try {
     // Moderators will modify the adoption publication
     const pubData = {};
-    pubData.birth_date = adoptionData.birth_date;
-    pubData.genre = adoptionData.genre;
-    pubData.breed = adoptionData.breed;
-    pubData.type = adoptionData.type;
-    pubData.pedigree = adoptionData.pedigree;
     pubData.document_status = 'Accepted';
 
     await trx('publication')
