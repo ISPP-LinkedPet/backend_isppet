@@ -404,6 +404,7 @@ exports.getPendingAdoptions = async (connection, userId) => {
   }
 
   const adoptions = await connection('adoption')
+      .select('*', 'adoption.id AS adoption_id')
       .join('publication', 'adoption.publication_id', '=', 'publication.id')
       .where('publication.document_status', 'In revision');
   return adoptions;
