@@ -42,11 +42,6 @@ exports.createBreading = async (req, res) => {
       !breedingData.price ||
       !breedingData.location
     ) {
-      console.log(
-          breedingData,
-          breedingPhotos,
-          !breedingData.price || !breedingData.location,
-      );
       return res.status(400).send({error: 'Invalid params'});
     }
 
