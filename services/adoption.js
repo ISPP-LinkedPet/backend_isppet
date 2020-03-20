@@ -412,10 +412,7 @@ exports.getPendingAdoptions = async (connection, userId) => {
 
 exports.acceptAdoption = async (adoptionId, trx) => {
   const pub = await trx('publication')
-      .select('*', 'user_account.id AS userId')
       .join('adoption', 'adoption.publication_id', '=', 'publication.id')
-      .join('particular', 'particular.id', '=', 'publication.particular_id')
-      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
       .where('adoption.id', adoptionId)
       .first();
   if (!pub) {
@@ -452,10 +449,7 @@ exports.acceptAdoption = async (adoptionId, trx) => {
 
 exports.rejectAdoption = async (adoptionId, trx) => {
   const pub = await trx('publication')
-      .select('*', 'user_account.id AS userId')
       .join('adoption', 'adoption.publication_id', '=', 'publication.id')
-      .join('particular', 'particular.id', '=', 'publication.particular_id')
-      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
       .where('adoption.id', adoptionId)
       .first();
   if (!pub) {
