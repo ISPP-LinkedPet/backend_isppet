@@ -350,6 +350,7 @@ exports.editBreeding = async (
       .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
       .where('breeding.id', breedingId)
       .first();
+
   if (!pub) {
     const error = new Error();
     error.status = 404;
@@ -362,19 +363,30 @@ exports.editBreeding = async (
     error.message = 'You can not edit a publication that you do not own';
     throw error;
   }
-  if (!(pub.document_status === 'In revision')) {
+
+  if (pub.document_status === 'Rejected') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not edit a publication which is not in revision';
+    error.message = 'You can not edit a publication which is rejected';
+    throw error;
+  }
+
+  if (pub.transaction_status === 'Completed') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not edit a publication which is completed';
     throw error;
   }
 
   const allPhotos = [];
+  const savedAnimalPhotos = [];
+  const savedIdentificationPhotos = [];
+  const savedVaccinePhotos = [];
 
   try {
     if (breedingPhotos.animal_photo) {
       // Mínimo 2 fotos del animal
-      const savedAnimalPhotos = [];
+
       if (
         breedingPhotos.animal_photo &&
         breedingPhotos.animal_photo.length >= 2
@@ -399,7 +411,7 @@ exports.editBreeding = async (
 
     if (breedingPhotos.identification_photo) {
       // Mínimo una foto identificativa
-      const savedIdentificationPhotos = [];
+
       if (breedingPhotos.identification_photo) {
         if (Array.isArray(breedingPhotos.identification_photo)) {
           breedingPhotos.identification_photo.forEach((photo) => {
@@ -432,7 +444,7 @@ exports.editBreeding = async (
 
     if (breedingPhotos.vaccine_passport) {
       // Mínimo una foto de las vacunas
-      const savedVaccinePhotos = [];
+
       if (breedingPhotos.vaccine_passport) {
         if (Array.isArray(breedingPhotos.vaccine_passport)) {
           breedingPhotos.vaccine_passport.forEach((photo) => {
@@ -466,18 +478,18 @@ exports.editBreeding = async (
     if (breedingPhotos.animal_photo) {
       pubData.animal_photo = savedAnimalPhotos.join(',');
     }
-    if (breedingPhotos.identification_photo) {
-      pubData.identification_photo = savedIdentificationPhotos.join(',');
-    }
-    if (breedingPhotos.vaccine_passport) {
-      pubData.vaccine_passport = savedVaccinePhotos.join(',');
-    }
-    if (breedingData.birth_date) pubData.birth_date = breedingData.birth_date;
-    if (breedingData.genre) pubData.genre = breedingData.genre;
-    if (breedingData.breed) pubData.breed = breedingData.breed;
+
     if (breedingData.location) pubData.location = breedingData.location;
-    if (breedingData.type) pubData.type = breedingData.type;
-    if (breedingData.pedigree) pubData.pedigree = breedingData.pedigree;
+
+    if (pub.document_status === 'In revision') {
+      if (breedingPhotos.identification_photo) {
+        pubData.identification_photo = savedIdentificationPhotos.join(',');
+      }
+      if (breedingPhotos.vaccine_passport) {
+        pubData.vaccine_passport = savedVaccinePhotos.join(',');
+      }
+    }
+    pubData.document_status = 'In revision';
 
     await trx('publication')
         .join('breeding', 'breeding.publication_id', '=', 'publication.id')
