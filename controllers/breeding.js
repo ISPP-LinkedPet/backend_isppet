@@ -10,7 +10,7 @@ exports.getBreeding = async (req, res) => {
     }
 
     const breeding = await breedingService.getBreeding(connection, breedingId);
-    return res.status(200).send({breeding});
+    return res.status(200).send(breeding);
   } catch (error) {
     if (error.status && error.message) {
       return res.status(error.status).send({error: error.message});
