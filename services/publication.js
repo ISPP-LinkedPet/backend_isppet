@@ -7,7 +7,7 @@ const PARTICULAR_CONTACT_FIELDS = [
 ];
 
 const SHELTER_CONTACT_FIELDS = [
-  'name',
+  'user_account.name',
   'email',
   'address',
   'telephone',
