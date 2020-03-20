@@ -67,7 +67,6 @@ exports.updateAdoption = async (
       .join('adoption', 'adoption.publication_id', '=', 'publication.id')
       .where('adoption.id', adoptionId)
       .first();
-  console.log(pub);
 
   if (!pub) {
     const error = new Error();
@@ -497,12 +496,23 @@ exports.rejectAdoption = async (adoptionId, trx) => {
 
 exports.imInterested = async (userId, adoptionId, trx) => {
   // Se comprueba que no se intenta estar interesado en una publication propia
+
+  const particularId = await trx('particular')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+  if (!particularId) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Not found user';
+    throw error;
+  }
   const pub = await trx('publication')
       .join('adoption', 'adoption.publication_id', '=', 'publication.id')
       .where({'adoption.id': adoptionId})
       .first();
 
-  if (pub == undefined || pub.particular_id === userId) {
+  if (pub == undefined || pub.particular_id === particularId.id) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not be interested in your own publications';
@@ -512,7 +522,7 @@ exports.imInterested = async (userId, adoptionId, trx) => {
   // Se comprueba que esta publicacion no este con una request pendiente del usuario actual
   const rqt = await trx('request')
       .where({publication_id: pub.publication_id})
-      .andWhere({particular_id: userId})
+      .andWhere({particular_id: particularId.id})
       .first();
 
   if (rqt && rqt.status === 'Pending') {
@@ -528,7 +538,6 @@ exports.imInterested = async (userId, adoptionId, trx) => {
       .where({'publication.document_status': 'Accepted'})
       .andWhere({'publication.transaction_status': 'In progress'})
       .andWhere({'adoption.id': adoptionId});
-
   if (!wrongPub.length) {
     const error = new Error();
     error.status = 404;
@@ -549,7 +558,7 @@ exports.imInterested = async (userId, adoptionId, trx) => {
     const rqtData = {
       status: 'Pending',
       publication_id: pub.publication_id,
-      particular_id: userId,
+      particular_id: particularId.id,
     };
 
     const requestId = await trx('request').insert(rqtData);

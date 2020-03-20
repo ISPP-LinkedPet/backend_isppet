@@ -261,7 +261,7 @@ exports.getPendingBreedings = async (connection, userId) => {
 
 exports.imInterested = async (userId, breedingId, trx) => {
   // se obtine el id del particular
-  const particularId = await connection('particular')
+  const particularId = await trx('particular')
       .select('id')
       .where('user_account_id', userId)
       .first();
@@ -277,7 +277,7 @@ exports.imInterested = async (userId, breedingId, trx) => {
       .where('breeding.id', breedingId)
       .first();
 
-  if (pub == undefined || pub.particular_id === particularId) {
+  if (pub == undefined || pub.particular_id === particularId.id) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not be interested in your own publications';
@@ -287,7 +287,7 @@ exports.imInterested = async (userId, breedingId, trx) => {
   // Se comprueba que esta publicacion no este con una request pendiente del usuario actual
   const rqt = await trx('request')
       .where({publication_id: pub.publication_id})
-      .andWhere({particular_id: userId})
+      .andWhere({particular_id: particularId.id})
       .first();
 
   if (rqt && rqt.status === 'Pending') {
@@ -324,9 +324,8 @@ exports.imInterested = async (userId, breedingId, trx) => {
     const rqtData = {
       status: 'Pending',
       publication_id: pub.publication_id,
-      particular_id: userId,
+      particular_id: particularId.id,
     };
-
     const requestId = await trx('request').insert(rqtData);
     return await trx('request')
         .where({id: requestId})
