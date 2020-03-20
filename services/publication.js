@@ -340,7 +340,7 @@ const getContactDataOfRequest = async (connection, requestId) => {
       .select(PARTICULAR_CONTACT_FIELDS)
       .join('user_account', 'particular.user_account_id', '=', 'user_account.id')
       .join('request', 'request.particular_id', '=', 'particular.id')
-      .where('request.id', requestId);
+      .where('request.id', requestId).first();
 };
 
 
