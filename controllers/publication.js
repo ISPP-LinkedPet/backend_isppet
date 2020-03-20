@@ -68,7 +68,7 @@ exports.getAcceptedRequestListByActorId = async (req, res) => {
     // authorization
     const userId = req.user.id;
 
-    const acceptedRequestList = await publicationService.getacceptedRequestListByActorId(connection, userId);
+    const acceptedRequestList = await publicationService.getAcceptedRequestListByActorId(connection, userId);
 
     return res.status(200).send(acceptedRequestList);
   } catch (error) {
@@ -132,6 +132,34 @@ exports.getPendingRequestsToMyPublications = async (req, res) => {
     return res.status(200).send(requests);
   } catch (error) {
     console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send(error.message);
+    }
+    return res.status(500).send(error);
+  }
+};
+
+exports.getCreatedAndAcceptedRequests = async (req, res) => {
+  try {
+    const connection = req.connection;
+    const userId = req.user.id;
+    const requests = await publicationService.getCreatedAndAcceptedRequests(connection, userId);
+    return res.status(200).send(requests);
+  } catch (error) {
+    if (error.status && error.message) {
+      return res.status(error.status).send(error.message);
+    }
+    return res.status(500).send(error);
+  }
+};
+
+exports.getReceivedAndAcceptedRequests = async (req, res) => {
+  try {
+    const connection = req.connection;
+    const user = req.user;
+    const requests = await publicationService.getReceivedAndAcceptedRequests(connection, user);
+    return res.status(200).send(requests);
+  } catch (error) {
     if (error.status && error.message) {
       return res.status(error.status).send(error.message);
     }
