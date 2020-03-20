@@ -253,7 +253,7 @@ exports.getPendingBreedings = async (connection, userId) => {
     throw error;
   }
 
-  const breedings = await connection('breeding')
+  const breedings = await connection('breeding').select('*', 'breeding.id AS breedingId')
       .join('publication', 'breeding.publication_id', '=', 'publication.id')
       .where('publication.document_status', 'In revision');
   return breedings;
