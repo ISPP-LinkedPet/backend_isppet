@@ -1656,6 +1656,54 @@ exports.seed = async (knex) => {
       publication_id: 1,
       particular_id: 4,
     },
+    {
+      id: 38,
+      status: 'Rejected',
+      publication_id: 38,
+      particular_id: 15,
+    },
+    {
+      id: 39,
+      status: 'Accepted',
+      publication_id: 38,
+      particular_id: 8,
+    },
+    {
+      id: 40,
+      status: 'Rejected',
+      publication_id: 38,
+      particular_id: 12,
+    },
+    {
+      id: 41,
+      status: 'Rejected',
+      publication_id: 38,
+      particular_id: 4,
+    },
+    {
+      id: 42,
+      status: 'Accepted',
+      publication_id: 27,
+      particular_id: 1,
+    },
+    {
+      id: 43,
+      status: 'Accepted',
+      publication_id: 28,
+      particular_id: 1,
+    },
+    {
+      id: 44,
+      status: 'Pending',
+      publication_id: 29,
+      particular_id: 1,
+    },
+    {
+      id: 45,
+      status: 'Rejected',
+      publication_id: 28,
+      particular_id: 1,
+    },
   ]);
 
   // moderator
