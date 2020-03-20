@@ -357,6 +357,7 @@ exports.editBreeding = async (
     error.message = 'Breeding not found';
     throw error;
   }
+
   if (!(pub.userId === userId)) {
     const error = new Error();
     error.status = 404;

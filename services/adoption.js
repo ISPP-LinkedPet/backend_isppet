@@ -105,11 +105,27 @@ exports.updateAdoption = async (
     throw error;
   }
 
+  if (pub.document_status === 'Rejected') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not edit a publication which is rejected';
+    throw error;
+  }
+
+  if (pub.transaction_status === 'Completed') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not edit a publication which is completed';
+    throw error;
+  }
+
   const allPhotos = [];
+  const savedAnimalPhotos = [];
+  const savedIdentificationPhotos = [];
+  const savedVaccinePhotos = [];
 
   try {
     // Mínimo 2 fotos del animal
-    const savedAnimalPhotos = [];
     if (
       adoptionPhotos.animal_photo &&
       adoptionPhotos.animal_photo.length >= 2
@@ -133,7 +149,6 @@ exports.updateAdoption = async (
     allPhotos.push(...savedAnimalPhotos);
 
     // Mínimo una foto identificativa
-    const savedIdentificationPhotos = [];
     if (adoptionPhotos.identification_photo) {
       if (Array.isArray(adoptionPhotos.identification_photo)) {
         adoptionPhotos.identification_photo.forEach((photo) => {
@@ -159,7 +174,6 @@ exports.updateAdoption = async (
     allPhotos.push(...savedIdentificationPhotos);
 
     // Mínimo una foto de las vacunas
-    const savedVaccinePhotos = [];
     if (adoptionPhotos.vaccine_passport) {
       if (Array.isArray(adoptionPhotos.vaccine_passport)) {
         adoptionPhotos.vaccine_passport.forEach((photo) => {
@@ -196,10 +210,21 @@ exports.updateAdoption = async (
       breed: adoptionData.breed,
     };
 
+    if (pub.document_status === 'In revision') {
+      if (adoptionPhotos.identification_photo) {
+        pubData.identification_photo = savedIdentificationPhotos.join(',');
+      }
+      if (adoptionPhotos.vaccine_passport) {
+        pubData.vaccine_passport = savedVaccinePhotos.join(',');
+      }
+    }
+    pubData.document_status = 'In revision';
+
     await trx('publication')
         .join('adoption', 'adoption.publication_id', '=', 'publication.id')
         .where({'adoption.id': adoptionId})
         .update(pubData);
+
     await trx('adoption')
         .where({'adoption.id': adoptionId})
         .update({
