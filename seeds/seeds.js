@@ -808,7 +808,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/doberman.jpg, images/animal_photos/doberman2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2020-01-01',
       genre: 'Male',
@@ -825,7 +825,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/bulterrier.jpg, images/animal_photos/bulterrier2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2015-06-30',
       genre: 'Female',
@@ -841,7 +841,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/yorkshire.jpg, images/animal_photos/yorkshire2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2018-09-24',
       genre: 'Male',
@@ -859,7 +859,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/maine.jpg, images/animal_photos/maine2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2018-11-15',
       genre: 'Male',
@@ -875,7 +875,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/siames.jpg, images/animal_photos/siames2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2019-12-01',
       genre: 'Female',
@@ -891,7 +891,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/caballoarabe.jpg, images/animal_photos/caballoarabe2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2015-08-23',
       genre: 'Male',
@@ -907,7 +907,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/caballoarabe.jpg, images/animal_photos/caballoarabe2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2016-12-12',
       genre: 'Female',
@@ -923,7 +923,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/caballoandaluz.jpg, images/animal_photos/caballoandaluz2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2015-07-07',
       genre: 'Female',
@@ -939,7 +939,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/mustang.jpg, images/animal_photos/mustang2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2017-11-03',
       genre: 'Male',
@@ -955,7 +955,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/yorkshire.jpg, images/animal_photos/yorkshire2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2018-11-04',
       genre: 'Male',
@@ -971,7 +971,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/husky.jpg, images/animal_photos/husky2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2013-02-04',
       genre: 'Male',
@@ -987,7 +987,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/brabante.jpg, images/animal_photos/brabante2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2013-12-04',
       genre: 'Male',
@@ -1003,7 +1003,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/caballo-islandes.jpg, images/animal_photos/caballo-islandes2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2015-12-04',
       genre: 'Male',
@@ -1019,7 +1019,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/caballotrakehner.jpg, images/animal_photos/caballotrakehner2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2010-10-06',
       genre: 'Male',
@@ -1035,7 +1035,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/caballoandaluz.jpg, images/animal_photos/caballoandaluz2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2012-10-02',
       genre: 'Female',
@@ -1051,7 +1051,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/pomerania.jpg, images/animal_photos/pomerania2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2012-10-09',
       genre: 'Male',
@@ -1067,7 +1067,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/caballoandaluz.jpg, images/animal_photos/caballoandaluz2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2011-11-01',
       genre: 'Male',
@@ -1083,7 +1083,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/yorkshire.jpg, images/animal_photos/yorkshire2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2019-12-04',
       genre: 'Male',
@@ -1099,7 +1099,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/siames.jpg, images/animal_photos/siames2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2013-10-09',
       genre: 'Female',
@@ -1115,7 +1115,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/bulterrier.jpg, images/animal_photos/bulterrier2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2013-06-03',
       genre: 'Female',
@@ -1131,7 +1131,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/bullterrier.jpg, images/animal_photos/bulterrier2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2019-01-01',
       genre: 'Male',
@@ -1147,7 +1147,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/yorkshire.jpg, images/animal_photos/yorkshire2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2016-04-06',
       genre: 'Female',
@@ -1163,7 +1163,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/caniche.jpg, images/animal_photos/caniche2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'In revision',
       birth_date: '2017-12-06',
       genre: 'Female',
@@ -1179,7 +1179,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/pastor_aleman.jpg, images/animal_photos/pastor_aleman2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'In revision',
       birth_date: '2014-10-04',
       genre: 'Male',
@@ -1195,7 +1195,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/pastor_aleman.jpg, images/animal_photos/pastor_aleman2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2010-04-12',
       genre: 'Male',
@@ -1211,7 +1211,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/husky.jpg, images/animal_photos/husky2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2013-02-27',
       genre: 'Female',
@@ -1227,7 +1227,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/pomerania.jpg, images/animal_photos/pomerania2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'In revision',
       birth_date: '2015-12-10',
       genre: 'Male',
@@ -1243,7 +1243,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/pomerania.jpg, images/animal_photos/pomerania2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2009-07-09',
       genre: 'Male',
@@ -1259,7 +1259,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/rottweiler.jpg, images/animal_photos/rottweiler2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'In revision',
       birth_date: '2011-04-04',
       genre: 'Male',
@@ -1275,7 +1275,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/husky.jpg, images/animal_photos/husky2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'In revision',
       birth_date: '2013-02-27',
       genre: 'Female',
@@ -1291,7 +1291,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/rottweiler.jpg, images/animal_photos/rottweiler2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'In revision',
       birth_date: '2013-11-05',
       genre: 'Male',
@@ -1307,7 +1307,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/rottweiler.jpg, images/animal_photos/rottweiler2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'In revision',
       birth_date: '2010-07-24',
       genre: 'Male',
@@ -1323,7 +1323,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/pomerania.jpg, images/animal_photos/pomerania2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'In revision',
       birth_date: '2018-02-03',
       genre: 'Male',
@@ -1339,7 +1339,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/caniche.jpg, images/animal_photos/caniche2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'In revision',
       birth_date: '2017-12-06',
       genre: 'Female',
@@ -1355,7 +1355,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/pastor_aleman.jpg, images/animal_photos/pastor_aleman2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'In revision',
       birth_date: '2014-10-04',
       genre: 'Male',
@@ -1371,7 +1371,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/pastor_aleman.jpg, images/animal_photos/pastor_aleman2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2010-04-12',
       genre: 'Male',
@@ -1387,7 +1387,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/husky.jpg, images/animal_photos/husky2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2013-02-27',
       genre: 'Female',
@@ -1403,7 +1403,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/pomerania.jpg, images/animal_photos/pomerania2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'In revision',
       birth_date: '2015-12-10',
       genre: 'Male',
@@ -1419,7 +1419,7 @@ exports.seed = async (knex) => {
       animal_photo:
         'images/animal_photos/pomerania.jpg, images/animal_photos/pomerania2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
-      vaccine_passport: 'images/vaccine_passport/vaccine.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
       birth_date: '2009-07-09',
       genre: 'Male',
