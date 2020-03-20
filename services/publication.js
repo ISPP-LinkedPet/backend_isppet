@@ -94,8 +94,6 @@ exports.getAcceptedRequestListByActorId = async (connection, userId) => {
       .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
       .where('user_account.id', userId).first();
 
-  console.log('HOLA', particular.id);
-
   const acceptedRequest = await connection('publication')
       .join('request', 'request.publication_id', '=', 'publication.id')
       .where('publication.particular_id', particular.id)
@@ -108,8 +106,6 @@ exports.getRejectedRequestListByActorId = async (connection, userId) => {
   const particular = await connection('particular').select('particular.id')
       .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
       .where('user_account.id', userId).first();
-
-  console.log('HOLA', particular.id);
 
   const acceptedRequest = await connection('publication')
       .join('request', 'request.publication_id', '=', 'publication.id')
