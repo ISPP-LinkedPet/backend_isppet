@@ -868,7 +868,7 @@ exports.seed = async (knex) => {
       type: 'Cat',
       location: 'Calle Clavellinas nº 4, Sevilla.',
       pedigree: false,
-      particular_id: null,
+      particular_id: 4,
     },
     {
       id: 5,
@@ -1702,6 +1702,12 @@ exports.seed = async (knex) => {
       id: 45,
       status: 'Rejected',
       publication_id: 28,
+      particular_id: 1,
+    },
+    {
+      id: 46,
+      status: 'Pending',
+      publication_id: 4,
       particular_id: 1,
     },
   ]);
