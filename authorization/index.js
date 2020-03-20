@@ -40,3 +40,7 @@ exports.all = (req, res, next) =>
 // few specific role
 exports.shelter_particular = (req, res, next) =>
   permission(req, res, next, ['shelter', 'particular']);
+
+// few specific role
+exports.shelter_particular_moderator = (req, res, next) =>
+  permission(req, res, next, ['shelter', 'particular', 'moderator']);
