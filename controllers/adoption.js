@@ -223,7 +223,7 @@ exports.rejectAdoption = async (req, res) => {
   try {
     const adoptionId = req.params.id;
 
-    const adoption = await adoptionService.rejectaAdoption(adoptionId, trx);
+    const adoption = await adoptionService.rejectAdoption(adoptionId, trx);
 
     // commit
     await trx.commit();
