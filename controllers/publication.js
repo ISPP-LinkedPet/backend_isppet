@@ -20,6 +20,60 @@ exports.getPublicationsByActorId = async (req, res) => {
   }
 };
 
+exports.getBreedingsByActorId = async (req, res) => {
+  try {
+    const connection = req.connection;
+
+    // params
+    const actorId = req.params.id;
+    if (isNaN(actorId)) {
+      return res.status(400).send('ID must be a number');
+    }
+
+    const publications = await publicationService.getPublicationsByActorId(connection, actorId);
+    const r = [];
+
+    for (const publication of publications) {
+      const type = await publicationService.isBreedingOrAdoption(connection, publication.id);
+      if (type === 'breeding') {
+        r.push(publication);
+      }
+    }
+    return res.status(200).send(r);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) return res.status(error.status).send(error.message);
+    return res.status(500).send(error);
+  }
+};
+
+exports.getAdoptionsByActorId = async (req, res) => {
+  try {
+    const connection = req.connection;
+
+    // params
+    const actorId = req.params.id;
+    if (isNaN(actorId)) {
+      return res.status(400).send('ID must be a number');
+    }
+
+    const publications = await publicationService.getPublicationsByActorId(connection, actorId);
+    const r = [];
+
+    for (const publication of publications) {
+      const type = await publicationService.isBreedingOrAdoption(connection, publication.id);
+      if (type === 'adoption') {
+        r.push(publication);
+      }
+    }
+    return res.status(200).send(r);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) return res.status(error.status).send(error.message);
+    return res.status(500).send(error);
+  }
+};
+
 
 exports.getPublicationStatus = async (req, res) => {
   try {

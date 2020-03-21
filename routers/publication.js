@@ -11,6 +11,8 @@ router.get('/requests/created/accepted', authorization.particular, publicationCo
 router.get('/requests/received/accepted', authorization.shelter_particular, publicationController.getReceivedAndAcceptedRequests);
 router.get('/status/:status', authorization.moderator, (req, res) => publicationController.getPublicationStatus(req, res));
 router.get('/user/:id', authorization.shelter_particular, (req, res) => publicationController.getPublicationsByActorId(req, res));
+router.get('/breeding/user/:id', authorization.particular, (req, res) => publicationController.getBreedingsByActorId(req, res));
+router.get('/adoption/user/:id', authorization.shelter_particular, (req, res) => publicationController.getAdoptionsByActorId(req, res));
 router.get('/:id', authorization.all, (req, res) => publicationController.getPublication(req, res));
 
 module.exports = router;
