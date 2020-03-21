@@ -634,12 +634,12 @@ exports.breedingHasRequest = async (connection, userId, breedingId) => {
     throw error;
   }
 
-  const request = await connection('breeding')
-      .join('publication', 'breeding.publication_id', '=', 'publication.id')
-      .join('particular', 'particular.id', '=', 'publication.particular_id')
-      .join('request', 'request.particular_id', '=', 'particular.id')
-      .where('particular.id', particular.id)
-  // .andWhere('request.status', 'Pending')
+  const request = await connection('request')
+      .select('*', 'breeding.id as breeding_id')
+      .join('publication', 'request.publication_id', '=', 'publication.id')
+      .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+      .where('request.particular_id', particular.id)
+      .andWhere('request.status', 'Pending')
       .andWhere('breeding.id', breedingId);
 
   if (request.length) {
