@@ -663,6 +663,7 @@ exports.getAvailableBreedingsForParticular = async (connection, userId) => {
   }
 
   const breedings = await connection('breeding')
+      .select('*', 'breeding.id as breeding_id')
       .join('publication', 'publication.id', '=', 'breeding.publication_id')
       .whereNot('publication.particular_id', particular.id)
       .andWhere('publication.document_status', 'Accepted')
