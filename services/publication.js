@@ -260,7 +260,7 @@ const getReceivedAndAcceptedRequestsShelter = async (connection, shelterId) => {
   return res;
 };
 
-exports.isBreedingOrAdoption = async (connection, publicationId) => {
+const isBreedingOrAdoption = async (connection, publicationId) => {
   let publication;
   publication = await connection('publication')
       .join('breeding', 'breeding.publication_id', '=', 'publication.id')
@@ -280,6 +280,7 @@ exports.isBreedingOrAdoption = async (connection, publicationId) => {
 
   return 'none';
 };
+exports.isBreedingOrAdoption = isBreedingOrAdoption;
 
 const isParticularOrShelterAdoption = (adoption) => {
   if (adoption.shelter_id === null) {

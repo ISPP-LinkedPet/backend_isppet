@@ -388,7 +388,7 @@ const savePhoto = async (photo, photoRoute) => {
 };
 
 const getExtension = (photo) => {
-  const extension = photo.split('.').pop();
+  const extension = photo.split('.').pop().toLowerCase();
   if (!ALLOWED_EXTENSIONS.includes(extension)) {
     const error = new Error();
     error.status = 404;
