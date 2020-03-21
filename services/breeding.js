@@ -238,6 +238,7 @@ exports.getBreedingsOffers = async (breedingParams, connection, userId) => {
           queryBuilder.andWhere('publication.genre', 'like', `%${genre}%`);
         }
       });
+
   return breedings;
 };
 
@@ -647,4 +648,25 @@ exports.breedingHasRequest = async (connection, userId, breedingId) => {
   }
 
   return hasRequest;
+};
+
+exports.getAvailableBreedingsForParticular = async (connection, userId) => {
+  const particular = await connection('particular')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+  if (!particular) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Particular not found';
+    throw error;
+  }
+
+  const breedings = await connection('breeding')
+      .join('publication', 'publication.id', '=', 'breeding.publication_id')
+      .whereNot('publication.particular_id', particular.id)
+      .andWhere('publication.document_status', 'Accepted')
+      .andWhere('publication.transaction_status', 'In progress');
+
+  return breedings;
 };
