@@ -615,7 +615,7 @@ exports.getAdoptions = async (connection, page) => {
   const adoptions = await connection('adoption')
       .select('*', 'adoption.id as adoption_id')
       .innerJoin('publication', 'adoption.publication_id', '=', 'publication.id')
-      .where('publication.transaction_status', 'Completed')
+      .where('publication.transaction_status', 'In progress')
       .limit(10)
       .offset(10 * page);
 

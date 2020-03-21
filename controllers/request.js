@@ -29,7 +29,7 @@ exports.rejectRequest = async (req, res) => {
     if (error.status && error.message) {
       return res.status(error.status).send({error: error.message});
     }
-    return res.status(500).send(error);
+    return res.status(500).send({error});
   }
 };
 
@@ -64,6 +64,6 @@ exports.acceptRequest = async (req, res) => {
     if (error.status && error.message) {
       return res.status(error.status).send({error: error.message});
     }
-    return res.status(500).send(error);
+    return res.status(500).send({error});
   }
 };

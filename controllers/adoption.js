@@ -17,9 +17,9 @@ exports.getParticularAdoptions = async (req, res) => {
   } catch (error) {
     console.log(error);
     if (error.status && error.message) {
-      return res.status(error.status).send(error.message);
+      return res.status(error.status).send({error: error.message});
     }
-    return res.status(500).send(error);
+    return res.status(500).send({error});
   }
 };
 
@@ -29,7 +29,7 @@ exports.getAdoption = async (req, res) => {
 
     const adoptionId = req.params.id;
     if (isNaN(adoptionId)) {
-      return res.status(400).send({error: 'ID must be a number'});
+      return res.status(400).send('ID must be a number');
     }
 
     const adoption = await adoptionService.getAdoption(connection, adoptionId);
@@ -59,9 +59,9 @@ exports.getPendingAdoptions = async (req, res) => {
   } catch (error) {
     console.log(error);
     if (error.status && error.message) {
-      return res.status(error.status).send(error.message);
+      return res.status(error.status).send({error: error.message});
     }
-    return res.status(500).send(error);
+    return res.status(500).send({error});
   }
 };
 
@@ -208,7 +208,7 @@ exports.acceptAdoption = async (req, res) => {
     if (error.status && error.message) {
       return res.status(error.status).send({error: error.message});
     }
-    return res.status(500).send(error);
+    return res.status(500).send({error});
   }
 };
 
@@ -234,7 +234,7 @@ exports.rejectAdoption = async (req, res) => {
     if (error.status && error.message) {
       return res.status(error.status).send({error: error.message});
     }
-    return res.status(500).send(error);
+    return res.status(500).send({error});
   }
 };
 
@@ -311,8 +311,8 @@ exports.getAdoptions = async (req, res) => {
   } catch (error) {
     console.log(error);
     if (error.status && error.message) {
-      return res.status(error.status).send(error.message);
+      return res.status(error.status).send({error: error.message});
     }
-    return res.status(500).send(error);
+    return res.status(500).send({error});
   }
 };

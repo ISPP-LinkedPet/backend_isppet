@@ -83,9 +83,9 @@ exports.getMyInterestedBreedings = async (req, res) => {
   } catch (error) {
     console.log(error);
     if (error.status && error.message) {
-      return res.status(error.status).send(error.message);
+      return res.status(error.status).send({error: error.message});
     }
-    return res.status(500).send(error);
+    return res.status(500).send({error});
   }
 };
 
@@ -105,9 +105,9 @@ exports.getPendingBreedings = async (req, res) => {
   } catch (error) {
     console.log(error);
     if (error.status && error.message) {
-      return res.status(error.status).send(error.message);
+      return res.status(error.status).send({error: error.message});
     }
-    return res.status(500).send(error);
+    return res.status(500).send({error});
   }
 };
 
@@ -200,7 +200,7 @@ exports.editBreeding = async (req, res) => {
     if (error.status && error.message) {
       return res.status(error.status).send({error: error.message});
     }
-    return res.status(500).send(error);
+    return res.status(500).send({error});
   }
 };
 
@@ -231,7 +231,7 @@ exports.acceptBreeding = async (req, res) => {
     if (error.status && error.message) {
       return res.status(error.status).send({error: error.message});
     }
-    return res.status(500).send(error);
+    return res.status(500).send({error});
   }
 };
 
@@ -257,7 +257,7 @@ exports.rejectBreeding = async (req, res) => {
     if (error.status && error.message) {
       return res.status(error.status).send({error: error.message});
     }
-    return res.status(500).send(error);
+    return res.status(500).send({error});
   }
 };
 
@@ -280,11 +280,10 @@ exports.breedingHasRequest = async (req, res) => {
     return res.status(200).send({hasRequest});
   } catch (error) {
     console.log(error);
-
     if (error.status && error.message) {
-      return res.status(error.status).send(error.message);
+      return res.status(error.status).send({error: error.message});
     }
-    return res.status(500).send(error);
+    return res.status(500).send({error});
   }
 };
 
@@ -296,8 +295,8 @@ exports.getAvailableBreedingsForParticular = async (req, res) => {
     return res.status(200).send({breedings});
   } catch (error) {
     if (error.status && error.message) {
-      return res.status(error.status).send(error.message);
+      return res.status(error.status).send({error: error.message});
     }
-    return res.status(500).send(error);
+    return res.status(500).send({error});
   }
 };

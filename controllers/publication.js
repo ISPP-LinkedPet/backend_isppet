@@ -15,8 +15,10 @@ exports.getPublicationsByActorId = async (req, res) => {
     return res.status(200).send(publication);
   } catch (error) {
     console.log(error);
-    if (error.status && error.message) return res.status(error.status).send(error.message);
-    return res.status(500).send(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
   }
 };
 
@@ -42,8 +44,10 @@ exports.getBreedingsByActorId = async (req, res) => {
     return res.status(200).send(r);
   } catch (error) {
     console.log(error);
-    if (error.status && error.message) return res.status(error.status).send(error.message);
-    return res.status(500).send(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
   }
 };
 
@@ -69,8 +73,10 @@ exports.getAdoptionsByActorId = async (req, res) => {
     return res.status(200).send(r);
   } catch (error) {
     console.log(error);
-    if (error.status && error.message) return res.status(error.status).send(error.message);
-    return res.status(500).send(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
   }
 };
 
@@ -91,8 +97,10 @@ exports.getPublicationStatus = async (req, res) => {
     return res.status(200).send(publication);
   } catch (error) {
     console.log(error);
-    if (error.status && error.message) return res.status(error.status).send(error.message);
-    return res.status(500).send(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
   }
 };
 
@@ -127,8 +135,10 @@ exports.getAcceptedRequestListByActorId = async (req, res) => {
     return res.status(200).send(acceptedRequestList);
   } catch (error) {
     console.log(error);
-    if (error.status && error.message) return res.status(error.status).send(error.message);
-    return res.status(500).send(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
   }
 };
 
@@ -144,8 +154,10 @@ exports.getRejectedRequestListByActorId = async (req, res) => {
     return res.status(200).send(rejectedRequestList);
   } catch (error) {
     console.log(error);
-    if (error.status && error.message) return res.status(error.status).send(error.message);
-    return res.status(500).send(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
   }
 };
 
@@ -165,9 +177,9 @@ exports.getAcceptedRequestsToMyPublications = async (req, res) => {
   } catch (error) {
     console.log(error);
     if (error.status && error.message) {
-      return res.status(error.status).send(error.message);
+      return res.status(error.status).send({error: error.message});
     }
-    return res.status(500).send(error);
+    return res.status(500).send({error});
   }
 };
 
@@ -187,9 +199,9 @@ exports.getPendingRequestsToMyPublications = async (req, res) => {
   } catch (error) {
     console.log(error);
     if (error.status && error.message) {
-      return res.status(error.status).send(error.message);
+      return res.status(error.status).send({error: error.message});
     }
-    return res.status(500).send(error);
+    return res.status(500).send({error});
   }
 };
 
@@ -201,9 +213,9 @@ exports.getCreatedAndAcceptedRequests = async (req, res) => {
     return res.status(200).send(requests);
   } catch (error) {
     if (error.status && error.message) {
-      return res.status(error.status).send(error.message);
+      return res.status(error.status).send({error: error.message});
     }
-    return res.status(500).send(error);
+    return res.status(500).send({error});
   }
 };
 
@@ -215,8 +227,8 @@ exports.getReceivedAndAcceptedRequests = async (req, res) => {
     return res.status(200).send(requests);
   } catch (error) {
     if (error.status && error.message) {
-      return res.status(error.status).send(error.message);
+      return res.status(error.status).send({error: error.message});
     }
-    return res.status(500).send(error);
+    return res.status(500).send({error});
   }
 };

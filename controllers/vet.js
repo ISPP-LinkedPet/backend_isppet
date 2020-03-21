@@ -7,7 +7,9 @@ exports.getVets = async (req, res) => {
     return res.status(200).send(vet);
   } catch (error) {
     console.log(error);
-    if (error.status && error.message) return res.status(error.status).send(error.message);
-    return res.status(500).send(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
   }
 };
