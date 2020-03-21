@@ -48,7 +48,6 @@ exports.getParticularAdoptions = async (connection, page) => {
       .select('*', 'adoption.id as adoption_id')
       .innerJoin('publication', 'adoption.publication_id', '=', 'publication.id')
       .innerJoin('particular', 'particular.id', '=', 'publication.particular_id')
-      .where('publication.transaction_status', 'Completed')
       .limit(10)
       .offset(10 * page);
 
