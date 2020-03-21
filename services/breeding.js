@@ -209,11 +209,11 @@ exports.getBreedingsOffers = async (breedingParams, connection, userId) => {
     throw error;
   }
 
-  const location = breedingParams.location;
-  const birthDate = breedingParams.birth_date;
+  const price = breedingParams.price;
   const type = breedingParams.type;
-  const breed = breedingParams.breed;
   const pedigree = breedingParams.pedigree;
+  const breed = breedingParams.breed;
+  const genre = breedingParams.genre;
 
   const breedings = await connection('breeding')
       .select('*', 'breeding.id as breeding_id')
@@ -222,20 +222,20 @@ exports.getBreedingsOffers = async (breedingParams, connection, userId) => {
       .andWhere('publication.transaction_status', 'In progress')
       .andWhereNot('publication.particular_id', user.id)
       .modify(function(queryBuilder) {
-        if (location) {
-          queryBuilder.andWhere('publication.location', 'like', `%${location}%`);
-        }
-        if (birthDate) {
-          queryBuilder.andWhere('publication.birth_date', birthDate);
+        if (price) {
+          queryBuilder.andWhere('breeding.price', 'like', `%${price}%`);
         }
         if (type) {
           queryBuilder.andWhere('publication.type', 'like', `%${type}%`);
         }
+        if (pedigree) {
+          queryBuilder.andWhere('publication.pedigree', pedigree);
+        }
         if (breed) {
           queryBuilder.andWhere('publication.breed', 'like', `%${breed}%`);
         }
-        if (pedigree) {
-          queryBuilder.andWhere('publication.pedigree', pedigree);
+        if (genre) {
+          queryBuilder.andWhere('publication.genre', 'like', `%${genre}%`);
         }
       });
   return breedings;
