@@ -616,6 +616,7 @@ exports.getAdoptions = async (connection, page) => {
       .select('*', 'adoption.id as adoption_id')
       .innerJoin('publication', 'adoption.publication_id', '=', 'publication.id')
       .where('publication.transaction_status', 'In progress')
+      .andWhere('publication.document_status', 'Accepted')
       .limit(10)
       .offset(10 * page);
 
