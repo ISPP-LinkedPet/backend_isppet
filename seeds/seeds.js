@@ -1897,7 +1897,7 @@ exports.seed = async (knex) => {
       email: '@gmail.com',
       address: 'Calle camas nº 17, Sevilla.',
       telephone: '955318964',
-      optional_photo: 'http://veterinarioslahuella.es/',
+      optional_photo: null,
       is_premium: false,
     },
     {
@@ -1907,7 +1907,7 @@ exports.seed = async (knex) => {
       email: 'mascodinsevilla@gmail.com',
       address: 'Calle Diseño, 4, 41927 Mairena del Aljarafe, Sevilla.',
       telephone: '955262213',
-      optional_photo: null,
+      optional_photo: 'images/vets/mascodin.png',
       is_premium: false,
     },
     {
@@ -1938,7 +1938,7 @@ exports.seed = async (knex) => {
       address:
         'Calle Virgen de Loreto, 11, 41950 Castilleja de la Cuesta, Sevilla.',
       telephone: '954162152',
-      optional_photo: 'http://www.ejemplo233.com/',
+      optional_photo: 'images/vets/tartessos.jpg',
       is_premium: true,
     },
     {
@@ -2049,7 +2049,7 @@ exports.seed = async (knex) => {
       email: 'tamarguillovet@gmail.com',
       address: 'Calle Nalón, 19, 41005 Sevilla.',
       telephone: '954922075',
-      optional_photo: 'https://www.centroveterinariotamarguillo.com/',
+      optional_photo: null,
       is_premium: true,
     },
   ]);
