@@ -7,6 +7,7 @@ router.put('/edit/:id', authorization.particular, (req, res) => breedingControll
 router.get('/pending', authorization.moderator, (req, res) => breedingController.getPendingBreedings(req, res));
 router.get('/offers', authorization.particular, (req, res) => breedingController.getBreedingsOffers(req, res));
 router.get('/interested', authorization.particular, (req, res) => breedingController.getMyInterestedBreedings(req, res));
+router.get('/available', authorization.particular, (req, res) => breedingController.getAvailableBreedingsForParticular(req, res));
 router.post('/', authorization.particular, (req, res) => breedingController.createBreading(req, res));
 router.get('/:id', authorization.all, (req, res) => breedingController.getBreeding(req, res));
 router.post('/interested/:id', authorization.particular, (req, res) => breedingController.imInterested(req, res));
