@@ -87,24 +87,6 @@ exports.updateAdoption = async (
     throw error;
   }
 
-  if (
-    !(pub.document_status === 'In revision') &&
-    !(pub.particular_id === null)
-  ) {
-    const error = new Error();
-    error.status = 404;
-    error.message = 'You can not edit a publication which is not in revision';
-    throw error;
-  } else if (
-    !(pub.document_status === 'Accepted') &&
-    !(pub.shelter_id === null)
-  ) {
-    const error = new Error();
-    error.status = 404;
-    error.message = 'You can not edit a publication which is not in revision';
-    throw error;
-  }
-
   if (pub.document_status === 'Rejected') {
     const error = new Error();
     error.status = 404;

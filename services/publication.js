@@ -260,7 +260,7 @@ const getReceivedAndAcceptedRequestsShelter = async (connection, shelterId) => {
   return res;
 };
 
-const isBreedingOrAdoption = async (connection, publicationId) => {
+exports.isBreedingOrAdoption = async (connection, publicationId) => {
   let publication;
   publication = await connection('publication')
       .join('breeding', 'breeding.publication_id', '=', 'publication.id')
