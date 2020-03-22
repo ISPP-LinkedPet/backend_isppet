@@ -610,6 +610,53 @@ exports.rejectBreeding = async (breedingId, trx) => {
   }
 };
 
+exports.finishBreeding = async (breedingData, breedingId, trx) => {
+  const pub = await trx('publication')
+      .select('*', 'user_account.id AS userId')
+      .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+      .join('particular', 'particular.id', '=', 'publication.particular_id')
+      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
+      .where('breeding.id', breedingId)
+      .first();
+  if (!pub) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Breeding not found';
+    throw error;
+  }
+  if (!(pub.transaction_status === 'In progress')) {
+    const error = new Error();
+    error.status = 404;
+    error.message =
+      'You can not finish a publication which his transaction status is Completed';
+    throw error;
+  }
+  if (!(pub.codenumber === breedingData.codenumber)) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'This Verification code is not correct.';
+    throw error;
+  }
+
+  try {
+    // Moderators will modify the breeding publication
+    const pubData = {};
+    pubData.transaction_status = 'Completed';
+
+    await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .update(pubData);
+
+    return await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .first();
+  } catch (error) {
+    throw error;
+  }
+};
+
 const savePhoto = async (photo, photoRoute) => {
   await photo.mv(path.join('public', photoRoute));
 };
