@@ -82,7 +82,7 @@ exports.up = (knex) => {
               .enu('document_status', ['In revision', 'Accepted', 'Rejected'])
               .notNullable();
           table.date('birth_date');
-          table.enu('genre', ['Macho', 'Hembra']);
+          table.enu('genre', ['Male', 'Female']);
           table.string('breed', 100);
           table
               .enu('transaction_status', ['In progress', 'Completed'])
