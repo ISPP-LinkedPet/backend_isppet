@@ -36,11 +36,10 @@ exports.login = async (req, res) => {
 };
 
 exports.register = async (req, res) => {
-  // TODO capturar y almacenar la optional_photo
-
   const trx = await req.connection.transaction();
   try {
     const params = req.body;
+    params.files = req.files;
 
     // Check common params
     if (
