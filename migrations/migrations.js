@@ -95,6 +95,8 @@ exports.up = (knex) => {
               .foreign('particular_id')
               .references('id')
               .inTable('particular');
+          table.integer('star').unsigned();
+          table.string('review_description');
         })
 
     // request
@@ -187,6 +189,7 @@ exports.up = (knex) => {
           table.string('name', 100).notNullable();
           table.string('surname', 200).notNullable();
           table.string('email', 500).notNullable();
+          table.string('url', 500);
           table.string('address', 500).notNullable();
           table.string('latitude', 500);
           table.string('longitude', 500);
