@@ -30,7 +30,7 @@ exports.confirmPaymentToMyself = async (req, res) => {
     // authorization
     const userId = req.user.id;
 
-    const paymentId = req.params.paymentId;
+    const paymentId = req.params.id;
     if (isNaN(paymentId) || !paymentId) {
       return res.status(400).send({error: 'Payment ID must be a number'});
     }
