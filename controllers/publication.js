@@ -212,6 +212,7 @@ exports.getCreatedAndAcceptedRequests = async (req, res) => {
     const requests = await publicationService.getCreatedAndAcceptedRequests(connection, userId);
     return res.status(200).send(requests);
   } catch (error) {
+    console.log(error);
     if (error.status && error.message) {
       return res.status(error.status).send({error: error.message});
     }

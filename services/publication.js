@@ -190,7 +190,7 @@ exports.getCreatedAndAcceptedRequests = async (connection, userId) => {
   for (const request of requests) {
     const contactData = await getContactDataOfPublication(connection, request.publication_id);
     request.contactData = contactData;
-    request.publicationType = await isBreedingOrAdoption(connection, request.publication_id);
+    request.publicationType = await isBreedingOrAdoption(connection, request.publication_id)[0];
     res.push(request);
   }
 
@@ -263,11 +263,12 @@ const getReceivedAndAcceptedRequestsShelter = async (connection, shelterId) => {
 const isBreedingOrAdoption = async (connection, publicationId) => {
   let publication;
   publication = await connection('publication')
+      .select('breeding.price', 'breeding.id AS breedingId')
       .join('breeding', 'breeding.publication_id', '=', 'publication.id')
       .where('publication.id', publicationId)
       .first();
   if (publication) {
-    return 'breeding';
+    return ['breeding', publication.price, publication.breedingId];
   }
 
   publication = await connection('publication')
@@ -275,10 +276,10 @@ const isBreedingOrAdoption = async (connection, publicationId) => {
       .where('publication.id', publicationId)
       .first();
   if (publication) {
-    return 'adoption';
+    return ['adoption'];
   }
 
-  return 'none';
+  return ['none'];
 };
 exports.isBreedingOrAdoption = isBreedingOrAdoption;
 
@@ -293,15 +294,19 @@ const isParticularOrShelterAdoption = (adoption) => {
 // datos de contacto del usuario que creó la publicación
 const getContactDataOfPublication = async (connection, publicationId) => {
   // Vemos si es adopción o crianza
-  const publicationType = await isBreedingOrAdoption(connection, publicationId);
+  const rows = await isBreedingOrAdoption(connection, publicationId);
+  const publicationType = rows[0];
 
   if (publicationType === 'breeding') {
-    return await connection('particular')
+    const res = await connection('particular')
         .select(PARTICULAR_CONTACT_FIELDS)
         .join('publication', 'particular.id', '=', 'publication.particular_id')
         .join('user_account', 'particular.user_account_id', '=', 'user_account.id')
         .where('publication.id', publicationId)
         .first();
+    res.price = rows[1];
+    res.breedingId = rows[2];
+    return res;
   } else if (publicationType === 'adoption') {
     // Comprobamos si la adopción la creó un particular o un refugio
     const adoption = await connection('adoption')

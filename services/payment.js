@@ -2,7 +2,7 @@ const stripe = require('stripe')(process.env.STRIPE_API_KEY, {
   maxNetworkRetries: 2,
 });
 
-exports.createPaymentToMyself = async (connection, token, userId, breedingId) => {
+exports.createPaymentToMyself = async (connection, token, userId, breedingId, returnUrl) => {
   // obtengo la breeding
   const breeding = await connection('breeding').where('breeding.id', breedingId).first();
   if (!breeding) {
@@ -19,12 +19,12 @@ exports.createPaymentToMyself = async (connection, token, userId, breedingId) =>
   });
 
   const payment = await stripe.paymentIntents.create({
-    amount: breeding.price,
+    amount: Number(breeding.price),
     currency: 'eur',
     payment_method: paymentCreate.id,
     payment_method_types: ['card'],
     confirm: true,
-    return_url: ``,
+    return_url: returnUrl,
   });
 
   // Obtengo el estado del pago

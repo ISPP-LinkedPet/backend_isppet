@@ -7,13 +7,13 @@ exports.createPaymentToMyself = async (req, res) => {
     // authorization
     const userId = req.user.id;
 
-    const {token, breedingId} = JSON.parse(req.body || {});
-    if (!token || !breedingId) {
-      return res.status(400).send({error: 'Token and breedingId must be provided '});
+    const {token, breedingId, returnUrl} = req.body;
+    if (!token || !breedingId || !returnUrl) {
+      return res.status(400).send({error: 'Token, breedingId and returnUrl must be provided '});
     }
 
-    const payment = await paymentService.createPaymentToMyself(connection, token, userId, breedingId);
-    return res.status(200).send(payment.status);
+    const payment = await paymentService.createPaymentToMyself(connection, token, userId, breedingId, returnUrl);
+    return res.status(200).send({status: payment.status, url: payment.next_action != null ? payment.next_action.redirect_to_url.url : null});
   } catch (error) {
     console.log(error);
     if (error.status && error.message) {
