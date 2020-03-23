@@ -26,6 +26,7 @@
     "mysql": "^2.18.1",
     "mysql2": "^2.1.0",
     "path": "^0.12.7",
+    "stripe": "^8.33.0",
     "uuid": "^7.0.2"
   },
   "devDependencies": {
