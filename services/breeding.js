@@ -154,7 +154,7 @@ exports.createBreeding = async (breedingData, breedingPhotos, userId, trx) => {
       location: breedingData.location,
       type: null,
       pedigree: null,
-      transaction_status: 'In progress',
+      transaction_status: 'Offered',
       particular_id: particular.id,
     };
 
@@ -219,7 +219,7 @@ exports.getBreedingsOffers = async (breedingParams, connection, userId) => {
       .select('*', 'breeding.id as breeding_id')
       .join('publication', 'breeding.publication_id', '=', 'publication.id')
       .where('publication.document_status', 'Accepted')
-      .andWhere('publication.transaction_status', 'In progress')
+      .andWhere('publication.transaction_status', 'Offered')
       .andWhereNot('publication.particular_id', user.id)
       .modify(function(queryBuilder) {
         if (price) {
@@ -302,7 +302,7 @@ exports.imInterested = async (userId, breedingId, trx) => {
   const wrongPub = await trx('publication')
       .join('breeding', 'breeding.publication_id', '=', 'publication.id')
       .where({'publication.document_status': 'Accepted'})
-      .andWhere({'publication.transaction_status': 'In progress'})
+      .andWhere({'publication.transaction_status': 'Offered'})
       .andWhere({'breeding.id': breedingId});
 
   if (!wrongPub.length) {
@@ -667,7 +667,7 @@ exports.getAvailableBreedingsForParticular = async (connection, userId) => {
       .join('publication', 'publication.id', '=', 'breeding.publication_id')
       .whereNot('publication.particular_id', particular.id)
       .andWhere('publication.document_status', 'Accepted')
-      .andWhere('publication.transaction_status', 'In progress');
+      .andWhere('publication.transaction_status', 'Offered');
 
   return breedings;
 };

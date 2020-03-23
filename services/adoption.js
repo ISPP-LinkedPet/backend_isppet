@@ -320,7 +320,7 @@ exports.createAdoption = async (
         animal_photo: savedAnimalPhotos.join(','),
         identification_photo: savedIdentificationPhotos.join(',') || null,
         document_status: 'Accepted',
-        transaction_status: 'In progress',
+        transaction_status: 'Offered',
         vaccine_passport: savedVaccinePhotos.join(',') || null,
         type: adoptionData.type,
         location: adoptionData.location,
@@ -334,7 +334,7 @@ exports.createAdoption = async (
         animal_photo: savedAnimalPhotos.join(','),
         identification_photo: savedIdentificationPhotos.join(',') || null,
         document_status: 'In revision',
-        transaction_status: 'In progress',
+        transaction_status: 'Offered',
         vaccine_passport: savedVaccinePhotos.join(',') || null,
         type: adoptionData.type,
         location: adoptionData.location,
@@ -532,7 +532,7 @@ exports.imInterested = async (userId, adoptionId, trx) => {
   const wrongPub = await trx('publication')
       .join('adoption', 'adoption.publication_id', '=', 'publication.id')
       .where({'publication.document_status': 'Accepted'})
-      .andWhere({'publication.transaction_status': 'In progress'})
+      .andWhere({'publication.transaction_status': 'Offered'})
       .andWhere({'adoption.id': adoptionId});
   if (!wrongPub.length) {
     const error = new Error();
@@ -589,7 +589,7 @@ exports.getAdoptionsOffers = async (adoptionParams, connection, userId) => {
   const adoptions = await connection('adoption')
       .join('publication', 'adoption.publication_id', '=', 'publication.id')
       .where('publication.document_status', 'Accepted')
-      .andWhere('publication.transaction_status', 'In progress')
+      .andWhere('publication.transaction_status', 'Offered')
       .andWhereNot('publication.particular_id', user.id)
       .modify(function(queryBuilder) {
         if (location) {
@@ -615,7 +615,7 @@ exports.getAdoptions = async (connection, page) => {
   const adoptions = await connection('adoption')
       .select('*', 'adoption.id as adoption_id')
       .innerJoin('publication', 'adoption.publication_id', '=', 'publication.id')
-      .where('publication.transaction_status', 'In progress')
+      .where('publication.transaction_status', 'Offered')
       .andWhere('publication.document_status', 'Accepted')
       .limit(10)
       .offset(10 * page);
