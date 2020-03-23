@@ -16,6 +16,7 @@ const BREEDING_FIELDS = [
   'publication.breed',
   'publication.transaction_status',
   'breeding.price',
+  'breeding.codenumber',
   'publication.location',
   'publication.pedigree',
   'publication.type',
@@ -47,7 +48,7 @@ exports.getBreeding = async (connection, breedingId) => {
 
 exports.createBreeding = async (breedingData, breedingPhotos, userId, trx) => {
   const allPhotos = [];
-
+  const codenumberBreeding = numbergenerator();
   try {
     // Mínimo 2 fotos del animal
     const savedAnimalPhotos = [];
@@ -162,6 +163,7 @@ exports.createBreeding = async (breedingData, breedingPhotos, userId, trx) => {
     const breedingId = await trx('breeding').insert({
       publication_id: publicationId,
       price: breedingData.price,
+      codenumber: codenumberBreeding,
     });
 
     return await trx('breeding')
@@ -254,7 +256,8 @@ exports.getPendingBreedings = async (connection, userId) => {
     throw error;
   }
 
-  const breedings = await connection('breeding').select('*', 'breeding.id AS breedingId')
+  const breedings = await connection('breeding')
+      .select('*', 'breeding.id AS breedingId')
       .join('publication', 'breeding.publication_id', '=', 'publication.id')
       .where('publication.document_status', 'In revision');
   return breedings;
@@ -607,12 +610,72 @@ exports.rejectBreeding = async (breedingId, trx) => {
   }
 };
 
+exports.finishBreeding = async (breedingData, breedingId, trx) => {
+  const pub = await trx('publication')
+      .select('*', 'user_account.id AS userId')
+      .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+      .join('particular', 'particular.id', '=', 'publication.particular_id')
+      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
+      .where('breeding.id', breedingId)
+      .first();
+  if (!pub) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Breeding not found';
+    throw error;
+  }
+  if (!(pub.transaction_status === 'In progress')) {
+    const error = new Error();
+    error.status = 404;
+    error.message =
+      'You can not finish a publication which his transaction status is Completed';
+    throw error;
+  }
+  if (!(pub.codenumber === breedingData.codenumber)) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'This Verification code is not correct.';
+    throw error;
+  }
+
+  try {
+    // Moderators will modify the breeding publication
+    const pubData = {};
+    pubData.transaction_status = 'Completed';
+
+    await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .update(pubData);
+
+    return await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .first();
+  } catch (error) {
+    throw error;
+  }
+};
+
 const savePhoto = async (photo, photoRoute) => {
   await photo.mv(path.join('public', photoRoute));
 };
 
+// eslint-disable-next-line require-jsdoc
+function numbergenerator() {
+  let codenumber = '';
+  const possible = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  for (let i = 0; i < 8; i++) {
+    codenumber += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return codenumber;
+}
+
 const getExtension = (photo) => {
-  const extension = photo.split('.').pop().toLowerCase();
+  const extension = photo
+      .split('.')
+      .pop()
+      .toLowerCase();
   if (!ALLOWED_EXTENSIONS.includes(extension)) {
     const error = new Error();
     error.status = 404;
