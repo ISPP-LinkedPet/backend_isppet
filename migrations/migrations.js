@@ -137,6 +137,7 @@ exports.up = (knex) => {
         .createTable('breeding', function(table) {
           table.increments().primary();
           table.double('price').notNullable();
+          table.string('codenumber');
           table
               .integer('publication_id')
               .unsigned()
