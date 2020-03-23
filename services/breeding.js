@@ -624,7 +624,10 @@ exports.finishBreeding = async (breedingData, breedingId, trx) => {
     error.message = 'Breeding not found';
     throw error;
   }
-  if (!(pub.transaction_status === 'In progress')) {
+  if (
+    !(pub.transaction_status === 'In progress') &&
+    !(pub.transaction_status === 'Offered')
+  ) {
     const error = new Error();
     error.status = 404;
     error.message =
@@ -642,6 +645,48 @@ exports.finishBreeding = async (breedingData, breedingId, trx) => {
     // Moderators will modify the breeding publication
     const pubData = {};
     pubData.transaction_status = 'Completed';
+
+    await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .update(pubData);
+
+    return await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .first();
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.writeReview = async (breedingData, breedingId, trx) => {
+  const pub = await trx('publication')
+      .select('*', 'user_account.id AS userId')
+      .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+      .join('particular', 'particular.id', '=', 'publication.particular_id')
+      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
+      .where('breeding.id', breedingId)
+      .first();
+  if (!pub) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Breeding not found';
+    throw error;
+  }
+  if (!(pub.transaction_status === 'Completed')) {
+    const error = new Error();
+    error.status = 404;
+    error.message =
+      'You can not write a review on a publication which his transaction status is not Completed.';
+    throw error;
+  }
+
+  try {
+    // Moderators will modify the breeding publication
+    const pubData = {};
+    pubData.star = breedingData.star;
+    pubData.review_description = breedingData.review_description;
 
     await trx('publication')
         .join('breeding', 'breeding.publication_id', '=', 'publication.id')
