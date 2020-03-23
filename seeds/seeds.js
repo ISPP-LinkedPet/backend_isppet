@@ -6,6 +6,7 @@ exports.seed = async (knex) => {
   await knex('adoption').del();
   await knex('administrator').del();
   await knex('breeding').del();
+  await knex('review').del();
   await knex('request').del();
   await knex('publication').del();
   await knex('particular').del();
@@ -1093,8 +1094,6 @@ exports.seed = async (knex) => {
       location: 'Calle María Ortíz nº 12, Sevilla.',
       pedigree: false,
       particular_id: 18,
-      star: 5,
-      review_description: 'La crianza fue completada con éxito.',
     },
     {
       id: 19,
@@ -1127,8 +1126,6 @@ exports.seed = async (knex) => {
       location: 'Calle Rubén Darío nº 12. Sevilla.',
       pedigree: true,
       particular_id: 20,
-      star: 4,
-      review_description: 'La crianza fue completada con éxito.',
     },
     {
       id: 21,
@@ -1716,6 +1713,25 @@ exports.seed = async (knex) => {
     },
   ]);
 
+  // review
+
+  await knex('review').insert([
+    {
+      id: 1,
+      star: 5,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 18,
+      request_id: 17,
+    },
+    {
+      id: 2,
+      star: 5,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 20,
+      request_id: 19,
+    },
+  ]);
+
   // moderator
   await knex('moderator').insert([
     {id: 1, surname: 'Sánchez', user_account_id: 7},
@@ -1892,7 +1908,8 @@ exports.seed = async (knex) => {
       url: 'https://centroveterinariobormujos.com',
       address: 'Av. del Aljarafe, 68, 41930 Bormujos, Sevilla.',
       telephone: '955725684',
-      optional_photo: 'https://fastly.4sqi.net/img/general/600x600/33362540_7Ib17cahmEjREuHkg9_h1bisn1GFn5Pyd-2rVtq2qzw.jpg',
+      optional_photo:
+        'https://fastly.4sqi.net/img/general/600x600/33362540_7Ib17cahmEjREuHkg9_h1bisn1GFn5Pyd-2rVtq2qzw.jpg',
       is_premium: true,
     },
     {
@@ -1903,7 +1920,8 @@ exports.seed = async (knex) => {
       url: 'http://veterinarioslahuella.es/clinica-veterinaria-bormujos/',
       address: 'Calle Jacinto Benavente, 2C, 41930 Bormujos, Sevilla.',
       telephone: '955723761',
-      optional_photo: 'https://lh3.googleusercontent.com/P4s80SY2nURV-wmx2M-uack9j8neJoZnITBEwWAD892NUt5UP_ZZLEd9QqOhXFmwZnsRFQHkNw=w1080-h608-p-no-v0',
+      optional_photo:
+        'https://lh3.googleusercontent.com/P4s80SY2nURV-wmx2M-uack9j8neJoZnITBEwWAD892NUt5UP_ZZLEd9QqOhXFmwZnsRFQHkNw=w1080-h608-p-no-v0',
       is_premium: false,
     },
     {
@@ -1925,7 +1943,8 @@ exports.seed = async (knex) => {
       url: null,
       address: 'Calle Aceituna, 3, 41960 Gines, Sevilla.',
       telephone: '954714547',
-      optional_photo: 'https://2.bp.blogspot.com/_dq4LEWcxxRU/SxGGMhnozzI/AAAAAAAAAVc/UwUeWf_uRLw/s1600/clinica+veterinaria+f+palomo.jpg',
+      optional_photo:
+        'https://2.bp.blogspot.com/_dq4LEWcxxRU/SxGGMhnozzI/AAAAAAAAAVc/UwUeWf_uRLw/s1600/clinica+veterinaria+f+palomo.jpg',
       is_premium: true,
     },
     {
@@ -1933,10 +1952,12 @@ exports.seed = async (knex) => {
       name: 'Catdog',
       surname: 'Veterinario',
       email: 'catdoggines@gmail.com',
-      url: 'http://catdog.es/nuestras-clinicas-veterinarias-aljarafe/clinica-veterinaria-gines-aljarafe/',
+      url:
+        'http://catdog.es/nuestras-clinicas-veterinarias-aljarafe/clinica-veterinaria-gines-aljarafe/',
       address: 'Calle la Mogaba, 15, 41960 Gines, Sevilla.',
       telephone: '954717300',
-      optional_photo: 'https://lh3.googleusercontent.com/proxy/br_RwwK4_LOaO0eI-8m--kTMf5Gb5t4RjQaBNDwW4_9nPUEfoSUXk6OpXHFpB7xwA2Df1trhamBTLcGqsGY6CA6w7DfHTaoOpXnDrNyGQ7prtABRvZKVxdCoUscd1Q',
+      optional_photo:
+        'https://lh3.googleusercontent.com/proxy/br_RwwK4_LOaO0eI-8m--kTMf5Gb5t4RjQaBNDwW4_9nPUEfoSUXk6OpXHFpB7xwA2Df1trhamBTLcGqsGY6CA6w7DfHTaoOpXnDrNyGQ7prtABRvZKVxdCoUscd1Q',
       is_premium: false,
     },
     {
@@ -1970,7 +1991,8 @@ exports.seed = async (knex) => {
       url: 'http://www.hispalvet.com',
       address: 'Calle José Luis Navarro, 14, 41940 Tomares, Sevilla.',
       telephone: '954044835',
-      optional_photo: 'https://t2.ea.ltmcdn.com/es/places/6/7/0/img_7076_clinica-veterinaria-san-bernardo_0_300_150.jpg',
+      optional_photo:
+        'https://t2.ea.ltmcdn.com/es/places/6/7/0/img_7076_clinica-veterinaria-san-bernardo_0_300_150.jpg',
       is_premium: false,
     },
     {
@@ -1981,7 +2003,8 @@ exports.seed = async (knex) => {
       url: 'https://www.facebook.com/clinicaveterinariasantaritatomares',
       address: 'C/ Tomás De Ibarra, 24, 41940 Tomares, Sevilla.',
       telephone: '954151279',
-      optional_photo: 'https://s3-media0.fl.yelpcdn.com/bphoto/Rh2CTWTKc5L9cs5qWHtdzQ/o.jpg',
+      optional_photo:
+        'https://s3-media0.fl.yelpcdn.com/bphoto/Rh2CTWTKc5L9cs5qWHtdzQ/o.jpg',
       is_premium: true,
     },
     {
@@ -2003,7 +2026,8 @@ exports.seed = async (knex) => {
       url: 'https://www.mascotasalud.com',
       address: 'Av. de la Arboleda, 40, 41940 Tomares, Sevilla.',
       telephone: '954870057',
-      optional_photo: 'https://www.mascotasalud.com/s/cc_images/teaserbox_33684667.jpg?t=1529350544',
+      optional_photo:
+        'https://www.mascotasalud.com/s/cc_images/teaserbox_33684667.jpg?t=1529350544',
       is_premium: false,
     },
     {
@@ -2015,7 +2039,8 @@ exports.seed = async (knex) => {
       address:
         'Calle Rodríguez Marín, 67, 41920 San Juan de Aznalfarache, Sevilla.',
       telephone: '954760813',
-      optional_photo: 'https://vetalysveterinarios.com/wp-content/uploads/2016/05/clinica_sevilla.jpg',
+      optional_photo:
+        'https://vetalysveterinarios.com/wp-content/uploads/2016/05/clinica_sevilla.jpg',
       is_premium: true,
     },
     {
@@ -2026,7 +2051,8 @@ exports.seed = async (knex) => {
       url: 'https://www.centroveterinariotriana.es/es/',
       address: 'Calle San Jacinto, 68, 41010 Sevilla.',
       telephone: '954333472',
-      optional_photo: 'https://s3-media0.fl.yelpcdn.com/bphoto/MwcPd94wJJQZXkkI98rWgg/l.jpg',
+      optional_photo:
+        'https://s3-media0.fl.yelpcdn.com/bphoto/MwcPd94wJJQZXkkI98rWgg/l.jpg',
       is_premium: true,
     },
     {
@@ -2037,7 +2063,8 @@ exports.seed = async (knex) => {
       url: 'https://www.veterinariaalameda.com',
       address: 'Alameda de Hércules, 41, 41002 Sevilla.',
       telephone: '954378569',
-      optional_photo: 'https://www.mundoanimalia.com/images/veterinario/76/7b/92/9831384e2ed3938f00b8fb98b3424649/fotos_070__5773.jpg',
+      optional_photo:
+        'https://www.mundoanimalia.com/images/veterinario/76/7b/92/9831384e2ed3938f00b8fb98b3424649/fotos_070__5773.jpg',
       is_premium: false,
     },
     {
@@ -2059,7 +2086,8 @@ exports.seed = async (knex) => {
       url: 'https://www.thedogtorvet.com',
       address: 'Calle Juan de Mata Carriazo, 5, Local 3, 41018 Sevilla.',
       telephone: '954410900',
-      optional_photo: 'https://lh3.googleusercontent.com/proxy/ukNTpmPkphSMptwOQ74CFlLkgjVQ5DM7aKIuF0pXnia84BNpUx76yRh5wfXFpmEDhIRZ0hgjxGHwJ7Gr0LnnfwSKUldZkHq2n-yM73qMsWY',
+      optional_photo:
+        'https://lh3.googleusercontent.com/proxy/ukNTpmPkphSMptwOQ74CFlLkgjVQ5DM7aKIuF0pXnia84BNpUx76yRh5wfXFpmEDhIRZ0hgjxGHwJ7Gr0LnnfwSKUldZkHq2n-yM73qMsWY',
       is_premium: false,
     },
     {
@@ -2070,7 +2098,8 @@ exports.seed = async (knex) => {
       url: 'https://www.centroveterinariotamarguillo.com',
       address: 'Calle Nalón, 19, 41005 Sevilla.',
       telephone: '954922075',
-      optional_photo: 'https://t1.ea.ltmcdn.com/es/places/9/7/0/img_7079_centro-veterinario-tamarguillo_0_orig.jpg',
+      optional_photo:
+        'https://t1.ea.ltmcdn.com/es/places/9/7/0/img_7079_centro-veterinario-tamarguillo_0_orig.jpg',
       is_premium: true,
     },
   ]);
