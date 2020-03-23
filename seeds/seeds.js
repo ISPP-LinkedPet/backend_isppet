@@ -1093,6 +1093,8 @@ exports.seed = async (knex) => {
       location: 'Calle María Ortíz nº 12, Sevilla.',
       pedigree: false,
       particular_id: 18,
+      star: 5,
+      review_description: 'La crianza fue completada con éxito.',
     },
     {
       id: 19,
@@ -1125,6 +1127,8 @@ exports.seed = async (knex) => {
       location: 'Calle Rubén Darío nº 12. Sevilla.',
       pedigree: true,
       particular_id: 20,
+      star: 4,
+      review_description: 'La crianza fue completada con éxito.',
     },
     {
       id: 21,

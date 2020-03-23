@@ -95,6 +95,8 @@ exports.up = (knex) => {
               .foreign('particular_id')
               .references('id')
               .inTable('particular');
+          table.integer('star').unsigned();
+          table.string('review_description');
         })
 
     // request
