@@ -322,7 +322,10 @@ exports.getAvailableBreedingsForParticular = async (req, res) => {
   try {
     const connection = req.connection;
     const userId = req.user.id;
-    const breedings = await breedingService.getAvailableBreedingsForParticular(connection, userId);
+    const breedings = await breedingService.getAvailableBreedingsForParticular(
+        connection,
+        userId,
+    );
     return res.status(200).send({breedings});
   } catch (error) {
     if (error.status && error.message) {

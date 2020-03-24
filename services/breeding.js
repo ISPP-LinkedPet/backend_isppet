@@ -628,7 +628,10 @@ exports.finishBreeding = async (breedingData, breedingId, trx) => {
     error.message = 'Breeding not found';
     throw error;
   }
-  if (!(pub.transaction_status === 'In progress')) {
+  if (
+    !(pub.transaction_status === 'In progress') &&
+    !(pub.transaction_status === 'Offered')
+  ) {
     const error = new Error();
     error.status = 404;
     error.message =

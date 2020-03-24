@@ -18,3 +18,34 @@ exports.getReview = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+
+exports.writeReview = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
+  try {
+    const reviewData = req.body;
+    const userId = req.user.id;
+
+    const review = await reviewService.writeReview(
+        reviewData,
+        userId,
+        trx,
+    );
+
+    // commit
+    await trx.commit();
+
+    return res.status(200).send(review);
+  } catch (error) {
+    console.log(error);
+    // rollback
+    await trx.rollback();
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};

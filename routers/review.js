@@ -6,5 +6,8 @@ const authorization = require('../authorization/index');
 router.get('/:id', authorization.all, (req, res) =>
   reviewController.getReview(req, res),
 );
+router.post('/', authorization.particular, (req, res) =>
+  reviewController.writeReview(req, res),
+);
 
 module.exports = router;
