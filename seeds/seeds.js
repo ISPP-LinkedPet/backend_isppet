@@ -1721,14 +1721,14 @@ exports.seed = async (knex) => {
       star: 5,
       review_description: 'La crianza fue completada con éxito.',
       publication_id: 18,
-      request_id: 17,
+      particular_id: 9,
     },
     {
       id: 2,
       star: 5,
       review_description: 'La crianza fue completada con éxito.',
       publication_id: 20,
-      request_id: 19,
+      particular_id: 18,
     },
   ]);
 

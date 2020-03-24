@@ -133,7 +133,28 @@ exports.up = (knex) => {
               .references('id')
               .inTable('user_account');
         })
-
+    // review
+        .createTable('review', function(table) {
+          table.increments().primary();
+          table.integer('star').unsigned();
+          table.string('review_description');
+          table
+              .integer('particular_id')
+              .unsigned()
+              .notNullable();
+          table
+              .foreign('particular_id')
+              .references('id')
+              .inTable('particular');
+          table
+              .integer('publication_id')
+              .unsigned()
+              .notNullable();
+          table
+              .foreign('publication_id')
+              .references('id')
+              .inTable('publication');
+        })
     // breeding
         .createTable('breeding', function(table) {
           table.increments().primary();
@@ -195,29 +216,6 @@ exports.up = (knex) => {
           table.integer('telephone').notNullable();
           table.string('optional_photo', 500).nullable();
           table.boolean('is_premium');
-        })
-
-    // review
-        .createTable('review', function(table) {
-          table.increments().primary();
-          table.integer('star').unsigned();
-          table.string('review_description');
-          table
-              .integer('publication_id')
-              .unsigned()
-              .notNullable();
-          table
-              .foreign('publication_id')
-              .references('id')
-              .inTable('publication');
-          table
-              .integer('request_id')
-              .unsigned()
-              .notNullable();
-          table
-              .foreign('request_id')
-              .references('id')
-              .inTable('request');
         })
   );
 };
