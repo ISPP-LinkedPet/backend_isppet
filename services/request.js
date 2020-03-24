@@ -38,7 +38,7 @@ exports.acceptRequest = async (trx, requestId, userId, publicationId) => {
     throw error;
   }
 
-  // you only can accept request make to your publications
+  // you only can accept request made to your publications
   const request = await trx('request')
       .select('request.id')
       .join('publication', 'publication.id', '=', 'request.publication_id')
@@ -65,4 +65,5 @@ exports.acceptRequest = async (trx, requestId, userId, publicationId) => {
   }
 
   await trx('request').select('id').where('request.id', requestId).update({status: 'Accepted'});
+  await trx('publication').select('id').where('publication.id', publicationId).update({transaction_status: 'In progress'});
 };
