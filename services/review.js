@@ -22,3 +22,32 @@ exports.getReview = async (connection, reviewId) => {
 
   return review;
 };
+
+exports.writeReview = async (reviewData, userId, trx) => {
+  const particularId = await trx('particular')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+  console.log(particularId);
+  if (!particularId) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Not found user';
+    throw error;
+  }
+
+  try {
+    const reviewId = await trx('review').insert({
+      publication_id: reviewData.publication_id,
+      particular_id: particularId.id,
+      star: reviewData.star,
+      review_description: reviewData.review_description,
+    });
+    return await trx('review')
+        .select('*', 'review.id as id')
+        .where({'review.id': reviewId})
+        .first();
+  } catch (error) {
+    throw error;
+  }
+};
