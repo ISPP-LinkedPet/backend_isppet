@@ -630,12 +630,13 @@ exports.finishBreeding = async (breedingData, breedingId, trx) => {
   }
   if (
     !(pub.transaction_status === 'In progress') &&
-    !(pub.transaction_status === 'Offered')
+    !(pub.transaction_status === 'Offered')&&
+    !(pub.transaction_status === 'In payment')
   ) {
     const error = new Error();
     error.status = 404;
     error.message =
-      'You can not finish a publication which his transaction status is Completed';
+      'You can not finish a publication which is not in progress.';
     throw error;
   }
   if (!(pub.codenumber === breedingData.codenumber)) {
@@ -648,7 +649,7 @@ exports.finishBreeding = async (breedingData, breedingId, trx) => {
   try {
     // Moderators will modify the breeding publication
     const pubData = {};
-    pubData.transaction_status = 'Completed';
+    pubData.transaction_status = 'Awaiting payment';
 
     await trx('publication')
         .join('breeding', 'breeding.publication_id', '=', 'publication.id')
