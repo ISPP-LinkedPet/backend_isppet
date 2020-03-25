@@ -38,6 +38,17 @@ exports.acceptRequest = async (trx, requestId, userId, publicationId) => {
     throw error;
   }
 
+  // publication must be in "Offered" status
+  const publication = await trx('publication').where('publication.id', publicationId)
+      .andWhere('publication.transaction_status', 'Offered')
+      .andWhere('publication.document_status', 'Accepted');
+  if (!publication) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Publication not Valid';
+    throw error;
+  }
+
   // you only can accept request make to your publications
   const request = await trx('request')
       .select('request.id')
@@ -53,6 +64,7 @@ exports.acceptRequest = async (trx, requestId, userId, publicationId) => {
     error.message = 'Request not found';
     throw error;
   }
+
   const requestToReject = await trx('request')
       .select('request.id AS request_id')
       .join('publication', 'publication.id', '=', 'request.publication_id')
@@ -65,4 +77,7 @@ exports.acceptRequest = async (trx, requestId, userId, publicationId) => {
   }
 
   await trx('request').select('id').where('request.id', requestId).update({status: 'Accepted'});
+
+  // change publication status
+  await trx('publication').where('publication.id', publicationId).update({transaction_status: 'In payment'});
 };
