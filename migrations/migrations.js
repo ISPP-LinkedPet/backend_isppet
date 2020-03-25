@@ -86,7 +86,7 @@ exports.up = (knex) => {
           table.enu('genre', ['Male', 'Female']);
           table.string('breed', 100);
           table
-              .enu('transaction_status', ['Offered', 'In progress', 'Completed'])
+              .enu('transaction_status', ['Offered', 'In payment', 'In progress', 'Awaiting payment', 'Completed'])
               .notNullable();
           table.string('type', 100);
           table.string('location', 500).notNullable();
