@@ -190,7 +190,8 @@ exports.getCreatedAndAcceptedRequests = async (connection, userId) => {
   for (const request of requests) {
     const contactData = await getContactDataOfPublication(connection, request.publication_id);
     request.contactData = contactData;
-    request.publicationType = await isBreedingOrAdoption(connection, request.publication_id)[0];
+    const t = await isBreedingOrAdoption(connection, request.publication_id);
+    request.publicationType = t[0];
     res.push(request);
   }
 
@@ -232,7 +233,7 @@ const getReceivedAndAcceptedRequestsParticular = async (connection, particularId
   const res = [];
   for (const request of requests) {
     const publicationType = await isBreedingOrAdoption(connection, request.publication_id);
-    request.publicationType = publicationType;
+    request.publicationType = publicationType[0];
     const contactData = await getContactDataOfRequest(connection, request.requestId);
     request.contactData = contactData;
     res.push(request);

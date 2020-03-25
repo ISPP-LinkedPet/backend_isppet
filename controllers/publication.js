@@ -33,10 +33,13 @@ exports.getBreedingsByActorId = async (req, res) => {
     }
 
     const publications = await publicationService.getPublicationsByActorId(connection, actorId);
+    console.log(publications);
     const r = [];
 
     for (const publication of publications) {
-      const type = await publicationService.isBreedingOrAdoption(connection, publication.id);
+      const t = await publicationService.isBreedingOrAdoption(connection, publication.id);
+      const type = t[0];
+      console.log(type);
       if (type === 'breeding') {
         r.push(publication);
       }
@@ -65,7 +68,8 @@ exports.getAdoptionsByActorId = async (req, res) => {
     const r = [];
 
     for (const publication of publications) {
-      const type = await publicationService.isBreedingOrAdoption(connection, publication.id);
+      const t = await publicationService.isBreedingOrAdoption(connection, publication.id);
+      const type = t[0];
       if (type === 'adoption') {
         r.push(publication);
       }
