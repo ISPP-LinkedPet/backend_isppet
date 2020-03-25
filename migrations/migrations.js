@@ -6,6 +6,7 @@ exports.up = (knex) => {
         .dropTableIfExists('shelter')
         .dropTableIfExists('administrator')
         .dropTableIfExists('breeding')
+        .dropTableIfExists('review')
         .dropTableIfExists('request')
         .dropTableIfExists('publication')
         .dropTableIfExists('particular')
@@ -95,8 +96,6 @@ exports.up = (knex) => {
               .foreign('particular_id')
               .references('id')
               .inTable('particular');
-          table.integer('star').unsigned();
-          table.string('review_description');
         })
 
     // request
@@ -134,7 +133,28 @@ exports.up = (knex) => {
               .references('id')
               .inTable('user_account');
         })
-
+    // review
+        .createTable('review', function(table) {
+          table.increments().primary();
+          table.integer('star').unsigned();
+          table.string('review_description');
+          table
+              .integer('particular_id')
+              .unsigned()
+              .notNullable();
+          table
+              .foreign('particular_id')
+              .references('id')
+              .inTable('particular');
+          table
+              .integer('publication_id')
+              .unsigned()
+              .notNullable();
+          table
+              .foreign('publication_id')
+              .references('id')
+              .inTable('publication');
+        })
     // breeding
         .createTable('breeding', function(table) {
           table.increments().primary();

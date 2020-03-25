@@ -158,7 +158,7 @@ exports.getPendingRequestsToMyPublications = async (connection, userId) => {
         .join('request', 'publication.id', '=', 'request.publication_id')
         .where('publication.particular_id', user.id)
         .andWhere('request.status', 'Pending')
-        .andWhere('publication.transaction_status', 'In progress');
+        .andWhere('publication.transaction_status', 'Offered');
   } else if (actor.role === 'shelter') {
     const user = await connection('shelter').select('id').where('user_account_id', userId).first();
     requests = await connection('publication')
@@ -166,7 +166,7 @@ exports.getPendingRequestsToMyPublications = async (connection, userId) => {
         .join('adoption', 'publication.id', '=', 'adoption.publication_id')
         .where('adoption.shelter_id', user.id)
         .andWhere('request.status', 'Pending')
-        .andWhere('publication.transaction_status', 'In progress');
+        .andWhere('publication.transaction_status', 'Offered');
   }
   return requests;
 };

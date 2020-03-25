@@ -225,13 +225,17 @@ exports.getBreedingsOffers = async (breedingParams, connection, userId) => {
       .andWhereNot('publication.particular_id', user.id)
       .modify(function(queryBuilder) {
         if (price) {
-          queryBuilder.andWhere('breeding.price', 'like', `%${price}%`);
+          queryBuilder.andWhere('breeding.price', '<=', parseFloat(price));
         }
         if (type) {
           queryBuilder.andWhere('publication.type', 'like', `%${type}%`);
         }
         if (pedigree) {
-          queryBuilder.andWhere('publication.pedigree', pedigree);
+          if (pedigree == 'true') {
+            queryBuilder.andWhere('publication.pedigree', 'like', 1);
+          } else {
+            queryBuilder.andWhere('publication.pedigree', 'like', 0);
+          }
         }
         if (breed) {
           queryBuilder.andWhere('publication.breed', 'like', `%${breed}%`);
@@ -624,7 +628,10 @@ exports.finishBreeding = async (breedingData, breedingId, trx) => {
     error.message = 'Breeding not found';
     throw error;
   }
-  if (!(pub.transaction_status === 'In progress')) {
+  if (
+    !(pub.transaction_status === 'In progress') &&
+    !(pub.transaction_status === 'Offered')
+  ) {
     const error = new Error();
     error.status = 404;
     error.message =

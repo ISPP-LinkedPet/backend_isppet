@@ -13,7 +13,9 @@ const authRouter = require('./routers/auth');
 const publicationRouter = require('./routers/publication');
 const vetRouter = require('./routers/vet');
 const requestRouter = require('./routers/request');
+const reviewRouter = require('./routers/review');
 const paymentRouter = require('./routers/payment');
+
 
 const app = express();
 
@@ -54,6 +56,7 @@ app.use('/publication', publicationRouter);
 app.use('/vet', vetRouter);
 app.use('/request', requestRouter);
 app.use('/payment', paymentRouter);
+app.use('/review', reviewRouter);
 
 // Ruta pública para acceder a las imágenes
 app.use(express.static('public'));
