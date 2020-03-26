@@ -3,6 +3,6 @@ const router = new express.Router();
 const particularController = require('../controllers/particular');
 const authorization = require('../authorization/index');
 
-router.get('/:id', authorization.moderator, (req, res) => particularController.getParticular(req, res));
+router.get('/:id', authorization.reviewer, (req, res) => particularController.getParticular(req, res));
 
 module.exports = router;

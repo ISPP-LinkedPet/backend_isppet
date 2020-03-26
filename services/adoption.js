@@ -178,7 +178,7 @@ exports.updateAdoption = async (
     allPhotos.push(...savedVaccinePhotos);
 
     // Some values are not required during edition
-    // Moderators will modify the adoption publication
+    // reviewers will modify the adoption publication
     const pubData = {
       animal_photo: savedAnimalPhotos.join(','),
       identification_photo: savedIdentificationPhotos.join(',') || null,
@@ -398,7 +398,7 @@ const getExtension = (photo) => {
 };
 
 exports.getPendingAdoptions = async (connection, userId) => {
-  const user = await connection('moderator')
+  const user = await connection('reviewer')
       .select('id')
       .where('user_account_id', userId)
       .first();
@@ -435,7 +435,7 @@ exports.acceptAdoption = async (adoptionId, trx) => {
   }
 
   try {
-    // Moderators will modify the adoption publication
+    // reviewers will modify the adoption publication
     const pubData = {};
     pubData.document_status = 'Accepted';
 
@@ -472,7 +472,7 @@ exports.rejectAdoption = async (adoptionId, trx) => {
   }
 
   try {
-    // Moderators will modify the adoption publication
+    // reviewers will modify the adoption publication
     const pubData = {};
     pubData.document_status = 'Rejected';
 

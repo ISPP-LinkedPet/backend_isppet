@@ -143,7 +143,7 @@ exports.createBreeding = async (breedingData, breedingPhotos, userId, trx) => {
         .first();
 
     // Some values are not required during creation
-    // Moderators will modify the breeding publication
+    // reviewers will modify the breeding publication
     const pubData = {
       animal_photo: savedAnimalPhotos.join(','),
       identification_photo: savedIdentificationPhotos.join(','),
@@ -249,7 +249,7 @@ exports.getBreedingsOffers = async (breedingParams, connection, userId) => {
 };
 
 exports.getPendingBreedings = async (connection, userId) => {
-  const user = await connection('moderator')
+  const user = await connection('reviewer')
       .select('id')
       .where('user_account_id', userId)
       .first();
@@ -482,7 +482,7 @@ exports.editBreeding = async (
       allPhotos.push(...savedVaccinePhotos);
     }
 
-    // Moderators will modify the breeding publication
+    // reviewers will modify the breeding publication
     const pubData = {};
     if (breedingPhotos.animal_photo) {
       pubData.animal_photo = savedAnimalPhotos.join(',');
@@ -551,7 +551,7 @@ exports.acceptBreeding = async (breedingData, breedingId, trx) => {
   }
 
   try {
-    // Moderators will modify the breeding publication
+    // reviewers will modify the breeding publication
     const pubData = {};
     pubData.birth_date = breedingData.birth_date;
     pubData.genre = breedingData.genre;
@@ -596,7 +596,7 @@ exports.rejectBreeding = async (breedingId, trx) => {
   }
 
   try {
-    // Moderators will modify the breeding publication
+    // reviewers will modify the breeding publication
     const pubData = {};
     pubData.document_status = 'Rejected';
 
@@ -646,7 +646,7 @@ exports.finishBreeding = async (breedingData, breedingId, trx) => {
   }
 
   try {
-    // Moderators will modify the breeding publication
+    // reviewers will modify the breeding publication
     const pubData = {};
     pubData.transaction_status = 'Completed';
 

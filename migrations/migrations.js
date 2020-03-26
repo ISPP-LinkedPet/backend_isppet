@@ -10,7 +10,7 @@ exports.up = (knex) => {
         .dropTableIfExists('request')
         .dropTableIfExists('publication')
         .dropTableIfExists('particular')
-        .dropTableIfExists('moderator')
+        .dropTableIfExists('reviewer')
         .dropTableIfExists('vet')
         .dropTableIfExists('user_account')
         .raw(`SET FOREIGN_KEY_CHECKS = 1;`)
@@ -24,7 +24,7 @@ exports.up = (knex) => {
               .unique('user_name');
           table.enu('role', [
             'administrator',
-            'moderator',
+            'reviewer',
             'particular',
             'shelter',
           ]);
@@ -120,8 +120,8 @@ exports.up = (knex) => {
               .inTable('particular');
         })
 
-    // moderator
-        .createTable('moderator', function(table) {
+    // reviewer
+        .createTable('reviewer', function(table) {
           table.increments().primary();
           table.string('surname', 100);
           table

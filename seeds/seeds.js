@@ -10,7 +10,7 @@ exports.seed = async (knex) => {
   await knex('request').del();
   await knex('publication').del();
   await knex('particular').del();
-  await knex('moderator').del();
+  await knex('reviewer').del();
   await knex('vet').del();
   await knex('user_account').del();
   await knex.raw(`SET FOREIGN_KEY_CHECKS = 1;`);
@@ -91,12 +91,12 @@ exports.seed = async (knex) => {
       telephone: '691876543',
       optional_photo: null,
     },
-    // moderator
+    // reviewer
     {
       id: 7,
       user_name: 'rosaSanchez',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
-      role: 'moderator',
+      role: 'reviewer',
       activate: true,
       name: 'Rosa',
       email: 'rosasanchez@gmail.com',
@@ -108,7 +108,7 @@ exports.seed = async (knex) => {
       id: 8,
       user_name: 'luciaMontero',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
-      role: 'moderator',
+      role: 'reviewer',
       activate: false,
       name: 'Lucía',
       email: 'luciamontero@gmail.com',
@@ -120,7 +120,7 @@ exports.seed = async (knex) => {
       id: 9,
       user_name: 'christianM',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
-      role: 'moderator',
+      role: 'reviewer',
       activate: true,
       name: 'Christian',
       email: 'chrmarand@alum.us.es',
@@ -429,12 +429,12 @@ exports.seed = async (knex) => {
       telephone: '648523394',
       optional_photo: null,
     },
-    // moderator
+    // reviewer
     {
       id: 35,
       user_name: 'paulaRey',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
-      role: 'moderator',
+      role: 'reviewer',
       activate: true,
       name: 'Paula',
       email: 'paulareymartin@gmail.com',
@@ -446,7 +446,7 @@ exports.seed = async (knex) => {
       id: 36,
       user_name: 'juanValencia',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
-      role: 'moderator',
+      role: 'reviewer',
       activate: false,
       name: 'Juan',
       email: 'juanvalencia@gmail.com',
@@ -458,7 +458,7 @@ exports.seed = async (knex) => {
       id: 37,
       user_name: 'victorSar',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
-      role: 'moderator',
+      role: 'reviewer',
       activate: true,
       name: 'Victor',
       email: 'victorsarento@gmail.com',
@@ -470,7 +470,7 @@ exports.seed = async (knex) => {
       id: 38,
       user_name: 'estherExp',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
-      role: 'moderator',
+      role: 'reviewer',
       activate: true,
       name: 'Esther',
       email: 'estherexp@gmail.com',
@@ -482,7 +482,7 @@ exports.seed = async (knex) => {
       id: 39,
       user_name: 'miguelBer',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
-      role: 'moderator',
+      role: 'reviewer',
       activate: false,
       name: 'Miguel',
       email: 'miguelberbe@gmail.com',
@@ -494,7 +494,7 @@ exports.seed = async (knex) => {
       id: 40,
       user_name: 'javierpm',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
-      role: 'moderator',
+      role: 'reviewer',
       activate: true,
       name: 'Javier',
       email: 'javierpm@gmail.com',
@@ -506,7 +506,7 @@ exports.seed = async (knex) => {
       id: 41,
       user_name: 'Pedro',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
-      role: 'moderator',
+      role: 'reviewer',
       activate: true,
       name: 'Pedro',
       email: 'pedrodraw@gmail.com',
@@ -1732,8 +1732,8 @@ exports.seed = async (knex) => {
     },
   ]);
 
-  // moderator
-  await knex('moderator').insert([
+  // reviewer
+  await knex('reviewer').insert([
     {id: 1, surname: 'Sánchez', user_account_id: 7},
     {id: 2, surname: 'Montero', user_account_id: 8},
     {id: 3, surname: 'Martínez', user_account_id: 9},

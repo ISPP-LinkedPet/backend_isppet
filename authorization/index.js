@@ -22,8 +22,8 @@ permission = (req, res, next, roles) => {
 exports.vet = (req, res, next) => permission(req, res, next, ['vet']);
 exports.administrator = (req, res, next) =>
   permission(req, res, next, ['administrator']);
-exports.moderator = (req, res, next) =>
-  permission(req, res, next, ['moderator']);
+exports.reviewer = (req, res, next) =>
+  permission(req, res, next, ['reviewer']);
 exports.particular = (req, res, next) =>
   permission(req, res, next, ['particular']);
 exports.shelter = (req, res, next) => permission(req, res, next, ['shelter']);
@@ -33,7 +33,7 @@ exports.all = (req, res, next) =>
   permission(req, res, next, [
     'administrator',
     'particular',
-    'moderator',
+    'reviewer',
     'shelter',
   ]);
 
@@ -42,5 +42,5 @@ exports.shelter_particular = (req, res, next) =>
   permission(req, res, next, ['shelter', 'particular']);
 
 // few specific role
-exports.shelter_particular_moderator = (req, res, next) =>
-  permission(req, res, next, ['shelter', 'particular', 'moderator']);
+exports.shelter_particular_reviewer = (req, res, next) =>
+  permission(req, res, next, ['shelter', 'particular', 'reviewer']);
