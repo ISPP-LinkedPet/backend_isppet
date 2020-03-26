@@ -366,7 +366,7 @@ exports.editBreeding = async (
     throw error;
   }
 
-  if (!(pub.userId === userId)) {
+  if (pub.userId !== userId) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not edit a publication that you do not own';
@@ -543,7 +543,7 @@ exports.acceptBreeding = async (breedingData, breedingId, trx) => {
     error.message = 'Breeding not found';
     throw error;
   }
-  if (!(pub.document_status === 'In revision')) {
+  if (pub.document_status !== 'In revision') {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not accept a publication which is not in revision';
@@ -570,6 +570,7 @@ exports.acceptBreeding = async (breedingData, breedingId, trx) => {
         .where({'breeding.id': breedingId})
         .first();
   } catch (error) {
+    console.err(error);
     throw error;
   }
 };
@@ -588,7 +589,7 @@ exports.rejectBreeding = async (breedingId, trx) => {
     error.message = 'Breeding not found';
     throw error;
   }
-  if (!(pub.document_status === 'In revision')) {
+  if (pub.document_status !== 'In revision') {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not reject a publication which is not in revision';
@@ -610,6 +611,7 @@ exports.rejectBreeding = async (breedingId, trx) => {
         .where({'breeding.id': breedingId})
         .first();
   } catch (error) {
+    console.err(error);
     throw error;
   }
 };
@@ -629,8 +631,8 @@ exports.finishBreeding = async (breedingData, breedingId, trx) => {
     throw error;
   }
   if (
-    !(pub.transaction_status === 'In progress') &&
-    !(pub.transaction_status === 'Offered')
+    (pub.transaction_status !== 'In progress') &&
+    (pub.transaction_status !== 'Offered')
   ) {
     const error = new Error();
     error.status = 404;
@@ -638,7 +640,7 @@ exports.finishBreeding = async (breedingData, breedingId, trx) => {
       'You can not finish a publication which his transaction status is Completed';
     throw error;
   }
-  if (!(pub.codenumber === breedingData.codenumber)) {
+  if (pub.codenumber !== breedingData.codenumber) {
     const error = new Error();
     error.status = 404;
     error.message = 'This Verification code is not correct.';
@@ -660,6 +662,7 @@ exports.finishBreeding = async (breedingData, breedingId, trx) => {
         .where({'breeding.id': breedingId})
         .first();
   } catch (error) {
+    console.err(error);
     throw error;
   }
 };
