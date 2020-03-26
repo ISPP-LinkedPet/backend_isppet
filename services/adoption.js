@@ -74,12 +74,7 @@ exports.updateAdoption = async (
     throw error;
   }
 
-  if (pub.shelter_id === null && !(pub.particular_id === userId)) {
-    const error = new Error();
-    error.status = 404;
-    error.message = 'You can not edit a publication that you do not own';
-    throw error;
-  } else if (pub.particular_id === null && !(pub.shelter_id === userId)) {
+  if ((pub.shelter_id === null && (pub.particular_id !== userId)) || (pub.particular_id === null && (pub.shelter_id !== userId))) {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not edit a publication that you do not own';
@@ -427,7 +422,7 @@ exports.acceptAdoption = async (adoptionId, trx) => {
     error.message = 'Adoption not found';
     throw error;
   }
-  if (!(pub.document_status === 'In revision')) {
+  if (pub.document_status !== 'In revision') {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not accept a publication which is not in revision';
@@ -449,6 +444,7 @@ exports.acceptAdoption = async (adoptionId, trx) => {
         .where({'adoption.id': adoptionId})
         .first();
   } catch (error) {
+    console.err(error);
     throw error;
   }
 };
@@ -464,7 +460,7 @@ exports.rejectAdoption = async (adoptionId, trx) => {
     error.message = 'Adoption not found';
     throw error;
   }
-  if (!(pub.document_status === 'In revision')) {
+  if (pub.document_status !== 'In revision') {
     const error = new Error();
     error.status = 404;
     error.message = 'You can not reject a publication which is not in revision';
@@ -486,6 +482,7 @@ exports.rejectAdoption = async (adoptionId, trx) => {
         .where({'adoption.id': adoptionId})
         .first();
   } catch (error) {
+    console.err(error);
     throw error;
   }
 };
