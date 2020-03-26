@@ -36,11 +36,9 @@ exports.createPaymentToMyself = async (connection, token, userId, breedingId, re
   }
 
   return payment; // succeeded,requires_action,requires_source
-
 };
 
 exports.confirmPaymentToMyself = async (connection, userId, paymentId, breedingId) => {
-
   const breeding = await connection('breeding').where('breeding.id', breedingId).first();
   const publication = await connection('publication').join('breeding', 'breeding.publication_id', '=', 'publication.id').where('breeding.id', breedingId).first();
   if (!breeding || !publication) {
