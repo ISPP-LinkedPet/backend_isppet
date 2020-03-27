@@ -1,6 +1,20 @@
+const REVIEW_FIELDS = [
+  'user_account_id',
+  'particular.id',
+  'surname',
+  'user_account.name',
+  'user_account.user_name',
+  'user_account.role',
+  'user_account.name',
+  'user_account.register_date',
+  'user_account.address',
+  'user_account.optional_photo',
+];
+
 exports.getParticular = async (connection, particularId) => {
   const particular = await connection('particular')
-      .innerJoin('user_account', 'particular.user_account_id', '=', 'user_account.id')
+      .select(REVIEW_FIELDS)
+      .join('user_account', 'particular.user_account_id', '=', 'user_account.id')
       .where('particular.id', particularId)
       .first();
 
@@ -13,4 +27,3 @@ exports.getParticular = async (connection, particularId) => {
 
   return particular;
 };
-
