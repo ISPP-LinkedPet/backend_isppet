@@ -1,7 +1,7 @@
 const REVIEW_FIELDS = [
   'review.id',
   'publication_id',
-  'request_id',
+  'particular_id',
   'review_description',
   'star',
 ];
@@ -9,7 +9,7 @@ const REVIEW_FIELDS = [
 exports.getReview = async (connection, reviewId) => {
   const review = await connection('review')
       .select(REVIEW_FIELDS)
-      .join('publication', 'review.publication_id', '=', 'publication.id')
+      .join('particular', 'review.particular_id', '=', 'particular.id')
       .where('review.id', reviewId)
       .first();
 
