@@ -72,7 +72,7 @@ exports.acceptRequest = async (trx, requestId, userId, publicationId) => {
       .andWhere('publication.particular_id', particular.id)
       .andWhere('publication.id', publicationId);
 
-  for (requestR of requestToReject) {
+  for (const requestR of requestToReject) {
     await trx('request').select('id').where('request.id', requestR.request_id).update({status: 'Rejected'});
   }
 
