@@ -48,6 +48,7 @@ exports.writeReview = async (reviewData, userId, trx) => {
         .where({'review.id': reviewId})
         .first();
   } catch (error) {
+    console.err(error);
     throw error;
   }
 };
