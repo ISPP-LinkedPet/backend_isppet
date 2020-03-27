@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-permission = (req, res, next, roles) => {
+const permission = (req, res, next, roles) => {
   try {
     // get token
     const token = req.headers.authorization.replace('Bearer ', '');

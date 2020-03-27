@@ -30,13 +30,13 @@ exports.register = async (trx, params) => {
   let photoName;
   try {
     // Check user_name
+    const error = new Error();
     const userNameCheck = await trx('user_account')
         .where('user_account.user_name', params.user_name)
         .first();
     if (userNameCheck) {
-      const error = new Error();
       error.status = 400;
-      error.message = 'User name already exists';
+      error.message = 'El nombre de usuario introducido ya existe';
       throw error;
     }
 
@@ -45,24 +45,21 @@ exports.register = async (trx, params) => {
         .where('user_account.email', params.email)
         .first();
     if (emailCheck) {
-      const error = new Error();
       error.status = 400;
-      error.message = 'Email already exists';
+      error.message = 'El email introducido ya existe';
       throw error;
     }
 
     // Check password
     if (params.password !== params.repeat_password) {
-      const error = new Error();
       error.status = 400;
-      error.message = 'Passwords do not match';
+      error.message = 'La contraseña no coincide con la verificación';
       throw error;
     }
 
     if (params.password.length < 8) {
-      const error = new Error();
       error.status = 400;
-      error.message = 'Password must have at least 8 characters';
+      error.message = 'La contraseña debe tener una longitud de al menos 8 caracteres';
       throw error;
     }
 
@@ -93,9 +90,8 @@ exports.register = async (trx, params) => {
     if (params.role === 'particular') {
       // Check surname
       if (!params.surname) {
-        const error = new Error();
         error.status = 400;
-        error.message = 'A surname is required';
+        error.message = 'Debe añadir un apellido';
         throw error;
       }
 
@@ -128,7 +124,6 @@ exports.register = async (trx, params) => {
       return user;
     }
 
-    const error = new Error();
     error.status = 400;
     error.message = 'Role not allowed';
     throw error;
