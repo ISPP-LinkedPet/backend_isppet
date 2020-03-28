@@ -7,6 +7,7 @@ require('dotenv').config();
 
 // routers
 const breedingRouter = require('./routers/breeding');
+const particularRouter = require('./routers/particular');
 const shelterRouter = require('./routers/shelter');
 const adoptionRouter = require('./routers/adoption');
 const authRouter = require('./routers/auth');
@@ -49,6 +50,7 @@ app.use((req, res, next) => {
 
 // routers
 app.use('/breeding', breedingRouter);
+app.use('/particular', particularRouter);
 app.use('/auth', authRouter);
 app.use('/shelter', shelterRouter);
 app.use('/adoption', adoptionRouter);
