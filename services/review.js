@@ -28,7 +28,6 @@ exports.writeReview = async (reviewData, userId, trx) => {
       .select('id')
       .where('user_account_id', userId)
       .first();
-  console.log(particularId);
   if (!particularId) {
     const error = new Error();
     error.status = 404;

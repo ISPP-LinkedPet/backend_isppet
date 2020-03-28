@@ -33,7 +33,6 @@ exports.getBreedingsByActorId = async (req, res) => {
     }
 
     const publications = await publicationService.getPublicationsByActorId(connection, actorId);
-    console.log(publications);
     const r = [];
 
     for (const publication of publications) {
