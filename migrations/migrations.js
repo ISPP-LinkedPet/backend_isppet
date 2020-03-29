@@ -13,6 +13,7 @@ exports.up = (knex) => {
         .dropTableIfExists('moderator')
         .dropTableIfExists('vet')
         .dropTableIfExists('user_account')
+        .dropTableIfExists('pet')
         .raw(`SET FOREIGN_KEY_CHECKS = 1;`)
 
     // user_account
@@ -216,6 +217,27 @@ exports.up = (knex) => {
           table.integer('telephone').notNullable();
           table.string('optional_photo', 500).nullable();
           table.boolean('is_premium');
+        })
+
+    // pet
+        .createTable('pet', function(table) {
+          table.increments().primary();
+          table.string('animal_photo', 1000).notNullable();
+          table.string('identification_photo', 200);
+          table.string('vaccine_passport', 500);
+          table.date('birth_date');
+          table.enu('genre', ['Male', 'Female']);
+          table.string('breed', 100);
+          table.string('type', 100);
+          table.boolean('pedigree');
+          table
+              .enu('pet_status', ['In review', 'Accepted'])
+              .notNullable();
+          table.integer('particular_id').unsigned();
+          table
+              .foreign('particular_id')
+              .references('id')
+              .inTable('particular');
         })
   );
 };

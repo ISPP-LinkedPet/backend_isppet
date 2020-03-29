@@ -13,6 +13,7 @@ exports.seed = async (knex) => {
   await knex('moderator').del();
   await knex('vet').del();
   await knex('user_account').del();
+  await knex('pet').del();
   await knex.raw(`SET FOREIGN_KEY_CHECKS = 1;`);
 
   // user_account

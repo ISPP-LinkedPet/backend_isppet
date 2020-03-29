@@ -7,6 +7,7 @@ require('dotenv').config();
 
 // routers
 const breedingRouter = require('./routers/breeding');
+const particularRouter = require('./routers/particular');
 const shelterRouter = require('./routers/shelter');
 const adoptionRouter = require('./routers/adoption');
 const authRouter = require('./routers/auth');
@@ -15,6 +16,7 @@ const vetRouter = require('./routers/vet');
 const requestRouter = require('./routers/request');
 const reviewRouter = require('./routers/review');
 const paymentRouter = require('./routers/payment');
+const petRouter = require('./routers/pet');
 
 
 const app = express();
@@ -49,6 +51,7 @@ app.use((req, res, next) => {
 
 // routers
 app.use('/breeding', breedingRouter);
+app.use('/particular', particularRouter);
 app.use('/auth', authRouter);
 app.use('/shelter', shelterRouter);
 app.use('/adoption', adoptionRouter);
@@ -57,6 +60,7 @@ app.use('/vet', vetRouter);
 app.use('/request', requestRouter);
 app.use('/payment', paymentRouter);
 app.use('/review', reviewRouter);
+app.use('/pet', petRouter);
 
 // Ruta pública para acceder a las imágenes
 app.use(express.static('public'));
