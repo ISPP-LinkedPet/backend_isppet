@@ -9,27 +9,18 @@ exports.createPet = async (req, res) => {
   try {
     const particularId = req.user.id;
 
-    // body
-    const petData = req.body;
-
     // file
     const petPhotos = req.files;
 
     if (
       !petPhotos.animal_photo ||
       !petPhotos.identification_photo ||
-      !petPhotos.vaccine_passport ||
-      !petData.breed ||
-      !petData.type ||
-      !petData.genre ||
-      !petData.pedigree ||
-      !petData.birth_date
+      !petPhotos.vaccine_passport
     ) {
       return res.status(400).send({error: 'Invalid params'});
     }
 
     const pet = await petService.createPet(
-        petData,
         petPhotos,
         particularId,
         trx,
@@ -57,12 +48,10 @@ exports.editPet = async (req, res) => {
 
   try {
     const userId = req.user.id;
-    const petData = req.body;
     const petPhotos = req.files;
     const petId = req.params.id;
 
     const pet = await petService.editPet(
-        petData,
         petPhotos,
         petId,
         userId,

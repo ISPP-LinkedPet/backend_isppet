@@ -13,6 +13,7 @@ exports.up = (knex) => {
         .dropTableIfExists('moderator')
         .dropTableIfExists('vet')
         .dropTableIfExists('user_account')
+        .dropTableIfExists('pet')
         .raw(`SET FOREIGN_KEY_CHECKS = 1;`)
 
     // user_account
@@ -229,6 +230,9 @@ exports.up = (knex) => {
           table.string('breed', 100);
           table.string('type', 100);
           table.boolean('pedigree');
+          table
+              .enu('pet_status', ['In review', 'Accepted'])
+              .notNullable();
           table.integer('particular_id').unsigned();
           table
               .foreign('particular_id')
