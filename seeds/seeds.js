@@ -2157,7 +2157,7 @@ exports.seed = async (knex) => {
     {
       id: 5,
       vet_id: 2,
-      top_banner: 'https://media.istockphoto.com/vectors/veterinary-assistance-clinic-for-animals-pets-vet-service-banner-vector-id839398776',
+      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
       lateral_banner: 'https://www.dispensariveterinari.com/sites/default/files/banner-lateral/211/imatges/vet_formacion.jpg',
       ad_type: 'DXC',
       price: '0.99',
@@ -2169,7 +2169,7 @@ exports.seed = async (knex) => {
     {
       id: 6,
       vet_id: 3,
-      top_banner: 'https://media.istockphoto.com/vectors/veterinary-assistance-clinic-for-animals-pets-vet-service-banner-vector-id839398776',
+      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
       lateral_banner: 'https://www.dispensariveterinari.com/sites/default/files/banner-lateral/211/imatges/vet_formacion.jpg',
       ad_type: 'DXC',
       price: '0.99',
@@ -2193,7 +2193,7 @@ exports.seed = async (knex) => {
     {
       id: 8,
       vet_id: 5,
-      top_banner: 'https://media.istockphoto.com/vectors/veterinary-assistance-clinic-for-animals-pets-vet-service-banner-vector-id839398776',
+      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
       lateral_banner: 'https://www.dispensariveterinari.com/sites/default/files/banner-lateral/211/imatges/vet_formacion.jpg',
       ad_type: 'DXC',
       price: '0.99',
@@ -2205,7 +2205,7 @@ exports.seed = async (knex) => {
     {
       id: 9,
       vet_id: 5,
-      top_banner: 'https://images.squarespace-cdn.com/content/v1/5713ed1c22482eca2d3be952/1460996015695-UVBXVYMDBKBQASBB2KLC/ke17ZwdGBToddI8pDm48kAmUDF74qbHDQRW7FVGk-6wUqsxRUqqbr1mOJYKfIPR7LoDQ9mXPOjoJoqy81S2I8DJR1sBVb-sUr1iA4ScHlBTFhSPlVV71_Xhqg_adcQJM_Xy4lClRuAhTT1ti-f41gfCg91_eTyZ-sDDeRt_yAYhooPxBeWiyUuvrrvpVBDsc/BVC_banner1.jpg',
+      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
       lateral_banner: 'https://www.trixie.de/userdata/mysydeshop/images/normal/233304_PHO_PRO_900723-1.jpg',
       ad_type: 'DXC',
       price: '0.99',
