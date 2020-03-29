@@ -10,7 +10,7 @@ const VACCINES_FOLDER = path.join('images', 'vaccine_passports');
 const ALLOWED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
 
 
-exports.createPet = async (petData, petPhotos, userId, trx) => {
+exports.createPet = async (petPhotos, userId, trx) => {
   const allPhotos = [];
   try {
     // Mínimo 2 fotos del animal
@@ -113,11 +113,12 @@ exports.createPet = async (petData, petPhotos, userId, trx) => {
       animal_photo: savedAnimalPhotos.join(','),
       identification_photo: savedIdentificationPhotos.join(','),
       vaccine_passport: savedVaccinePhotos.join(','),
-      birth_date: petData.birth_date,
-      genre: petData.genre,
-      breed: petData.breed,
-      type: petData.type,
-      pedigree: petData.pedigree,
+      birth_date: null,
+      genre: null,
+      breed: null,
+      type: null,
+      pedigree: null,
+      pet_status: 'In review',
       particular_id: particular.id,
     };
 
@@ -138,7 +139,6 @@ exports.createPet = async (petData, petPhotos, userId, trx) => {
 };
 
 exports.editPet = async (
-  petData,
   petPhotos,
   petId,
   userId,
@@ -262,7 +262,7 @@ exports.editPet = async (
     }
 
     // Moderators will modify the pet publication
-    const editPetData = petData;
+    const editPetData = {};
     if (petPhotos.animal_photo) {
       editPetData.animal_photo = savedAnimalPhotos.join(',');
     }
@@ -273,6 +273,16 @@ exports.editPet = async (
     if (petPhotos.vaccine_passport) {
       editPetData.vaccine_passport = savedVaccinePhotos.join(',');
     }
+
+    if (pet.pet_status == 'Accepted') {
+      editPetData.breed = null;
+      editPetData.type = null;
+      editPetData.birth_date = null;
+      editPetData.pedigree = null;
+      editPetData.genre = null;
+      editPetData.pet_status = 'In review';
+    }
+
     await trx('pet')
         .where({'pet.id': petId})
         .update(editPetData);
