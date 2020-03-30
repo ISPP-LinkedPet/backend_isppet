@@ -11,6 +11,7 @@ exports.up = (knex) => {
         .dropTableIfExists('publication')
         .dropTableIfExists('particular')
         .dropTableIfExists('moderator')
+        .dropTableIfExists('ad_suscription')
         .dropTableIfExists('vet')
         .dropTableIfExists('user_account')
         .dropTableIfExists('pet')
@@ -219,6 +220,21 @@ exports.up = (knex) => {
           table.boolean('is_premium');
         })
 
+    // ad_suscription
+        .createTable('ad_suscription', function(table) {
+          table.increments().primary();
+          table.integer('vet_id').unsigned().notNullable();
+          table.foreign('vet_id').references('id').inTable('vet');
+          table.string('top_banner', 500).notNullable();
+          table.string('lateral_banner', 500).notNullable();
+          table.enu('ad_type', ['DXC', 'CPM']).notNullable();
+          table.double('price').notNullable();
+          table.string('redirect_to', 500);
+          table.boolean('active').notNullable();
+          table.integer('view_count').unsigned().defaultTo(0);
+          table.integer('click_count').unsigned().defaultTo(0);
+        })
+
     // pet
         .createTable('pet', function(table) {
           table.increments().primary();
@@ -231,7 +247,7 @@ exports.up = (knex) => {
           table.string('type', 100);
           table.boolean('pedigree');
           table
-              .enu('pet_status', ['In review', 'Accepted'])
+              .enu('pet_status', ['In revision', 'Accepted', 'Rejected'])
               .notNullable();
           table.integer('particular_id').unsigned();
           table

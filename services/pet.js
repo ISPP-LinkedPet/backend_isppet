@@ -118,7 +118,7 @@ exports.createPet = async (petPhotos, userId, trx) => {
       breed: null,
       type: null,
       pedigree: null,
-      pet_status: 'In review',
+      pet_status: 'In revision',
       particular_id: particular.id,
     };
 
@@ -274,13 +274,13 @@ exports.editPet = async (
       editPetData.vaccine_passport = savedVaccinePhotos.join(',');
     }
 
-    if (pet.pet_status == 'Accepted') {
+    if (pet.pet_status !== 'In revision') {
       editPetData.breed = null;
       editPetData.type = null;
       editPetData.birth_date = null;
       editPetData.pedigree = null;
       editPetData.genre = null;
-      editPetData.pet_status = 'In review';
+      editPetData.pet_status = 'In revision';
     }
 
     await trx('pet')
@@ -320,3 +320,99 @@ const getExtension = (photo) => {
   return photo.split('.').pop();
 };
 
+exports.getPet = async (connection, petId) => {
+  const pet = await connection('pet')
+      .where('pet.id', petId)
+      .first();
+
+  if (!pet) {
+    const error = new Error();
+    error.status = 400;
+    error.message = 'No pet with that ID';
+    throw error;
+  }
+
+  return pet;
+};
+
+exports.getPetsInRevision = async (connection) => {
+  const pets = await connection('pet')
+      .where('pet.pet_status', 'In revision');
+
+  return pets;
+};
+
+exports.acceptPet = async (petData, petId, trx) => {
+  const pet = await trx('pet')
+      .where('pet.id', petId)
+      .first();
+  if (!pet) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Pet not found';
+    throw error;
+  }
+  if (pet.pet_status !== 'In revision') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not accept a pet which is not in revision';
+    throw error;
+  }
+
+  try {
+    // Moderators will modify the pet
+    const editPetData = {};
+    editPetData.birth_date = petData.birth_date;
+    editPetData.genre = petData.genre;
+    editPetData.breed = petData.breed;
+    editPetData.type = petData.type;
+    editPetData.pedigree = petData.pedigree;
+    editPetData.pet_status = 'Accepted';
+
+    await trx('pet')
+        .where({'pet.id': petId})
+        .update(editPetData);
+
+    return await trx('pet')
+        .where({'pet.id': petId})
+        .first();
+  } catch (error) {
+    console.err(error);
+    throw error;
+  }
+};
+
+exports.rejectPet = async (petId, trx) => {
+  const pet = await trx('pet')
+      .where('pet.id', petId)
+      .first();
+  if (!pet) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Pet not found';
+    throw error;
+  }
+  if (pet.pet_status !== 'In revision') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not reject a pet which is not in revision';
+    throw error;
+  }
+
+  try {
+    // Moderators will modify the pet
+    const editPetData = {};
+    editPetData.pet_status = 'Rejected';
+
+    await trx('pet')
+        .where({'pet.id': petId})
+        .update(editPetData);
+
+    return await trx('pet')
+        .where({'pet.id': petId})
+        .first();
+  } catch (error) {
+    console.err(error);
+    throw error;
+  }
+};
