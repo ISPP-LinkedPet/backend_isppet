@@ -67,3 +67,28 @@ exports.acceptRequest = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+exports.hasRequest = async (req, res) => {
+  const connection = req.connection;
+
+  try {
+    // get params
+    const requestId = req.params.id;
+
+    // authorization
+    const userId = req.user.id;
+
+    const hasRequest = await requestService.hasRequest(
+        connection,
+        userId,
+        requestId,
+    );
+
+    return res.status(200).send({hasRequest});
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
