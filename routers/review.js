@@ -9,5 +9,6 @@ router.get('/:id', authorization.all, (req, res) =>
 router.post('/', authorization.particular, (req, res) =>
   reviewController.writeReview(req, res),
 );
+router.get('/user/:id', authorization.all, (req, res) => reviewController.getReviewsByParticularId(req, res));
 
 module.exports = router;

@@ -51,3 +51,18 @@ exports.writeReview = async (reviewData, userId, trx) => {
     throw error;
   }
 };
+
+exports.getReviewsByParticularId = async (connection, particularId) => {
+  try {
+    const res = [];
+    let reviews = [];
+    reviews = await connection('review')
+        .select('*', 'review.id as review_id')
+        .where('review.particular_id', particularId);
+    res.push(...reviews);
+    return reviews;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
