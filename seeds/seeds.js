@@ -1432,6 +1432,86 @@ exports.seed = async (knex) => {
       pedigree: false,
       particular_id: 1,
     },
+    {
+      id: 40,
+      animal_photo:
+        'images/animal_photos/pomerania.jpg, images/animal_photos/pomerania2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      document_status: 'Accepted',
+      birth_date: '2009-07-09',
+      genre: 'Female',
+      breed: 'Pomerania',
+      transaction_status: 'Completed',
+      type: 'Dog',
+      location: 'Calle Aznalfarache nº 28. Sevilla.',
+      pedigree: true,
+      particular_id: 1,
+    },
+    {
+      id: 41,
+      animal_photo:
+        'images/animal_photos/yorkshire.jpg, images/animal_photos/yorkshire2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      document_status: 'Accepted',
+      birth_date: '2009-07-09',
+      genre: 'Female',
+      breed: 'Yorkshire',
+      transaction_status: 'Completed',
+      type: 'Dog',
+      location: 'Calle Colón nº 28. Sevilla.',
+      pedigree: true,
+      particular_id: 12,
+    },
+    {
+      id: 42,
+      animal_photo:
+        'images/animal_photos/caniche.jpg, images/animal_photos/caniche2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      document_status: 'Accepted',
+      birth_date: '2009-07-09',
+      genre: 'Female',
+      breed: 'Yorkshire',
+      transaction_status: 'Completed',
+      type: 'Dog',
+      location: 'Calle Colón nº 28. Sevilla.',
+      pedigree: true,
+      particular_id: 12,
+    },
+    {
+      id: 43,
+      animal_photo:
+        'images/animal_photos/caniche.jpg, images/animal_photos/caniche2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      document_status: 'Accepted',
+      birth_date: '2009-07-09',
+      genre: 'Male',
+      breed: 'Yorkshire',
+      transaction_status: 'Completed',
+      type: 'Dog',
+      location: 'Calle Puerto Real nº 28. Sevilla.',
+      pedigree: true,
+      particular_id: 11,
+    },
+    {
+      id: 44,
+      animal_photo:
+        'images/animal_photos/caniche.jpg, images/animal_photos/caniche2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      document_status: 'Accepted',
+      birth_date: '2009-07-09',
+      genre: 'Male',
+      breed: 'Yorkshire',
+      transaction_status: 'Completed',
+      type: 'Dog',
+      location: 'Calle Marruecos nº 28. Sevilla.',
+      pedigree: true,
+      particular_id: 1,
+    },
   ]);
 
   // request
@@ -1712,6 +1792,36 @@ exports.seed = async (knex) => {
       publication_id: 4,
       particular_id: 1,
     },
+    {
+      id: 47,
+      status: 'Accepted',
+      publication_id: 40,
+      particular_id: 12,
+    },
+    {
+      id: 48,
+      status: 'Accepted',
+      publication_id: 41,
+      particular_id: 1,
+    },
+    {
+      id: 49,
+      status: 'Accepted',
+      publication_id: 42,
+      particular_id: 1,
+    },
+    {
+      id: 50,
+      status: 'Accepted',
+      publication_id: 43,
+      particular_id: 2,
+    },
+    {
+      id: 51,
+      status: 'Accepted',
+      publication_id: 44,
+      particular_id: 2,
+    },
   ]);
 
   // review
@@ -1730,6 +1840,48 @@ exports.seed = async (knex) => {
       review_description: 'La crianza fue completada con éxito.',
       publication_id: 20,
       particular_id: 18,
+    },
+    {
+      id: 3,
+      star: 5,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 2,
+      particular_id: 3,
+    },
+    {
+      id: 4,
+      star: 5,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 40,
+      particular_id: 12,
+    },
+    {
+      id: 5,
+      star: 5,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 41,
+      particular_id: 1,
+    },
+    {
+      id: 6,
+      star: 4,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 42,
+      particular_id: 1,
+    },
+    {
+      id: 7,
+      star: 4,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 43,
+      particular_id: 2,
+    },
+    {
+      id: 8,
+      star: 4,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 44,
+      particular_id: 2,
     },
   ]);
 
@@ -1774,6 +1926,14 @@ exports.seed = async (knex) => {
     {id: 23, codenumber: 'ab5j12g4', price: 39, publication_id: 31},
     {id: 24, codenumber: 'abcd7654', price: 45, publication_id: 32},
     {id: 25, codenumber: 'thukd1234', price: 75, publication_id: 33},
+    {id: 26, codenumber: 'abc3e7u4', price: 715, publication_id: 38},
+    {id: 27, codenumber: 'abcd12ss', price: 175, publication_id: 39},
+    {id: 28, codenumber: 'abc68974', price: 125, publication_id: 40},
+    {id: 29, codenumber: 'abc68114', price: 125, publication_id: 41},
+    {id: 30, codenumber: 'abc62114', price: 85, publication_id: 42},
+    {id: 31, codenumber: 'abc68124', price: 162, publication_id: 43},
+    {id: 32, codenumber: '5tc68124', price: 144, publication_id: 44},
+
   ]);
 
   // shelter
