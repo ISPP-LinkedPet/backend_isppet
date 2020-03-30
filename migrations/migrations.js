@@ -231,7 +231,7 @@ exports.up = (knex) => {
           table.string('type', 100);
           table.boolean('pedigree');
           table
-              .enu('pet_status', ['In review', 'Accepted'])
+              .enu('pet_status', ['In revision', 'Accepted', 'Rejected'])
               .notNullable();
           table.integer('particular_id').unsigned();
           table
