@@ -27,3 +27,29 @@ exports.getParticular = async (connection, particularId) => {
 
   return particular;
 };
+exports.hasRequestFrom = async (connection, userId, particularId) => {
+  let hasRequest = false;
+  const particular = await connection('particular')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+  if (particular == undefined) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Particular not found';
+    throw error;
+  }
+
+  const request = await connection('request')
+      .select('*')
+      .join('publication', 'request.publication_id', '=', 'publication.id')
+      .where('publication.particular_id', particular.id)
+      .andWhere('request.status', 'Pending')
+      .andWhere('request.particular_id', particularId);
+
+  if (request.length) {
+    hasRequest = true;
+  }
+
+  return hasRequest;
+};

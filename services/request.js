@@ -111,7 +111,7 @@ exports.hasRequest = async (connection, userId, requestId) => {
   }
 
   const request = await connection('request')
-      .select('*', 'request.id as review_id')
+      .select('*', 'request.id as request_id')
       .join('publication', 'request.publication_id', '=', 'publication.id')
       .where('publication.particular_id', particular.id)
       .andWhere('request.status', 'Pending')

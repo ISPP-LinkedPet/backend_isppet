@@ -47,11 +47,21 @@ exports.acceptRequest = async (req, res) => {
     const requestId = req.params.id;
     const publicationId = req.params.publicationId;
 
-    if (!requestId || isNaN(requestId) || !publicationId || isNaN(publicationId)) {
+    if (
+      !requestId ||
+      isNaN(requestId) ||
+      !publicationId ||
+      isNaN(publicationId)
+    ) {
       return res.status(400).send('Invalid params');
     }
 
-    const request = await requestService.acceptRequest(trx, requestId, userId, publicationId);
+    const request = await requestService.acceptRequest(
+        trx,
+        requestId,
+        userId,
+        publicationId,
+    );
 
     // commit
     await trx.commit();
