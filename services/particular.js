@@ -27,6 +27,24 @@ exports.getParticular = async (connection, particularId) => {
 
   return particular;
 };
+
+exports.getParticularLogged = async (connection, userId) => {
+  const particular = await connection('particular')
+      .select(REVIEW_FIELDS)
+      .join('user_account', 'particular.user_account_id', '=', 'user_account.id')
+      .where('particular.user_account_id', userId)
+      .first();
+
+  if (!particular) {
+    const error = new Error();
+    error.status = 400;
+    error.message = 'No particulars with that ID';
+    throw error;
+  }
+
+  return particular;
+};
+
 exports.hasRequestFrom = async (connection, userId, particularId) => {
   let hasRequest = false;
   const particular = await connection('particular')

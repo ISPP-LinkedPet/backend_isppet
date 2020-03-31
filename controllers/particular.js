@@ -46,3 +46,21 @@ exports.hasRequestFrom = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+exports.getParticularLogged = async (req, res) => {
+  try {
+    const connection = req.connection;
+
+    const userId = req.user.id;
+
+    const particular = await particularService.getParticularLogged(
+        connection,
+        userId,
+    );
+    return res.status(200).send({particular});
+  } catch (error) {
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
