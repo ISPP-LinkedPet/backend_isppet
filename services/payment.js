@@ -19,9 +19,8 @@ exports.createPaymentToMyself = async (connection, token, userId, breedingId, re
     type: 'card',
     card: {token},
   });
-
   const payment = await stripe.paymentIntents.create({
-    amount: Number(breeding.price),
+    amount: parseInt(((breeding.price) - (breeding.price * 0.025)).toFixed(2)) * 1000,
     currency: 'eur',
     payment_method: paymentCreate.id,
     payment_method_types: ['card'],
