@@ -1778,7 +1778,7 @@ exports.seed = async (knex) => {
       id: 44,
       status: 'Pending',
       publication_id: 29,
-      particular_id: 1,
+      particular_id: 12,
     },
     {
       id: 45,
