@@ -2,13 +2,11 @@ const path = require('path');
 const fs = require('fs');
 const {v4: uuidv4} = require('uuid');
 
-
 const ANIMAL_FOLDER = path.join('images', 'animal_photos');
 const IDENTIFICATION_FOLDER = path.join('images', 'identification_photos');
 const VACCINES_FOLDER = path.join('images', 'vaccine_passports');
 
 const ALLOWED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
-
 
 exports.createPet = async (petPhotos, userId, trx) => {
   const allPhotos = [];
@@ -16,10 +14,7 @@ exports.createPet = async (petPhotos, userId, trx) => {
     // Mínimo 2 fotos del animal
     const savedAnimalPhotos = [];
 
-    if (
-      petPhotos.animal_photo &&
-      petPhotos.animal_photo.length >= 2
-    ) {
+    if (petPhotos.animal_photo && petPhotos.animal_photo.length >= 2) {
       petPhotos.animal_photo.forEach((photo) => {
         const photoName = path.join(
             ANIMAL_FOLDER,
@@ -54,9 +49,7 @@ exports.createPet = async (petPhotos, userId, trx) => {
       } else {
         const photoName = path.join(
             IDENTIFICATION_FOLDER,
-            `${uuidv4()}.${getExtension(
-                petPhotos.identification_photo.name,
-            )}`,
+            `${uuidv4()}.${getExtension(petPhotos.identification_photo.name)}`,
         );
         savePhoto(petPhotos.identification_photo, photoName);
         savedIdentificationPhotos.push(photoName);
@@ -138,12 +131,7 @@ exports.createPet = async (petPhotos, userId, trx) => {
   }
 };
 
-exports.editPet = async (
-  petPhotos,
-  petId,
-  userId,
-  trx,
-) => {
+exports.editPet = async (petPhotos, petId, userId, trx) => {
   // Se comprueba que este editando un pet propio
   const pet = await trx('pet')
       .select('*', 'user_account.id AS userId')
@@ -175,10 +163,7 @@ exports.editPet = async (
     if (petPhotos.animal_photo) {
       // Mínimo 2 fotos del animal
 
-      if (
-        petPhotos.animal_photo &&
-        petPhotos.animal_photo.length >= 2
-      ) {
+      if (petPhotos.animal_photo && petPhotos.animal_photo.length >= 2) {
         petPhotos.animal_photo.forEach((photo) => {
           const photoName = path.join(
               ANIMAL_FOLDER,
@@ -213,9 +198,7 @@ exports.editPet = async (
         } else {
           const photoName = path.join(
               IDENTIFICATION_FOLDER,
-              `${uuidv4()}.${getExtension(
-                  petPhotos.identification_photo.name,
-              )}`,
+              `${uuidv4()}.${getExtension(petPhotos.identification_photo.name)}`,
           );
           savePhoto(petPhotos.identification_photo, photoName);
           savedIdentificationPhotos.push(photoName);
@@ -287,7 +270,6 @@ exports.editPet = async (
         .where({'pet.id': petId})
         .update(editPetData);
 
-
     return await trx('pet')
         .where({'pet.id': petId})
         .first();
@@ -336,8 +318,7 @@ exports.getPet = async (connection, petId) => {
 };
 
 exports.getPetsInRevision = async (connection) => {
-  const pets = await connection('pet')
-      .where('pet.pet_status', 'In revision');
+  const pets = await connection('pet').where('pet.pet_status', 'In revision');
 
   return pets;
 };
@@ -413,6 +394,26 @@ exports.rejectPet = async (petId, trx) => {
         .first();
   } catch (error) {
     console.err(error);
+    throw error;
+  }
+};
+exports.getPetsByParticularId = async (connection, particularId) => {
+  try {
+    const res = [];
+    let pets = [];
+    pets = await connection('pet')
+        .select('*')
+        .where('pet.particular_id', particularId);
+    res.push(...pets);
+    if (!pets.length) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'Este particular no tiene ninguna mascota registrada.';
+      throw error;
+    }
+    return pets;
+  } catch (error) {
+    console.log(error);
     throw error;
   }
 };

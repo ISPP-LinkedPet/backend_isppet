@@ -127,7 +127,7 @@ exports.seed = async (knex) => {
       email: 'chrmarand@alum.us.es',
       address: 'Avenida de Reina Mercedes, nº 34. Sevilla.',
       telephone: '765285432',
-      optional_photo: 'http://www.ejemplo9.com/',
+      optional_photo: null,
     },
     // particular
     {
@@ -140,7 +140,7 @@ exports.seed = async (knex) => {
       email: 'palina_lokaziouk@outlook.es',
       address: 'Avenida Blas Infante, nº 23. Sevilla.',
       telephone: '665823954',
-      optional_photo: null,
+      optional_photo: 'images/users/foto8.jpg',
     },
     {
       id: 11,
@@ -152,7 +152,7 @@ exports.seed = async (knex) => {
       email: 'alvar.luciana@gmail.com',
       address: 'Calle de la Paz, nº 56. Sevilla.',
       telephone: '696869357',
-      optional_photo: null,
+      optional_photo: 'images/users/foto2.jpg',
     },
     {
       id: 12,
@@ -164,7 +164,7 @@ exports.seed = async (knex) => {
       email: 'pidonado@agrosavia.com',
       address: 'Calle el Pinar, nº 23. Sevilla.',
       telephone: '954767889',
-      optional_photo: null,
+      optional_photo: 'images/users/foto3.jpg',
     },
     {
       id: 13,
@@ -176,7 +176,7 @@ exports.seed = async (knex) => {
       email: 'pablodmzeta@gmail.com',
       address: 'Avenida de la Palmera, nº 32. Sevilla.',
       telephone: '668523694',
-      optional_photo: null,
+      optional_photo: 'images/users/foto1.jpg',
     },
     {
       id: 14,
@@ -188,7 +188,7 @@ exports.seed = async (knex) => {
       email: 'aliciaps21998@gmail.com',
       address: 'Calle el País, nº 76. Sevilla',
       telephone: '678523694',
-      optional_photo: null,
+      optional_photo: 'images/users/foto4.jpg',
     },
     {
       id: 15,
@@ -200,7 +200,7 @@ exports.seed = async (knex) => {
       email: 'lucigali37@gmail.com',
       address: 'Calle Trajano, nº 12. Sevilla.',
       telephone: '621523694',
-      optional_photo: null,
+      optional_photo: 'images/users/foto8.jpg',
     },
     {
       id: 16,
@@ -260,7 +260,7 @@ exports.seed = async (knex) => {
       email: 'mcarmen@gmail.com',
       address: 'Calle Lictores',
       telephone: '657527794',
-      optional_photo: null,
+      optional_photo: 'images/users/foto4.jpg',
     },
     {
       id: 21,
@@ -332,7 +332,7 @@ exports.seed = async (knex) => {
       email: 'alfonsoalfonsomarin@gmail.com',
       address: 'Calle la fuga, nº 6. Sevilla.',
       telephone: '677523692',
-      optional_photo: null,
+      optional_photo: 'images/users/foto7.jpg',
     },
     {
       id: 27,
@@ -416,7 +416,7 @@ exports.seed = async (knex) => {
       email: 'ejemplo33@gmail.com',
       address: 'Calle ejemplo 33',
       telephone: '658987885',
-      optional_photo: null,
+      optional_photo: 'images/users/foto5.jpg',
     },
     {
       id: 34,
@@ -428,7 +428,7 @@ exports.seed = async (knex) => {
       email: 'evalan@gmail.com',
       address: 'Calle Tesalónica, nº 1. Sevilla',
       telephone: '648523394',
-      optional_photo: null,
+      optional_photo: 'images/users/foto6.jpg',
     },
     // moderator
     {
@@ -1432,6 +1432,86 @@ exports.seed = async (knex) => {
       pedigree: false,
       particular_id: 1,
     },
+    {
+      id: 40,
+      animal_photo:
+        'images/animal_photos/pomerania.jpg, images/animal_photos/pomerania2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      document_status: 'Accepted',
+      birth_date: '2009-07-09',
+      genre: 'Female',
+      breed: 'Pomerania',
+      transaction_status: 'Completed',
+      type: 'Dog',
+      location: 'Calle Aznalfarache nº 28. Sevilla.',
+      pedigree: true,
+      particular_id: 1,
+    },
+    {
+      id: 41,
+      animal_photo:
+        'images/animal_photos/yorkshire.jpg, images/animal_photos/yorkshire2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      document_status: 'Accepted',
+      birth_date: '2009-07-09',
+      genre: 'Female',
+      breed: 'Yorkshire',
+      transaction_status: 'Completed',
+      type: 'Dog',
+      location: 'Calle Colón nº 28. Sevilla.',
+      pedigree: true,
+      particular_id: 12,
+    },
+    {
+      id: 42,
+      animal_photo:
+        'images/animal_photos/caniche.jpg, images/animal_photos/caniche2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      document_status: 'Accepted',
+      birth_date: '2009-07-09',
+      genre: 'Female',
+      breed: 'Yorkshire',
+      transaction_status: 'Completed',
+      type: 'Dog',
+      location: 'Calle Colón nº 28. Sevilla.',
+      pedigree: true,
+      particular_id: 12,
+    },
+    {
+      id: 43,
+      animal_photo:
+        'images/animal_photos/caniche.jpg, images/animal_photos/caniche2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      document_status: 'Accepted',
+      birth_date: '2009-07-09',
+      genre: 'Male',
+      breed: 'Yorkshire',
+      transaction_status: 'Completed',
+      type: 'Dog',
+      location: 'Calle Puerto Real nº 28. Sevilla.',
+      pedigree: true,
+      particular_id: 11,
+    },
+    {
+      id: 44,
+      animal_photo:
+        'images/animal_photos/caniche.jpg, images/animal_photos/caniche2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      document_status: 'Accepted',
+      birth_date: '2009-07-09',
+      genre: 'Male',
+      breed: 'Yorkshire',
+      transaction_status: 'Completed',
+      type: 'Dog',
+      location: 'Calle Marruecos nº 28. Sevilla.',
+      pedigree: true,
+      particular_id: 1,
+    },
   ]);
 
   // request
@@ -1698,7 +1778,7 @@ exports.seed = async (knex) => {
       id: 44,
       status: 'Pending',
       publication_id: 29,
-      particular_id: 1,
+      particular_id: 12,
     },
     {
       id: 45,
@@ -1711,6 +1791,36 @@ exports.seed = async (knex) => {
       status: 'Pending',
       publication_id: 4,
       particular_id: 1,
+    },
+    {
+      id: 47,
+      status: 'Accepted',
+      publication_id: 40,
+      particular_id: 12,
+    },
+    {
+      id: 48,
+      status: 'Accepted',
+      publication_id: 41,
+      particular_id: 1,
+    },
+    {
+      id: 49,
+      status: 'Accepted',
+      publication_id: 42,
+      particular_id: 1,
+    },
+    {
+      id: 50,
+      status: 'Accepted',
+      publication_id: 43,
+      particular_id: 2,
+    },
+    {
+      id: 51,
+      status: 'Accepted',
+      publication_id: 44,
+      particular_id: 2,
     },
   ]);
 
@@ -1730,6 +1840,48 @@ exports.seed = async (knex) => {
       review_description: 'La crianza fue completada con éxito.',
       publication_id: 20,
       particular_id: 18,
+    },
+    {
+      id: 3,
+      star: 5,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 2,
+      particular_id: 3,
+    },
+    {
+      id: 4,
+      star: 5,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 40,
+      particular_id: 12,
+    },
+    {
+      id: 5,
+      star: 5,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 41,
+      particular_id: 1,
+    },
+    {
+      id: 6,
+      star: 4,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 42,
+      particular_id: 1,
+    },
+    {
+      id: 7,
+      star: 4,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 43,
+      particular_id: 2,
+    },
+    {
+      id: 8,
+      star: 4,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 44,
+      particular_id: 2,
     },
   ]);
 
@@ -1774,6 +1926,13 @@ exports.seed = async (knex) => {
     {id: 23, codenumber: 'ab5j12g4', price: 39, publication_id: 31},
     {id: 24, codenumber: 'abcd7654', price: 45, publication_id: 32},
     {id: 25, codenumber: 'thukd1234', price: 75, publication_id: 33},
+    {id: 26, codenumber: 'abc3e7u4', price: 715, publication_id: 38},
+    {id: 27, codenumber: 'abcd12ss', price: 175, publication_id: 39},
+    {id: 28, codenumber: 'abc68974', price: 125, publication_id: 40},
+    {id: 29, codenumber: 'abc68114', price: 125, publication_id: 41},
+    {id: 30, codenumber: 'abc62114', price: 85, publication_id: 42},
+    {id: 31, codenumber: 'abc68124', price: 162, publication_id: 43},
+    {id: 32, codenumber: '5tc68124', price: 144, publication_id: 44},
   ]);
 
   // shelter
@@ -1898,7 +2057,79 @@ exports.seed = async (knex) => {
       shelter_id: null,
     },
   ]);
-
+  await knex('pet').insert([
+    // breeding
+    {
+      id: 1,
+      animal_photo:
+        'images/animal_photos/doberman.jpg, images/animal_photos/doberman2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      birth_date: '2020-01-01',
+      genre: 'Male',
+      breed: 'Doberman',
+      pet_status: 'Accepted',
+      type: 'Dog',
+      pedigree: true,
+      particular_id: 1,
+    },
+    {
+      id: 2,
+      animal_photo:
+        'images/animal_photos/yorkshire.jpg, images/animal_photos/yorkshire2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      birth_date: '2017-01-01',
+      genre: 'Male',
+      breed: 'Yorkshire',
+      pet_status: 'Accepted',
+      type: 'Dog',
+      pedigree: true,
+      particular_id: 1,
+    },
+    {
+      id: 3,
+      animal_photo:
+        'images/animal_photos/doberman.jpg, images/animal_photos/doberman2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      birth_date: '2020-01-01',
+      genre: 'Male',
+      breed: 'Doberman',
+      pet_status: 'Accepted',
+      type: 'Dog',
+      pedigree: true,
+      particular_id: 12,
+    },
+    {
+      id: 4,
+      animal_photo:
+        'images/animal_photos/caniche.jpg, images/animal_photos/caniche2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      birth_date: '2014-01-01',
+      genre: 'Male',
+      breed: 'Caniche',
+      pet_status: 'Accepted',
+      type: 'Dog',
+      pedigree: true,
+      particular_id: 1,
+    },
+    {
+      id: 5,
+      animal_photo:
+        'images/animal_photos/bullterrier.jpg, images/animal_photos/bullterrier2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      birth_date: '2012-01-01',
+      genre: 'Male',
+      breed: 'Bulldog',
+      pet_status: 'In Revision',
+      type: 'Dog',
+      pedigree: true,
+      particular_id: 1,
+    },
+  ]);
   // vet
   await knex('vet').insert([
     {
@@ -1910,7 +2141,7 @@ exports.seed = async (knex) => {
       address: 'Av. del Aljarafe, 68, 41930 Bormujos, Sevilla.',
       telephone: '955725684',
       optional_photo:
-        'https://fastly.4sqi.net/img/general/600x600/33362540_7Ib17cahmEjREuHkg9_h1bisn1GFn5Pyd-2rVtq2qzw.jpg',
+        'images/vets/bormujos.png',
       is_premium: true,
     },
     {
@@ -1921,8 +2152,7 @@ exports.seed = async (knex) => {
       url: 'http://veterinarioslahuella.es/clinica-veterinaria-bormujos/',
       address: 'Calle Jacinto Benavente, 2C, 41930 Bormujos, Sevilla.',
       telephone: '955723761',
-      optional_photo:
-        'https://lh3.googleusercontent.com/P4s80SY2nURV-wmx2M-uack9j8neJoZnITBEwWAD892NUt5UP_ZZLEd9QqOhXFmwZnsRFQHkNw=w1080-h608-p-no-v0',
+      optional_photo: null,
       is_premium: false,
     },
     {
@@ -1945,7 +2175,7 @@ exports.seed = async (knex) => {
       address: 'Calle Aceituna, 3, 41960 Gines, Sevilla.',
       telephone: '954714547',
       optional_photo:
-        'https://2.bp.blogspot.com/_dq4LEWcxxRU/SxGGMhnozzI/AAAAAAAAAVc/UwUeWf_uRLw/s1600/clinica+veterinaria+f+palomo.jpg',
+        'images/vets/palomo.jpg',
       is_premium: true,
     },
     {
@@ -1957,8 +2187,7 @@ exports.seed = async (knex) => {
         'http://catdog.es/nuestras-clinicas-veterinarias-aljarafe/clinica-veterinaria-gines-aljarafe/',
       address: 'Calle la Mogaba, 15, 41960 Gines, Sevilla.',
       telephone: '954717300',
-      optional_photo:
-        'https://lh3.googleusercontent.com/proxy/br_RwwK4_LOaO0eI-8m--kTMf5Gb5t4RjQaBNDwW4_9nPUEfoSUXk6OpXHFpB7xwA2Df1trhamBTLcGqsGY6CA6w7DfHTaoOpXnDrNyGQ7prtABRvZKVxdCoUscd1Q',
+      optional_photo: null,
       is_premium: false,
     },
     {
@@ -1992,8 +2221,7 @@ exports.seed = async (knex) => {
       url: 'http://www.hispalvet.com',
       address: 'Calle José Luis Navarro, 14, 41940 Tomares, Sevilla.',
       telephone: '954044835',
-      optional_photo:
-        'https://t2.ea.ltmcdn.com/es/places/6/7/0/img_7076_clinica-veterinaria-san-bernardo_0_300_150.jpg',
+      optional_photo: null,
       is_premium: false,
     },
     {
@@ -2005,7 +2233,7 @@ exports.seed = async (knex) => {
       address: 'C/ Tomás De Ibarra, 24, 41940 Tomares, Sevilla.',
       telephone: '954151279',
       optional_photo:
-        'https://s3-media0.fl.yelpcdn.com/bphoto/Rh2CTWTKc5L9cs5qWHtdzQ/o.jpg',
+        'images/vets/rita.jpg',
       is_premium: true,
     },
     {
@@ -2027,8 +2255,7 @@ exports.seed = async (knex) => {
       url: 'https://www.mascotasalud.com',
       address: 'Av. de la Arboleda, 40, 41940 Tomares, Sevilla.',
       telephone: '954870057',
-      optional_photo:
-        'https://www.mascotasalud.com/s/cc_images/teaserbox_33684667.jpg?t=1529350544',
+      optional_photo: null,
       is_premium: false,
     },
     {
@@ -2040,8 +2267,7 @@ exports.seed = async (knex) => {
       address:
         'Calle Rodríguez Marín, 67, 41920 San Juan de Aznalfarache, Sevilla.',
       telephone: '954760813',
-      optional_photo:
-        'https://vetalysveterinarios.com/wp-content/uploads/2016/05/clinica_sevilla.jpg',
+      optional_photo: 'images/vets/clinica_sevilla.jpg',
       is_premium: true,
     },
     {
@@ -2052,8 +2278,7 @@ exports.seed = async (knex) => {
       url: 'https://www.centroveterinariotriana.es/es/',
       address: 'Calle San Jacinto, 68, 41010 Sevilla.',
       telephone: '954333472',
-      optional_photo:
-        'https://s3-media0.fl.yelpcdn.com/bphoto/MwcPd94wJJQZXkkI98rWgg/l.jpg',
+      optional_photo: 'images/vets/triana.jpg',
       is_premium: true,
     },
     {
@@ -2064,8 +2289,7 @@ exports.seed = async (knex) => {
       url: 'https://www.veterinariaalameda.com',
       address: 'Alameda de Hércules, 41, 41002 Sevilla.',
       telephone: '954378569',
-      optional_photo:
-        'https://www.mundoanimalia.com/images/veterinario/76/7b/92/9831384e2ed3938f00b8fb98b3424649/fotos_070__5773.jpg',
+      optional_photo: 'images/vets/alamedasevilla.jpg',
       is_premium: false,
     },
     {
@@ -2087,8 +2311,7 @@ exports.seed = async (knex) => {
       url: 'https://www.thedogtorvet.com',
       address: 'Calle Juan de Mata Carriazo, 5, Local 3, 41018 Sevilla.',
       telephone: '954410900',
-      optional_photo:
-        'https://lh3.googleusercontent.com/proxy/ukNTpmPkphSMptwOQ74CFlLkgjVQ5DM7aKIuF0pXnia84BNpUx76yRh5wfXFpmEDhIRZ0hgjxGHwJ7Gr0LnnfwSKUldZkHq2n-yM73qMsWY',
+      optional_photo: null,
       is_premium: false,
     },
     {
@@ -2099,8 +2322,7 @@ exports.seed = async (knex) => {
       url: 'https://www.centroveterinariotamarguillo.com',
       address: 'Calle Nalón, 19, 41005 Sevilla.',
       telephone: '954922075',
-      optional_photo:
-        'https://t1.ea.ltmcdn.com/es/places/9/7/0/img_7079_centro-veterinario-tamarguillo_0_orig.jpg',
+      optional_photo: 'images/vets/tamarugillo.jpg',
       is_premium: true,
     },
   ]);
@@ -2110,8 +2332,10 @@ exports.seed = async (knex) => {
     {
       id: 1,
       vet_id: 1,
-      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
-      lateral_banner: 'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
+      top_banner:
+        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+      lateral_banner:
+        'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
       ad_type: 'CPM',
       price: '9.99',
       redirect_to: null,
@@ -2122,8 +2346,10 @@ exports.seed = async (knex) => {
     {
       id: 2,
       vet_id: 1,
-      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
-      lateral_banner: 'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
+      top_banner:
+        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+      lateral_banner:
+        'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
       ad_type: 'CPM',
       price: '9.99',
       redirect_to: null,
@@ -2134,8 +2360,10 @@ exports.seed = async (knex) => {
     {
       id: 3,
       vet_id: 1,
-      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
-      lateral_banner: 'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
+      top_banner:
+        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+      lateral_banner:
+        'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
       ad_type: 'CPM',
       price: '9.99',
       redirect_to: null,
@@ -2146,8 +2374,10 @@ exports.seed = async (knex) => {
     {
       id: 4,
       vet_id: 2,
-      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
-      lateral_banner: 'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
+      top_banner:
+        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+      lateral_banner:
+        'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
       ad_type: 'CPM',
       price: '9.99',
       redirect_to: null,
@@ -2158,8 +2388,10 @@ exports.seed = async (knex) => {
     {
       id: 5,
       vet_id: 2,
-      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
-      lateral_banner: 'https://www.dispensariveterinari.com/sites/default/files/banner-lateral/211/imatges/vet_formacion.jpg',
+      top_banner:
+        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+      lateral_banner:
+        'https://www.dispensariveterinari.com/sites/default/files/banner-lateral/211/imatges/vet_formacion.jpg',
       ad_type: 'DXC',
       price: '0.99',
       redirect_to: 'https://centroveterinariobormujos.com/',
@@ -2170,8 +2402,10 @@ exports.seed = async (knex) => {
     {
       id: 6,
       vet_id: 3,
-      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
-      lateral_banner: 'https://www.dispensariveterinari.com/sites/default/files/banner-lateral/211/imatges/vet_formacion.jpg',
+      top_banner:
+        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+      lateral_banner:
+        'https://www.dispensariveterinari.com/sites/default/files/banner-lateral/211/imatges/vet_formacion.jpg',
       ad_type: 'DXC',
       price: '0.99',
       redirect_to: 'https://centroveterinariobormujos.com/',
@@ -2182,8 +2416,10 @@ exports.seed = async (knex) => {
     {
       id: 7,
       vet_id: 4,
-      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
-      lateral_banner: 'https://www.vetpraxis.net/wp-content/uploads/2016/02/banner-lateral-manejo-criticos-2016.png',
+      top_banner:
+        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+      lateral_banner:
+        'https://www.vetpraxis.net/wp-content/uploads/2016/02/banner-lateral-manejo-criticos-2016.png',
       ad_type: 'CPM',
       price: '9.99',
       redirect_to: null,
@@ -2194,8 +2430,10 @@ exports.seed = async (knex) => {
     {
       id: 8,
       vet_id: 5,
-      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
-      lateral_banner: 'https://www.dispensariveterinari.com/sites/default/files/banner-lateral/211/imatges/vet_formacion.jpg',
+      top_banner:
+        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+      lateral_banner:
+        'https://www.dispensariveterinari.com/sites/default/files/banner-lateral/211/imatges/vet_formacion.jpg',
       ad_type: 'DXC',
       price: '0.99',
       redirect_to: 'https://centroveterinariobormujos.com/',
@@ -2206,8 +2444,10 @@ exports.seed = async (knex) => {
     {
       id: 9,
       vet_id: 5,
-      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
-      lateral_banner: 'https://www.trixie.de/userdata/mysydeshop/images/normal/233304_PHO_PRO_900723-1.jpg',
+      top_banner:
+        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+      lateral_banner:
+        'https://www.trixie.de/userdata/mysydeshop/images/normal/233304_PHO_PRO_900723-1.jpg',
       ad_type: 'DXC',
       price: '0.99',
       redirect_to: 'https://www.kivet.com/',

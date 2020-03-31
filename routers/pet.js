@@ -9,5 +9,6 @@ router.put('/reject/:id', authorization.moderator, (req, res) => petController.r
 router.get('/revision', authorization.moderator, (req, res) => petController.getPetsInRevision(req, res));
 router.post('/', authorization.particular, (req, res) => petController.createPet(req, res));
 router.get('/:id', authorization.particular_moderator, (req, res) => petController.getPet(req, res));
+router.get('/user/:id', authorization.all, (req, res) => petController.getPetsByParticularId(req, res));
 
 module.exports = router;
