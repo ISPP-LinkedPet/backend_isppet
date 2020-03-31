@@ -631,7 +631,7 @@ exports.finishBreeding = async (breedingData, breedingId, trx) => {
     throw error;
   }
   if ((pub.transaction_status !== 'In progress') &&
-      (pub.transaction_status !== 'Offered')&&
+      (pub.transaction_status !== 'Offered') &&
       (pub.transaction_status !== 'In payment')) {
     const error = new Error();
     error.status = 404;
