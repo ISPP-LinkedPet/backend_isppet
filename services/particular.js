@@ -9,6 +9,8 @@ const REVIEW_FIELDS = [
   'user_account.register_date',
   'user_account.address',
   'user_account.optional_photo',
+  'user_account.email',
+  'user_account.telephone',
 ];
 
 exports.getParticular = async (connection, particularId) => {
