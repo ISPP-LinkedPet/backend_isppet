@@ -1,7 +1,7 @@
 const REVIEW_FIELDS = [
   'review.id',
   'publication_id',
-  'particular_id',
+  'review.particular_id',
   'review_description',
   'star',
 ];
@@ -57,8 +57,9 @@ exports.getReviewsByParticularId = async (connection, particularId) => {
     const res = [];
     let reviews = [];
     reviews = await connection('review')
-        .select('*', 'review.id as review_id')
-        .where('review.particular_id', particularId);
+        .select(REVIEW_FIELDS)
+        .join('publication', 'review.publication_id', '=', 'publication.id')
+        .where('publication.particular_id', particularId);
     res.push(...reviews);
     return reviews;
   } catch (error) {
