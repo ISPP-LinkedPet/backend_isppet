@@ -127,7 +127,7 @@ exports.seed = async (knex) => {
       email: 'chrmarand@alum.us.es',
       address: 'Avenida de Reina Mercedes, nº 34. Sevilla.',
       telephone: '765285432',
-      optional_photo: 'http://www.ejemplo9.com/',
+      optional_photo: null,
     },
     // particular
     {
@@ -140,7 +140,7 @@ exports.seed = async (knex) => {
       email: 'palina_lokaziouk@outlook.es',
       address: 'Avenida Blas Infante, nº 23. Sevilla.',
       telephone: '665823954',
-      optional_photo: null,
+      optional_photo: 'images/users/foto8.jpg',
     },
     {
       id: 11,
@@ -152,7 +152,7 @@ exports.seed = async (knex) => {
       email: 'alvar.luciana@gmail.com',
       address: 'Calle de la Paz, nº 56. Sevilla.',
       telephone: '696869357',
-      optional_photo: null,
+      optional_photo: 'images/users/foto2.jpg',
     },
     {
       id: 12,
@@ -164,7 +164,7 @@ exports.seed = async (knex) => {
       email: 'pidonado@agrosavia.com',
       address: 'Calle el Pinar, nº 23. Sevilla.',
       telephone: '954767889',
-      optional_photo: null,
+      optional_photo: 'images/users/foto3.jpg',
     },
     {
       id: 13,
@@ -176,7 +176,7 @@ exports.seed = async (knex) => {
       email: 'pablodmzeta@gmail.com',
       address: 'Avenida de la Palmera, nº 32. Sevilla.',
       telephone: '668523694',
-      optional_photo: null,
+      optional_photo: 'images/users/foto1.jpg',
     },
     {
       id: 14,
@@ -188,7 +188,7 @@ exports.seed = async (knex) => {
       email: 'aliciaps21998@gmail.com',
       address: 'Calle el País, nº 76. Sevilla',
       telephone: '678523694',
-      optional_photo: null,
+      optional_photo: 'images/users/foto4.jpg',
     },
     {
       id: 15,
@@ -200,7 +200,7 @@ exports.seed = async (knex) => {
       email: 'lucigali37@gmail.com',
       address: 'Calle Trajano, nº 12. Sevilla.',
       telephone: '621523694',
-      optional_photo: null,
+      optional_photo: 'images/users/foto8.jpg',
     },
     {
       id: 16,
@@ -260,7 +260,7 @@ exports.seed = async (knex) => {
       email: 'mcarmen@gmail.com',
       address: 'Calle Lictores',
       telephone: '657527794',
-      optional_photo: null,
+      optional_photo: 'images/users/foto4.jpg',
     },
     {
       id: 21,
@@ -332,7 +332,7 @@ exports.seed = async (knex) => {
       email: 'alfonsoalfonsomarin@gmail.com',
       address: 'Calle la fuga, nº 6. Sevilla.',
       telephone: '677523692',
-      optional_photo: null,
+      optional_photo: 'images/users/foto7.jpg',
     },
     {
       id: 27,
@@ -416,7 +416,7 @@ exports.seed = async (knex) => {
       email: 'ejemplo33@gmail.com',
       address: 'Calle ejemplo 33',
       telephone: '658987885',
-      optional_photo: null,
+      optional_photo: 'images/users/foto5.jpg',
     },
     {
       id: 34,
@@ -428,7 +428,7 @@ exports.seed = async (knex) => {
       email: 'evalan@gmail.com',
       address: 'Calle Tesalónica, nº 1. Sevilla',
       telephone: '648523394',
-      optional_photo: null,
+      optional_photo: 'images/users/foto6.jpg',
     },
     // moderator
     {
