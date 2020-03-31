@@ -47,7 +47,14 @@ exports.hasRequestFrom = async (connection, userId, particularId) => {
       .andWhere('request.status', 'Pending')
       .andWhere('request.particular_id', particularId);
 
-  if (request.length) {
+  const request1 = await connection('request')
+      .select('*')
+      .join('publication', 'request.publication_id', '=', 'publication.id')
+      .where('publication.particular_id', particular.id)
+      .andWhere('request.status', 'Accepted')
+      .andWhere('request.particular_id', particularId);
+
+  if (request.length || request1.length) {
     hasRequest = true;
   }
 
