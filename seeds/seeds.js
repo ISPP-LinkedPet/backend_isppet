@@ -1778,7 +1778,7 @@ exports.seed = async (knex) => {
       id: 44,
       status: 'Pending',
       publication_id: 29,
-      particular_id: 1,
+      particular_id: 12,
     },
     {
       id: 45,
@@ -1933,7 +1933,6 @@ exports.seed = async (knex) => {
     {id: 30, codenumber: 'abc62114', price: 85, publication_id: 42},
     {id: 31, codenumber: 'abc68124', price: 162, publication_id: 43},
     {id: 32, codenumber: '5tc68124', price: 144, publication_id: 44},
-
   ]);
 
   // shelter
@@ -2058,7 +2057,79 @@ exports.seed = async (knex) => {
       shelter_id: null,
     },
   ]);
-
+  await knex('pet').insert([
+    // breeding
+    {
+      id: 1,
+      animal_photo:
+        'images/animal_photos/doberman.jpg, images/animal_photos/doberman2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      birth_date: '2020-01-01',
+      genre: 'Male',
+      breed: 'Doberman',
+      pet_status: 'Accepted',
+      type: 'Dog',
+      pedigree: true,
+      particular_id: 1,
+    },
+    {
+      id: 2,
+      animal_photo:
+        'images/animal_photos/yorkshire.jpg, images/animal_photos/yorkshire2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      birth_date: '2017-01-01',
+      genre: 'Male',
+      breed: 'Yorkshire',
+      pet_status: 'Accepted',
+      type: 'Dog',
+      pedigree: true,
+      particular_id: 1,
+    },
+    {
+      id: 3,
+      animal_photo:
+        'images/animal_photos/doberman.jpg, images/animal_photos/doberman2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      birth_date: '2020-01-01',
+      genre: 'Male',
+      breed: 'Doberman',
+      pet_status: 'Accepted',
+      type: 'Dog',
+      pedigree: true,
+      particular_id: 12,
+    },
+    {
+      id: 4,
+      animal_photo:
+        'images/animal_photos/caniche.jpg, images/animal_photos/caniche2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      birth_date: '2014-01-01',
+      genre: 'Male',
+      breed: 'Caniche',
+      pet_status: 'Accepted',
+      type: 'Dog',
+      pedigree: true,
+      particular_id: 1,
+    },
+    {
+      id: 5,
+      animal_photo:
+        'images/animal_photos/bulldog.jpg, images/animal_photos/bulldog2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      birth_date: '2012-01-01',
+      genre: 'Male',
+      breed: 'Bulldog',
+      pet_status: 'In Revision',
+      type: 'Dog',
+      pedigree: true,
+      particular_id: 1,
+    },
+  ]);
   // vet
   await knex('vet').insert([
     {
@@ -2270,8 +2341,10 @@ exports.seed = async (knex) => {
     {
       id: 1,
       vet_id: 1,
-      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
-      lateral_banner: 'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
+      top_banner:
+        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+      lateral_banner:
+        'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
       ad_type: 'CPM',
       price: '9.99',
       redirect_to: null,
@@ -2282,8 +2355,10 @@ exports.seed = async (knex) => {
     {
       id: 2,
       vet_id: 1,
-      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
-      lateral_banner: 'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
+      top_banner:
+        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+      lateral_banner:
+        'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
       ad_type: 'CPM',
       price: '9.99',
       redirect_to: null,
@@ -2294,8 +2369,10 @@ exports.seed = async (knex) => {
     {
       id: 3,
       vet_id: 1,
-      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
-      lateral_banner: 'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
+      top_banner:
+        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+      lateral_banner:
+        'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
       ad_type: 'CPM',
       price: '9.99',
       redirect_to: null,
@@ -2306,8 +2383,10 @@ exports.seed = async (knex) => {
     {
       id: 4,
       vet_id: 2,
-      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
-      lateral_banner: 'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
+      top_banner:
+        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+      lateral_banner:
+        'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
       ad_type: 'CPM',
       price: '9.99',
       redirect_to: null,
@@ -2318,8 +2397,10 @@ exports.seed = async (knex) => {
     {
       id: 5,
       vet_id: 2,
-      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
-      lateral_banner: 'https://www.dispensariveterinari.com/sites/default/files/banner-lateral/211/imatges/vet_formacion.jpg',
+      top_banner:
+        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+      lateral_banner:
+        'https://www.dispensariveterinari.com/sites/default/files/banner-lateral/211/imatges/vet_formacion.jpg',
       ad_type: 'DXC',
       price: '0.99',
       redirect_to: 'https://centroveterinariobormujos.com/',
@@ -2330,8 +2411,10 @@ exports.seed = async (knex) => {
     {
       id: 6,
       vet_id: 3,
-      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
-      lateral_banner: 'https://www.dispensariveterinari.com/sites/default/files/banner-lateral/211/imatges/vet_formacion.jpg',
+      top_banner:
+        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+      lateral_banner:
+        'https://www.dispensariveterinari.com/sites/default/files/banner-lateral/211/imatges/vet_formacion.jpg',
       ad_type: 'DXC',
       price: '0.99',
       redirect_to: 'https://centroveterinariobormujos.com/',
@@ -2342,8 +2425,10 @@ exports.seed = async (knex) => {
     {
       id: 7,
       vet_id: 4,
-      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
-      lateral_banner: 'https://www.vetpraxis.net/wp-content/uploads/2016/02/banner-lateral-manejo-criticos-2016.png',
+      top_banner:
+        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+      lateral_banner:
+        'https://www.vetpraxis.net/wp-content/uploads/2016/02/banner-lateral-manejo-criticos-2016.png',
       ad_type: 'CPM',
       price: '9.99',
       redirect_to: null,
@@ -2354,8 +2439,10 @@ exports.seed = async (knex) => {
     {
       id: 8,
       vet_id: 5,
-      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
-      lateral_banner: 'https://www.dispensariveterinari.com/sites/default/files/banner-lateral/211/imatges/vet_formacion.jpg',
+      top_banner:
+        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+      lateral_banner:
+        'https://www.dispensariveterinari.com/sites/default/files/banner-lateral/211/imatges/vet_formacion.jpg',
       ad_type: 'DXC',
       price: '0.99',
       redirect_to: 'https://centroveterinariobormujos.com/',
@@ -2366,8 +2453,10 @@ exports.seed = async (knex) => {
     {
       id: 9,
       vet_id: 5,
-      top_banner: 'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
-      lateral_banner: 'https://www.trixie.de/userdata/mysydeshop/images/normal/233304_PHO_PRO_900723-1.jpg',
+      top_banner:
+        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+      lateral_banner:
+        'https://www.trixie.de/userdata/mysydeshop/images/normal/233304_PHO_PRO_900723-1.jpg',
       ad_type: 'DXC',
       price: '0.99',
       redirect_to: 'https://www.kivet.com/',
