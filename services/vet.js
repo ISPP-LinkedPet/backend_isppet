@@ -13,13 +13,73 @@ exports.getVets = async (connection) => {
     });
   });
 
-  await axios.all(addresses).then(axios.spread((...responses) => {
-    responses.forEach((r, index) => {
-      const vet = vets[index];
-      vet.latitude = r.data.results[0].geometry.lat;
-      vet.longitude = r.data.results[0].geometry.lng;
-    });
-  }));
+  await axios.all(addresses).then(
+      axios.spread((...responses) => {
+        responses.forEach((r, index) => {
+          const vet = vets[index];
+          vet.latitude = r.data.results[0].geometry.lat;
+          vet.longitude = r.data.results[0].geometry.lng;
+        });
+      }),
+  );
 
   return vets;
+};
+
+exports.premiumTrue = async (vetId, trx) => {
+  const vet = await trx('vet')
+      .select('*')
+      .where('vet.id', vetId)
+      .first();
+  console.log(vet);
+  if (!vet) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'vet not found';
+    throw error;
+  }
+  try {
+    const vetData = {};
+    vetData.is_premium = true;
+
+    await trx('vet')
+        .where({'vet.id': vetId})
+        .update(vetData);
+    return await trx('vet')
+        .select('*', 'vet.id as id')
+        .where({'vet.id': vetId})
+        .first();
+  } catch (error) {
+    console.err(error);
+    throw error;
+  }
+};
+
+exports.premiumFalse = async (vetId, trx) => {
+  const vet = await trx('vet')
+      .select('*')
+      .where('vet.id', vetId)
+      .first();
+  console.log(vet);
+  if (!vet) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'vet not found';
+    throw error;
+  }
+  try {
+    const vetData = {};
+    vetData.is_premium = false;
+
+    await trx('vet')
+        .where({'vet.id': vetId})
+        .update(vetData);
+    return await trx('vet')
+        .select('*', 'vet.id as id')
+        .where({'vet.id': vetId})
+        .first();
+  } catch (error) {
+    console.err(error);
+    throw error;
+  }
 };
