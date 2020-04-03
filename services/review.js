@@ -42,6 +42,14 @@ exports.writeReview = async (reviewData, userId, trx) => {
       star: reviewData.star,
       review_description: reviewData.review_description,
     });
+    const pubData = {};
+    pubData.transaction_status = 'Reviewed';
+
+    await trx('publication')
+        .join('review', 'review.publication_id', '=', 'publication.id')
+        .where({'review.id': reviewId})
+        .update(pubData);
+
     return await trx('review')
         .select('*', 'review.id as id')
         .where({'review.id': reviewId})
