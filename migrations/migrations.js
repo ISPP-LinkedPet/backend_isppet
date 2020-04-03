@@ -244,6 +244,7 @@ exports.up = (knex) => {
           table.date('birth_date');
           table.enu('genre', ['Male', 'Female']);
           table.string('breed', 100);
+          table.string('name', 100);
           table.string('type', 100);
           table.boolean('pedigree');
           table
