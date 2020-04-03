@@ -18,6 +18,7 @@ const reviewRouter = require('./routers/review');
 const paymentRouter = require('./routers/payment');
 const adRouter = require('./routers/ad');
 const petRouter = require('./routers/pet');
+const administratorRouter = require('./routers/administrator');
 
 const app = express();
 
@@ -62,6 +63,7 @@ app.use('/payment', paymentRouter);
 app.use('/review', reviewRouter);
 app.use('/ad', adRouter);
 app.use('/pet', petRouter);
+app.use('/administrator', administratorRouter);
 
 // Ruta pública para acceder a las imágenes
 app.use(express.static('public'));
