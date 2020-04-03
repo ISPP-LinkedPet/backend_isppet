@@ -743,3 +743,76 @@ exports.getAvailableBreedingsForParticular = async (connection, userId) => {
 
   return breedings;
 };
+
+exports.createBreedingWithPet = async (breedingData, userId, trx) => {
+  const codenumberBreeding = numbergenerator();
+  try {
+    const pet = await trx('pet')
+        .where('pet.id', breedingData.petId)
+        .first();
+
+    // Get particular by user account id
+    const particular = await trx('particular')
+        .select('id')
+        .where('user_account_id', userId)
+        .first();
+
+    if (!pet) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'Pet not found';
+      throw error;
+    }
+
+    if (!particular) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'Particular not found';
+      throw error;
+    }
+
+    if (pet.particular_id != particular.id) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'You do not own this pet';
+      throw error;
+    }
+
+    if (pet.pet_status !== 'Accepted') {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'Pet is not valid, documents unrevised or rejected';
+      throw error;
+    }
+
+    const pubData = {
+      animal_photo: pet.animal_photo,
+      identification_photo: pet.identification_photo,
+      vaccine_passport: pet.vaccine_passport,
+      document_status: pet.pet_status,
+      birth_date: pet.birth_date,
+      genre: pet.genre,
+      breed: pet.breed,
+      location: breedingData.location,
+      type: pet.type,
+      pedigree: pet.pedigree,
+      transaction_status: 'Offered',
+      particular_id: particular.id,
+    };
+
+    const publicationId = await trx('publication').insert(pubData);
+    const breedingId = await trx('breeding').insert({
+      publication_id: publicationId,
+      price: breedingData.price,
+      codenumber: codenumberBreeding,
+    });
+
+    return await trx('breeding')
+        .join('publication', 'breeding.publication_id', '=', 'publication.id')
+        .select(BREEDING_FIELDS)
+        .where({'breeding.id': breedingId})
+        .first();
+  } catch (error) {
+    throw error;
+  }
+};
