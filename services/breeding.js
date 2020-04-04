@@ -21,6 +21,7 @@ const BREEDING_FIELDS = [
   'publication.pedigree',
   'publication.type',
   'publication.vaccine_passport',
+  'breeding.pet_id',
 ];
 
 const ANIMAL_FOLDER = path.join('images', 'animal_photos');
@@ -164,6 +165,7 @@ exports.createBreeding = async (breedingData, breedingPhotos, userId, trx) => {
       publication_id: publicationId,
       price: breedingData.price,
       codenumber: codenumberBreeding,
+      pet_id: null,
     });
 
     return await trx('breeding')
@@ -380,10 +382,10 @@ exports.editBreeding = async (
     throw error;
   }
 
-  if (pub.transaction_status === 'Completed') {
+  if (pub.transaction_status !== 'Offered') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not edit a publication which is completed';
+    error.message = 'You can not edit a publication which is not in offered status';
     throw error;
   }
 
@@ -511,6 +513,7 @@ exports.editBreeding = async (
           .where({'breeding.id': breedingId})
           .update({
             price: breedingData.price,
+            pet_id: null,
           });
     }
 
@@ -805,6 +808,7 @@ exports.createBreedingWithPet = async (breedingData, userId, trx) => {
       publication_id: publicationId,
       price: breedingData.price,
       codenumber: codenumberBreeding,
+      pet_id: pet.id,
     });
 
     return await trx('breeding')
@@ -813,6 +817,131 @@ exports.createBreedingWithPet = async (breedingData, userId, trx) => {
         .where({'breeding.id': breedingId})
         .first();
   } catch (error) {
+    throw error;
+  }
+};
+
+exports.editBreedingWithPet = async (
+  breedingData,
+  breedingId,
+  userId,
+  trx,
+) => {
+  // Se comprueba que este editando un breeding propio y en revision
+  const pub = await trx('publication')
+      .select('*', 'user_account.id AS userId')
+      .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+      .join('particular', 'particular.id', '=', 'publication.particular_id')
+      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
+      .where('breeding.id', breedingId)
+      .first();
+
+  // Get particular by user account id
+  const particular = await trx('particular')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+
+  const pet = await trx('pet')
+      .where('pet.id', breedingData.petId)
+      .first();
+
+  if (!pet) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Pet not found';
+    throw error;
+  }
+
+  if (!particular) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Particular not found';
+    throw error;
+  }
+
+  if (pet.particular_id != particular.id) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You do not own this pet';
+    throw error;
+  }
+
+  if (pet.pet_status !== 'Accepted') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Pet is not valid, documents unrevised or rejected';
+    throw error;
+  }
+  if (!pub) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Breeding not found';
+    throw error;
+  }
+
+  if (pub.userId !== userId) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not edit a publication that you do not own';
+    throw error;
+  }
+
+  if (pub.document_status === 'Rejected') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not edit a publication which is rejected';
+    throw error;
+  }
+
+  if (pub.transaction_status !== 'Offered') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not edit a publication which is not in offered status';
+    throw error;
+  }
+
+  try {
+    // Moderators will modify the breeding publication
+    const pubData = {
+      animal_photo: pet.animal_photo,
+      identification_photo: pet.identification_photo,
+      vaccine_passport: pet.vaccine_passport,
+      document_status: pet.pet_status,
+      birth_date: pet.birth_date,
+      genre: pet.genre,
+      breed: pet.breed,
+      location: breedingData.location,
+      type: pet.type,
+      pedigree: pet.pedigree,
+    };
+
+    await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .update(pubData);
+
+    // Update price
+    if (breedingData.price) {
+      await trx('breeding')
+          .where({'breeding.id': breedingId})
+          .update({
+            price: breedingData.price,
+            pet_id: pet.id,
+          });
+    }
+
+    return await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .first();
+  } catch (error) {
+    // Borramos las fotos guardadas en caso de error
+    allPhotos.forEach((photo) => {
+      fs.unlink(path.join('public', photo), (err) => {
+        // nothing to do
+      });
+    });
     throw error;
   }
 };
