@@ -77,3 +77,43 @@ exports.getUserAccount = async (connection, userId) => {
 
   return res;
 };
+
+exports.makeVetPremium = async (trx, vetId) => {
+  const vet = await trx('vet').where('vet.id', vetId).andWhere('vet.is_premium', 0).first();
+  console.log(vet)
+  if (!vet) {
+    const error = new Error();
+    error.status = 400;
+    error.message = 'This vet is already premium';
+    throw error;
+  }
+
+  const makeVetPremium = await trx('vet').where('vet.id', vetId).update({is_premium: 1});
+  if (!makeVetPremium) {
+    const error = new Error();
+    error.status = 403;
+    error.message = 'Not make premium';
+    throw error;
+  }
+};
+
+exports.cancelVetPremium = async (trx, vetId) => {
+
+  const vet = await trx('vet').where('vet.id', vetId).andWhere('vet.is_premium', 1).first();
+  console.log(vet)
+  if (!vet) {
+    const error = new Error();
+    error.status = 403;
+    error.message = 'This vet is not premium, so you cannot cancel';
+    throw error;
+  }
+
+  const cancelVetPremium = await trx('vet').where('vet.id', vetId).update({is_premium: 0});
+  if (!cancelVetPremium) {
+    const error = new Error();
+    error.status = 403;
+    error.message = 'Not cancel';
+    throw error;
+  }
+};
+

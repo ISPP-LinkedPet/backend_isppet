@@ -30,7 +30,6 @@ exports.createPaymentToMyself = async (connection, token, userId, breedingId, re
 
   // Obtengo el estado del pago
   if (payment.status === 'succeeded') {
-    console.log('HUI', publication);
     // si todo va bien, la publication pasa a ' In progress '
     await connection('publication').where('id', publication.publication_id).update({transaction_status: 'In progress'});
   }
