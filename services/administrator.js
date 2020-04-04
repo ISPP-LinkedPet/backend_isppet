@@ -147,12 +147,10 @@ exports.updateAds = async (connection, adData, adPhotos, adId, role) => {
 
   try {
     if (adPhotos.top_banner) {
-      console.log(adPhotos.top_banner.name);
       const photoName = path.join(
           TOP_BANNER,
           `${uuidv4()}.${getExtension(adPhotos.top_banner.name)}`,
       );
-      console.log(photoName);
       savePhoto(adPhotos.top_banner, photoName);
       topBanner.push(photoName);
     }
@@ -164,7 +162,6 @@ exports.updateAds = async (connection, adData, adPhotos, adId, role) => {
           LATERAL_BANNER,
           `${uuidv4()}.${getExtension(adPhotos.lateral_banner.name)}`,
       );
-      console.log(photoName);
       savePhoto(adPhotos.lateral_banner, photoName);
       lateralBanner.push(photoName);
     }
@@ -182,6 +179,67 @@ exports.updateAds = async (connection, adData, adPhotos, adId, role) => {
     await connection('ad_suscription')
         .where('ad_suscription.id', adId)
         .update(data);
+
+    return await connection('ad_suscription')
+        .where('ad_suscription.id', adId)
+        .first();
+  } catch (error) {
+    // Borramos las fotos guardadas en caso de error
+    allPhotos.forEach((photo) => {
+      fs.unlink(path.join('public', photo), (err) => {
+        // nothing to do
+      });
+    });
+    throw error;
+  }
+};
+
+exports.createAds = async (connection, adData, adPhotos, role) => {
+  if (role != 'administrator') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not create an ad because you are not an administrator';
+    throw error;
+  }
+
+  const allPhotos = [];
+  const topBanner = [];
+  const lateralBanner = [];
+
+  try {
+    if (adPhotos.top_banner) {
+      const photoName = path.join(
+          TOP_BANNER,
+          `${uuidv4()}.${getExtension(adPhotos.top_banner.name)}`,
+      );
+      savePhoto(adPhotos.top_banner, photoName);
+      topBanner.push(photoName);
+    }
+
+    allPhotos.push(...topBanner);
+
+    if (adPhotos.lateral_banner) {
+      const photoName = path.join(
+          LATERAL_BANNER,
+          `${uuidv4()}.${getExtension(adPhotos.lateral_banner.name)}`,
+      );
+      savePhoto(adPhotos.lateral_banner, photoName);
+      lateralBanner.push(photoName);
+    }
+
+    allPhotos.push(...lateralBanner);
+
+    const data = {
+      top_banner: topBanner.join(','),
+      lateral_banner: lateralBanner.join(','),
+      ad_type: adData.ad_type,
+      price: adData.price,
+      redirect_to: adData.redirect_to || null,
+      vet_id: adData.vet_id,
+      active: adData.active,
+    };
+
+    const adId = await connection('ad_suscription').insert(data);
 
     return await connection('ad_suscription')
         .where('ad_suscription.id', adId)
