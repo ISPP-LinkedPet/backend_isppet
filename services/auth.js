@@ -19,7 +19,7 @@ exports.getUserLogin = async (connection, userName) =>{
   if (rows[0].activate == 0) {
     const error = new Error();
     error.status = 400;
-    error.message = 'Account desactivate';
+    error.message = 'This user account has been banned.';
     throw error;
   }
 

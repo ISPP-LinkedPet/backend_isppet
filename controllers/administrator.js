@@ -52,6 +52,52 @@ exports.unbanUser = async (req, res) => {
   }
 };
 
+exports.getBanUsers = async (req, res) => {
+  const connection = req.connection;
+
+  try {
+    // authorization
+    const userId = req.user.id;
+    // const role = req.user.role;
+
+    const banUsers = await administratorService.getBanUsers(
+        connection,
+        userId,
+    );
+
+    return res.status(200).send(banUsers);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
+
+exports.getUnbanUsers = async (req, res) => {
+  const connection = req.connection;
+
+  try {
+    // authorization
+    const userId = req.user.id;
+    // const role = req.user.role;
+
+    const unbanUsers = await administratorService.getUnbanUsers(
+        connection,
+        userId,
+    );
+
+    return res.status(200).send(unbanUsers);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
+
 exports.makeVetPremium = async (req, res) => {
   const connection = req.connection;
 
