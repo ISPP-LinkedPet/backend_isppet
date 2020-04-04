@@ -97,3 +97,47 @@ exports.getUnbanUsers = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+
+exports.updateAd = async (req, res) => {
+  const connection = req.connection;
+  const trx = await connection.transaction();
+
+  try {
+    const user = await connection('administrator')
+        .select('id')
+        .where('user_account_id', req.user.id)
+        .first();
+    const role = req.user.role;
+    const adData = req.body;
+    const adPhotos = req.files;
+    const adId = req.params.id;
+
+    if (
+      !adPhotos.top_banner ||
+      !adPhotos.lateral_banner ||
+      !adData.ad_type ||
+      !adData.price ||
+      !user.id
+    ) {
+      return res.status(400).send({error: 'Invalid params'});
+    }
+
+    const ad = await administratorService.updateAds(
+        trx,
+        adData,
+        adPhotos,
+        adId,
+        role,
+    );
+
+    await trx.commit();
+    return res.status(200).send({ad});
+  } catch (error) {
+    // rollback
+    await trx.rollback();
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};

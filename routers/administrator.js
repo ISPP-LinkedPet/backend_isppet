@@ -7,5 +7,6 @@ router.put('/ban/:id', authorization.administrator, (req, res) => administratorC
 router.get('/ban/list', authorization.administrator, (req, res) => administratorController.getBanUsers(req, res));
 router.put('/unban/:id', authorization.administrator, (req, res) => administratorController.unbanUser(req, res));
 router.get('/unban/list', authorization.administrator, (req, res) => administratorController.getUnbanUsers(req, res));
+router.put('/ad/edit/:id', authorization.administrator, (req, res) => administratorController.updateAd(req, res));
 
 module.exports = router;
