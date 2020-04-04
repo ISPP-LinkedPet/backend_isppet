@@ -77,3 +77,37 @@ exports.getUserAccount = async (connection, userId) => {
 
   return res;
 };
+
+exports.getBanUsers = async (connection, userId) => {
+  const user = await connection('administrator')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+  if (!user) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Not found user';
+    throw error;
+  }
+
+  const banUsers = await connection('user_account')
+      .where({'user_account.activate': false});
+  return banUsers;
+};
+
+exports.getUnbanUsers = async (connection, userId) => {
+  const user = await connection('administrator')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+  if (!user) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Not found user';
+    throw error;
+  }
+
+  const unbanUsers = await connection('user_account')
+      .where({'user_account.activate': true});
+  return unbanUsers;
+};
