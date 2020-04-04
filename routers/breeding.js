@@ -15,6 +15,7 @@ router.put('/accept/:id', authorization.moderator, (req, res) => breedingControl
 router.put('/reject/:id', authorization.moderator, (req, res) => breedingController.rejectBreeding(req, res));
 router.get('/hasRequest/:id', authorization.particular, (req, res) => breedingController.breedingHasRequest(req, res));
 router.put('/finish/:id', authorization.particular, (req, res) => breedingController.finishBreeding(req, res));
-router.post('/pet', authorization.particular, (req, res) => breedingController.createBreadingWithPet(req, res));
+router.post('/pet', authorization.particular, (req, res) => breedingController.createBreedingWithPet(req, res));
+router.put('/pet/edit/:id', authorization.particular, (req, res) => breedingController.editBreedingWithPet(req, res));
 
 module.exports = router;

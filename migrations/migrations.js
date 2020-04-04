@@ -157,20 +157,6 @@ exports.up = (knex) => {
               .references('id')
               .inTable('publication');
         })
-    // breeding
-        .createTable('breeding', function(table) {
-          table.increments().primary();
-          table.double('price').notNullable();
-          table.string('codenumber');
-          table
-              .integer('publication_id')
-              .unsigned()
-              .notNullable();
-          table
-              .foreign('publication_id')
-              .references('id')
-              .inTable('publication');
-        })
 
     // shelter
         .createTable('shelter', function(table) {
@@ -244,7 +230,7 @@ exports.up = (knex) => {
           table.date('birth_date');
           table.enu('genre', ['Male', 'Female']);
           table.string('breed', 100);
-          table.string('name', 100);
+          table.string('name', 100).notNullable();
           table.string('type', 100);
           table.boolean('pedigree');
           table
@@ -255,6 +241,27 @@ exports.up = (knex) => {
               .foreign('particular_id')
               .references('id')
               .inTable('particular');
+        })
+        // breeding
+        .createTable('breeding', function(table) {
+          table.increments().primary();
+          table.double('price').notNullable();
+          table.string('codenumber');
+          table
+              .integer('publication_id')
+              .unsigned()
+              .notNullable();
+          table
+              .integer('pet_id')
+              .unsigned();
+          table
+              .foreign('pet_id')
+              .references('id')
+              .inTable('pet');
+          table
+              .foreign('publication_id')
+              .references('id')
+              .inTable('publication');
         })
   );
 };

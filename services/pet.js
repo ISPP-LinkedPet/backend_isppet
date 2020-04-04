@@ -8,7 +8,7 @@ const VACCINES_FOLDER = path.join('images', 'vaccine_passports');
 
 const ALLOWED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
 
-exports.createPet = async (petPhotos, userId, trx) => {
+exports.createPet = async (petName, petPhotos, userId, trx) => {
   const allPhotos = [];
   try {
     // Mínimo 2 fotos del animal
@@ -111,6 +111,7 @@ exports.createPet = async (petPhotos, userId, trx) => {
       breed: null,
       type: null,
       pedigree: null,
+      name: petName.name,
       pet_status: 'In revision',
       particular_id: particular.id,
     };
@@ -131,7 +132,7 @@ exports.createPet = async (petPhotos, userId, trx) => {
   }
 };
 
-exports.editPet = async (petPhotos, petId, userId, trx) => {
+exports.editPet = async (petName, petPhotos, petId, userId, trx) => {
   // Se comprueba que este editando un pet propio
   const pet = await trx('pet')
       .select('*', 'user_account.id AS userId')
@@ -139,6 +140,19 @@ exports.editPet = async (petPhotos, petId, userId, trx) => {
       .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
       .where('pet.id', petId)
       .first();
+
+  const publication = await trx('publication')
+      .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+      .where('breeding.pet_id', pet.id)
+      .first();
+
+
+  if (publication) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You cannot edit a pet with publications';
+    throw error;
+  }
 
   if (!pet) {
     const error = new Error();
@@ -255,6 +269,10 @@ exports.editPet = async (petPhotos, petId, userId, trx) => {
     }
     if (petPhotos.vaccine_passport) {
       editPetData.vaccine_passport = savedVaccinePhotos.join(',');
+    }
+
+    if (petName.name) {
+      editPetData.name = petName.name;
     }
 
     if (pet.pet_status !== 'In revision') {

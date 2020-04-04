@@ -334,7 +334,7 @@ exports.getAvailableBreedingsForParticular = async (req, res) => {
   }
 };
 
-exports.createBreadingWithPet = async (req, res) => {
+exports.createBreedingWithPet = async (req, res) => {
   const connection = req.connection;
 
   // create transaction
@@ -347,7 +347,6 @@ exports.createBreadingWithPet = async (req, res) => {
     const breedingData = req.body;
 
 
-    // breed, birth_date, pedigree and genre not required during creation
     if (
       !breedingData.petId ||
       !breedingData.price ||
@@ -358,6 +357,50 @@ exports.createBreadingWithPet = async (req, res) => {
 
     const breeding = await breedingService.createBreedingWithPet(
         breedingData,
+        particularId,
+        trx,
+    );
+
+    // commit
+    await trx.commit();
+
+    return res.status(200).send(breeding);
+  } catch (error) {
+    // rollback
+    await trx.rollback();
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
+
+exports.editBreedingWithPet = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
+  try {
+    const particularId = req.user.id;
+
+    // body
+    const breedingData = req.body;
+
+    const breedingId = req.params.id;
+
+
+    if (
+      !breedingData.petId ||
+      !breedingData.price ||
+      !breedingData.location
+    ) {
+      return res.status(400).send({error: 'Invalid params'});
+    }
+
+    const breeding = await breedingService.editBreedingWithPet(
+        breedingData,
+        breedingId,
         particularId,
         trx,
     );
