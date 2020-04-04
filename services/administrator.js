@@ -269,3 +269,75 @@ const getExtension = (photo) => {
   }
   return photo.split('.').pop();
 };
+
+exports.activateAd = async (connection, adId) => {
+  const ad = await this.getAd(connection, adId);
+
+  if (!ad) {
+    const error = new Error();
+    error.status = 400;
+    error.message = 'No ad with that ID';
+    throw error;
+  }
+
+  if (ad.active) {
+    const error = new Error();
+    error.status = 400;
+    error.message = 'This ad is already in active status.';
+    throw error;
+  }
+
+  try {
+    ad.active = true;
+    await connection('ad_suscription')
+        .where({'ad_suscription.id': adId})
+        .update(ad);
+
+    return await connection('ad_suscription')
+        .where({'ad_suscription.id': adId})
+        .first();
+  } catch (error) {
+    console.err(error);
+    throw error;
+  }
+};
+
+exports.deactivateAd = async (connection, adId) => {
+  const ad = await this.getAd(connection, adId);
+
+  if (!ad) {
+    const error = new Error();
+    error.status = 400;
+    error.message = 'No ad with that ID';
+    throw error;
+  }
+
+  if (!ad.active) {
+    const error = new Error();
+    error.status = 400;
+    error.message = 'This ad is already in a deactivated state.';
+    throw error;
+  }
+
+  try {
+    ad.active = false;
+    await connection('ad_suscription')
+        .where({'ad_suscription.id': adId})
+        .update(ad);
+
+    return await connection('ad_suscription')
+        .where({'ad_suscription.id': adId})
+        .first();
+  } catch (error) {
+    console.err(error);
+    throw error;
+  }
+};
+
+exports.getAd = async (connection, adId) => {
+  const res = await connection('ad_suscription')
+      .where({'ad_suscription.id': adId})
+      .first();
+
+  return res;
+};

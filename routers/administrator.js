@@ -9,5 +9,7 @@ router.put('/unban/:id', authorization.administrator, (req, res) => administrato
 router.get('/unban/list', authorization.administrator, (req, res) => administratorController.getUnbanUsers(req, res));
 router.put('/ad/edit/:id', authorization.administrator, (req, res) => administratorController.updateAd(req, res));
 router.post('/ad/create', authorization.administrator, (req, res) => administratorController.createAd(req, res));
+router.put('/ad/activate/:id', authorization.administrator, (req, res) => administratorController.activateAd(req, res));
+router.put('/ad/deactivate/:id', authorization.administrator, (req, res) => administratorController.deactivateAd(req, res));
 
 module.exports = router;

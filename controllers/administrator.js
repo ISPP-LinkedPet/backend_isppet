@@ -185,3 +185,55 @@ exports.createAd = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+
+exports.activateAd = async (req, res) => {
+  const connection = req.connection;
+
+  // Create transaction
+  const trx = await connection.transaction();
+
+  try {
+    const adId = req.params.id;
+
+    const ad = await administratorService.activateAd(trx, adId);
+
+    // commit
+    await trx.commit();
+
+    return res.status(200).send(ad);
+  } catch (error) {
+    console.log(error);
+    // rollback
+    await trx.rollback();
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
+
+exports.deactivateAd = async (req, res) => {
+  const connection = req.connection;
+
+  // Create transaction
+  const trx = await connection.transaction();
+
+  try {
+    const adId = req.params.id;
+
+    const ad = await administratorService.deactivateAd(trx, adId);
+
+    // commit
+    await trx.commit();
+
+    return res.status(200).send(ad);
+  } catch (error) {
+    console.log(error);
+    // rollback
+    await trx.rollback();
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
