@@ -296,6 +296,100 @@ exports.cancelVetPremium = async (req, res) => {
   }
 };
 
+exports.addVet = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
+  try {
+    const user = await connection('administrator')
+        .select('id')
+        .where('user_account_id', req.user.id)
+        .first();
+    const role = req.user.role;
+    const vetData = req.body;
+    const vetPhoto = req.files;
+
+    if (
+      !vetData.name ||
+      !vetData.surname ||
+      !vetData.email ||
+      !vetData.address ||
+      !vetData.telephone ||
+      !user.id
+    ) {
+      return res.status(400).send('Invalid params');
+    }
+
+    const vet = await administratorService.addVet(
+        vetData,
+        vetPhoto,
+        role,
+        trx,
+    );
+
+    // commit
+    await trx.commit();
+
+    return res.status(200).send({vet});
+  } catch (error) {
+    // rollback
+    await trx.rollback();
+
+    if (error.status && error.message) {
+      res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
+
+exports.updateVet = async (req, res) => {
+  const connection = req.connection;
+  const trx = await connection.transaction();
+
+  try {
+    const user = await connection('administrator')
+        .select('id')
+        .where('user_account_id', req.user.id)
+        .first();
+    const role = req.user.role;
+    const vetData = req.body;
+    const vetPhoto = req.files;
+    const vetId = req.params.id;
+
+    if (
+      !vetData.name ||
+      !vetData.surname ||
+      !vetData.email ||
+      !vetData.address ||
+      !vetData.telephone ||
+      !vetId ||
+      !user.id
+    ) {
+      return res.status(400).send({error: 'Invalid params'});
+    }
+
+    const vet = await administratorService.updateVet(
+        trx,
+        vetData,
+        vetPhoto,
+        vetId,
+        role,
+    );
+
+    await trx.commit();
+    return res.status(200).send({vet});
+  } catch (error) {
+    // rollback
+    await trx.rollback();
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
+
 exports.registerShelter = async (req, res) => {
   const trx = await req.connection.transaction();
   try {
@@ -318,7 +412,6 @@ exports.registerShelter = async (req, res) => {
     await trx.commit();
     return res.status(200).send({user});
   } catch (error) {
-    console.log(error);
     await trx.rollback();
     if (error.status && error.message) {
       return res.status(error.status).send({error: error.message});
