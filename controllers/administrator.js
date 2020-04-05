@@ -133,6 +133,7 @@ exports.updateAd = async (req, res) => {
     await trx.commit();
     return res.status(200).send({ad});
   } catch (error) {
+    console.log(error);
     // rollback
     await trx.rollback();
     if (error.status && error.message) {
@@ -177,6 +178,7 @@ exports.createAd = async (req, res) => {
     await trx.commit();
     return res.status(200).send({ad});
   } catch (error) {
+    console.log(error);
     // rollback
     await trx.rollback();
     if (error.status && error.message) {
@@ -334,6 +336,7 @@ exports.addVet = async (req, res) => {
 
     return res.status(200).send({vet});
   } catch (error) {
+    console.log(error);
     // rollback
     await trx.rollback();
 
@@ -381,6 +384,7 @@ exports.updateVet = async (req, res) => {
     await trx.commit();
     return res.status(200).send({vet});
   } catch (error) {
+    console.log(error);
     // rollback
     await trx.rollback();
     if (error.status && error.message) {
@@ -412,6 +416,7 @@ exports.registerShelter = async (req, res) => {
     await trx.commit();
     return res.status(200).send({user});
   } catch (error) {
+    console.log(error);
     await trx.rollback();
     if (error.status && error.message) {
       return res.status(error.status).send({error: error.message});
