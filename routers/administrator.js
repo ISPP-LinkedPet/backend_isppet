@@ -13,7 +13,11 @@ router.put('/ad/activate/:id', authorization.administrator, (req, res) => admini
 router.put('/ad/deactivate/:id', authorization.administrator, (req, res) => administratorController.deactivateAd(req, res));
 router.put('/makeVetPremium', authorization.administrator, (req, res) => administratorController.makeVetPremium(req, res));
 router.put('/cancelVetPremium', authorization.administrator, (req, res) => administratorController.cancelVetPremium(req, res));
+<<<<<<< HEAD
 router.post('/vet/add', authorization.administrator, (req, res) => administratorController.addVet(req, res));
 router.put('/vet/edit/:id', authorization.administrator, (req, res) => administratorController.updateVet(req, res));
+=======
+router.post('/registerShelter', authorization.administrator, (req, res) => administratorController.registerShelter(req, res));
+>>>>>>> origin/develop
 
 module.exports = router;

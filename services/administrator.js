@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const path = require('path');
 const fs = require('fs');
 const {v4: uuidv4} = require('uuid');
@@ -7,7 +8,11 @@ const API_KEY = '53125aca466345fd809c44468d122456';
 
 const TOP_BANNER = path.join('images', 'top_banner');
 const LATERAL_BANNER = path.join('images', 'lateral_banner');
+<<<<<<< HEAD
 const VETS = path.join('images', 'vets');
+=======
+const USERS_FOLDER = path.join('images', 'users');
+>>>>>>> origin/develop
 const ALLOWED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
 
 exports.banUser = async (connection, userId) => {
@@ -348,7 +353,6 @@ exports.getAd = async (connection, adId) => {
 
 exports.makeVetPremium = async (trx, vetId) => {
   const vet = await trx('vet').where('vet.id', vetId).andWhere('vet.is_premium', 0).first();
-  console.log(vet);
   if (!vet) {
     const error = new Error();
     error.status = 400;
@@ -367,7 +371,6 @@ exports.makeVetPremium = async (trx, vetId) => {
 
 exports.cancelVetPremium = async (trx, vetId) => {
   const vet = await trx('vet').where('vet.id', vetId).andWhere('vet.is_premium', 1).first();
-  console.log(vet);
   if (!vet) {
     const error = new Error();
     error.status = 403;
@@ -496,6 +499,87 @@ exports.updateVet = async (connection, vetData, vetPhoto, vetId, role) => {
         // nothing to do
       });
     });
+  throw error;
+  }
+};
+
+exports.registerShelter = async (trx, params) => {
+  let photoName;
+  try {
+    // Check user_name
+    const error = new Error();
+    const userNameCheck = await trx('user_account')
+        .where('user_account.user_name', params.user_name)
+        .first();
+    if (userNameCheck) {
+      error.status = 400;
+      error.message = 'El nombre de usuario introducido ya existe';
+      throw error;
+    }
+
+    // Check user_name
+    const emailCheck = await trx('user_account')
+        .where('user_account.email', params.email)
+        .first();
+    if (emailCheck) {
+      error.status = 400;
+      error.message = 'El email introducido ya existe';
+      throw error;
+    }
+
+    // Check password
+    if (params.password !== params.repeat_password) {
+      error.status = 400;
+      error.message = 'La contraseña no coincide con la verificación';
+      throw error;
+    }
+
+    if (params.password.length < 8) {
+      error.status = 400;
+      error.message = 'La contraseña debe tener una longitud de al menos 8 caracteres';
+      throw error;
+    }
+
+    if (params.files && params.files.optional_photo && !Array.isArray(params.files.optional_photo)) {
+      photoName = path.join(
+          USERS_FOLDER,
+          `${uuidv4()}.${getExtension(params.files.optional_photo.name)}`,
+      );
+      savePhoto(params.files.optional_photo, photoName);
+    }
+
+    const userData = {
+      user_name: params.user_name,
+      role: 'shelter',
+      password: bcrypt.hashSync(params.password, 8),
+      activate: 1, // activo por defecto
+      register_date: new Date(),
+      name: params.name,
+      email: params.email,
+      address: params.address,
+      telephone: params.telephone,
+      optional_photo: photoName || null,
+    };
+
+    // Shelter
+    const userAccountId = await trx('user_account').insert(userData);
+    const shelterId = await trx('shelter').insert({ user_account_id: userAccountId });
+    console.log(shelterId);
+
+    const user = await trx('user_account')
+        .select('*', 'user_account.id as userAccountId', 'shelter.id as shelterId')
+        .join('shelter', 'user_account.id', '=', 'shelter.user_account_id')
+        .where('shelter.id', shelterId)
+        .first();
+    delete user.password; // Quitamos la contraseña para no devolverla
+
+    return user;
+  } catch (error) {
+    if (photoName) {
+      fs.unlink(path.join('public', photoName), (err) => {
+        // nothing to do
+      });
+    }
     throw error;
   }
 };
