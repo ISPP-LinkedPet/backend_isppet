@@ -1,9 +1,13 @@
 const path = require('path');
 const fs = require('fs');
 const {v4: uuidv4} = require('uuid');
+const axios = require('axios');
+const BASE_URL = 'https://api.opencagedata.com/geocode/v1/json';
+const API_KEY = '53125aca466345fd809c44468d122456';
 
 const TOP_BANNER = path.join('images', 'top_banner');
 const LATERAL_BANNER = path.join('images', 'lateral_banner');
+const VETS = path.join('images', 'vets');
 const ALLOWED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
 
 exports.banUser = async (connection, userId) => {
@@ -344,7 +348,7 @@ exports.getAd = async (connection, adId) => {
 
 exports.makeVetPremium = async (trx, vetId) => {
   const vet = await trx('vet').where('vet.id', vetId).andWhere('vet.is_premium', 0).first();
-  console.log(vet)
+  console.log(vet);
   if (!vet) {
     const error = new Error();
     error.status = 400;
@@ -362,9 +366,8 @@ exports.makeVetPremium = async (trx, vetId) => {
 };
 
 exports.cancelVetPremium = async (trx, vetId) => {
-
   const vet = await trx('vet').where('vet.id', vetId).andWhere('vet.is_premium', 1).first();
-  console.log(vet)
+  console.log(vet);
   if (!vet) {
     const error = new Error();
     error.status = 403;
@@ -381,3 +384,143 @@ exports.cancelVetPremium = async (trx, vetId) => {
   }
 };
 
+exports.addVet = async (vetData, vetPhoto, role, connection) => {
+  if (role != 'administrator') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not add a vet because you are not an administrator';
+    throw error;
+  }
+
+  const allPhotos = [];
+  const optionalPhoto = [];
+
+  try {
+    if (vetPhoto) {
+      const photoName = path.join(
+          VETS,
+          `${uuidv4()}.${getExtension(vetPhoto.optional_photo.name)}`,
+      );
+      savePhoto(vetPhoto.optional_photo, photoName);
+      optionalPhoto.push(photoName);
+    }
+
+    allPhotos.push(...optionalPhoto);
+
+    const data = {
+      optional_photo: optionalPhoto.join(',') || null,
+      name: vetData.name,
+      surname: vetData.surname,
+      email: vetData.email,
+      url: vetData.url || null,
+      address: vetData.address,
+      telephone: vetData.telephone,
+    };
+
+    data.is_premium = false;
+    const data2 = await this.getLatLong(data);
+    const vetId = await connection('vet').insert(data2);
+
+    return await connection('vet')
+        .where('vet.id', vetId)
+        .first();
+  } catch (error) {
+    // Borramos las fotos guardadas en caso de error
+    allPhotos.forEach((photo) => {
+      fs.unlink(path.join('public', photo), (err) => {
+        // nothing to do
+      });
+    });
+    throw error;
+  }
+};
+
+exports.updateVet = async (connection, vetData, vetPhoto, vetId, role) => {
+  const vet = await connection('vet')
+      .where('vet.id', vetId)
+      .first();
+
+  if (!vet) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Vet not found';
+    throw error;
+  }
+
+  if (role != 'administrator') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not edit a vet because you are not an administrator';
+    throw error;
+  }
+
+  const allPhotos = [];
+  const optionalPhoto = [];
+
+  try {
+    if (vetPhoto) {
+      const photoName = path.join(
+          VETS,
+          `${uuidv4()}.${getExtension(vetPhoto.optional_photo.name)}`,
+      );
+      savePhoto(vetPhoto.optional_photo, photoName);
+      optionalPhoto.push(photoName);
+    }
+
+    allPhotos.push(...optionalPhoto);
+
+    const data = {
+      optional_photo: optionalPhoto.join(',') || null,
+      name: vetData.name,
+      surname: vetData.surname,
+      email: vetData.email,
+      url: vetData.url || null,
+      address: vetData.address,
+      telephone: vetData.telephone,
+    };
+
+    data.is_premium = false;
+    const data2 = await this.getLatLong(data);
+
+    await connection('vet')
+        .where('vet.id', vetId)
+        .update(data2);
+
+    return await connection('vet')
+        .where('vet.id', vetId)
+        .first();
+  } catch (error) {
+    // Borramos las fotos guardadas en caso de error
+    allPhotos.forEach((photo) => {
+      fs.unlink(path.join('public', photo), (err) => {
+        // nothing to do
+      });
+    });
+    throw error;
+  }
+};
+
+exports.getLatLong = async (vet) => {
+  const vets = [];
+  vets.push(vet);
+  const addresses = vets.map((vet) => {
+    const address = encodeURI(vet.address);
+    const url = `${BASE_URL}?q=${address}&key=${API_KEY}&language=es&pretty=1`;
+    return axios({
+      method: 'get',
+      url,
+    });
+  });
+
+  await axios.all(addresses).then(
+      axios.spread((...responses) => {
+        responses.forEach((r, index) => {
+          const vet = vets[index];
+          vet.latitude = r.data.results[0].geometry.lat;
+          vet.longitude = r.data.results[0].geometry.lng;
+        });
+      }),
+  );
+
+  return vets[0];
+};
