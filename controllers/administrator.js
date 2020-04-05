@@ -295,3 +295,34 @@ exports.cancelVetPremium = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+
+exports.registerShelter = async (req, res) => {
+  const trx = await req.connection.transaction();
+  try {
+    const params = req.body;
+    params.files = req.files;
+
+    if (
+      !params.user_name ||
+      !params.password ||
+      !params.repeat_password ||
+      !params.name ||
+      !params.email ||
+      !params.address ||
+      !params.telephone
+    ) {
+      return res.status(404).send({error: 'Missing params'});
+    }
+
+    const user = await administratorService.registerShelter(trx, params);
+    await trx.commit();
+    return res.status(200).send({user});
+  } catch (error) {
+    console.log(error);
+    await trx.rollback();
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};

@@ -108,22 +108,6 @@ exports.register = async (trx, params) => {
           .first();
     }
 
-    // Shelter
-    if (params.role === 'shelter') {
-      const userAccountId = await trx('user_account').insert(userData);
-      const shelterId = await trx('shelter').insert({
-        user_account_id: userAccountId,
-      });
-
-      const user = await trx('user_account')
-          .select('*', 'user_account.id as userAccountId', 'shelter.id as shelterId')
-          .join('shelter', 'user_account.id', '=', 'shelter.user_account_id')
-          .where('shelter.id', shelterId)
-          .first();
-      delete user.password; // Quitamos la contraseña para no devolverla
-      return user;
-    }
-
     error.status = 400;
     error.message = 'Role not allowed';
     throw error;

@@ -13,5 +13,6 @@ router.put('/ad/activate/:id', authorization.administrator, (req, res) => admini
 router.put('/ad/deactivate/:id', authorization.administrator, (req, res) => administratorController.deactivateAd(req, res));
 router.put('/makeVetPremium', authorization.administrator, (req, res) => administratorController.makeVetPremium(req, res));
 router.put('/cancelVetPremium', authorization.administrator, (req, res) => administratorController.cancelVetPremium(req, res));
+router.post('/registerShelter', authorization.administrator, (req, res) => administratorController.registerShelter(req, res));
 
 module.exports = router;
