@@ -8,11 +8,8 @@ const API_KEY = '53125aca466345fd809c44468d122456';
 
 const TOP_BANNER = path.join('images', 'top_banner');
 const LATERAL_BANNER = path.join('images', 'lateral_banner');
-<<<<<<< HEAD
 const VETS = path.join('images', 'vets');
-=======
 const USERS_FOLDER = path.join('images', 'users');
->>>>>>> origin/develop
 const ALLOWED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
 
 exports.banUser = async (connection, userId) => {
