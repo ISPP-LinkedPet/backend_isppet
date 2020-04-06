@@ -2332,18 +2332,18 @@ exports.seed = async (knex) => {
     },
   ]);
 
-  // vet
+  // ad_suscription
   await knex('ad_suscription').insert([
     {
       id: 1,
       vet_id: 1,
       top_banner:
-        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+        'images/ads/laHuella.png',
       lateral_banner:
-        'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
+        'images/ads/capuchinos.png',
       ad_type: 'CPM',
       price: '9.99',
-      redirect_to: null,
+      redirect_to: 'https://www.kivet.com/',
       active: true,
       view_count: 0,
       click_count: 0,
@@ -2352,12 +2352,12 @@ exports.seed = async (knex) => {
       id: 2,
       vet_id: 1,
       top_banner:
-        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+        'images/ads/sanGerman.png',
       lateral_banner:
-        'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
+        'images/ads/catDog.png',
       ad_type: 'CPM',
       price: '9.99',
-      redirect_to: null,
+      redirect_to: 'https://www.kivet.com/',
       active: false,
       view_count: 0,
       click_count: 0,
@@ -2366,12 +2366,12 @@ exports.seed = async (knex) => {
       id: 3,
       vet_id: 1,
       top_banner:
-        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+        'images/ads/santaRita.png',
       lateral_banner:
-        'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
+        'images/ads/tamarguillo.png',
       ad_type: 'CPM',
       price: '9.99',
-      redirect_to: null,
+      redirect_to: 'https://www.kivet.com/',
       active: false,
       view_count: 0,
       click_count: 0,
@@ -2380,12 +2380,12 @@ exports.seed = async (knex) => {
       id: 4,
       vet_id: 2,
       top_banner:
-        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+        'images/ads/triana.png',
       lateral_banner:
-        'https://static3.bigstockphoto.com/0/0/1/large1500/100756892.jpg',
+        'images/ads/capuchinos.png',
       ad_type: 'CPM',
       price: '9.99',
-      redirect_to: null,
+      redirect_to: 'https://www.kivet.com/',
       active: false,
       view_count: 0,
       click_count: 0,
@@ -2394,9 +2394,9 @@ exports.seed = async (knex) => {
       id: 5,
       vet_id: 2,
       top_banner:
-        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+        'images/ads/vetalys.png',
       lateral_banner:
-        'https://www.dispensariveterinari.com/sites/default/files/banner-lateral/211/imatges/vet_formacion.jpg',
+        'images/ads/catDog.png',
       ad_type: 'DXC',
       price: '0.99',
       redirect_to: 'https://centroveterinariobormujos.com/',
@@ -2408,9 +2408,9 @@ exports.seed = async (knex) => {
       id: 6,
       vet_id: 3,
       top_banner:
-        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+        'images/ads/laHuella.png',
       lateral_banner:
-        'https://www.dispensariveterinari.com/sites/default/files/banner-lateral/211/imatges/vet_formacion.jpg',
+        'images/ads/tamarguillo.png',
       ad_type: 'DXC',
       price: '0.99',
       redirect_to: 'https://centroveterinariobormujos.com/',
@@ -2422,12 +2422,12 @@ exports.seed = async (knex) => {
       id: 7,
       vet_id: 4,
       top_banner:
-        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+        'images/ads/sanGerman.png',
       lateral_banner:
-        'https://www.vetpraxis.net/wp-content/uploads/2016/02/banner-lateral-manejo-criticos-2016.png',
+        'images/ads/capuchinos.png',
       ad_type: 'CPM',
       price: '9.99',
-      redirect_to: null,
+      redirect_to: 'https://www.kivet.com/',
       active: true,
       view_count: 0,
       click_count: 0,
@@ -2436,9 +2436,9 @@ exports.seed = async (knex) => {
       id: 8,
       vet_id: 5,
       top_banner:
-        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+        'images/ads/santaRita.png',
       lateral_banner:
-        'https://www.dispensariveterinari.com/sites/default/files/banner-lateral/211/imatges/vet_formacion.jpg',
+        'images/ads/catDog.png',
       ad_type: 'DXC',
       price: '0.99',
       redirect_to: 'https://centroveterinariobormujos.com/',
@@ -2450,9 +2450,9 @@ exports.seed = async (knex) => {
       id: 9,
       vet_id: 5,
       top_banner:
-        'https://currentsvet.com/sites/default/files/CVET-web-Home-Banner-New4.jpg',
+        'images/ads/triana.png',
       lateral_banner:
-        'https://www.trixie.de/userdata/mysydeshop/images/normal/233304_PHO_PRO_900723-1.jpg',
+        'images/ads/tamarguillo.png',
       ad_type: 'DXC',
       price: '0.99',
       redirect_to: 'https://www.kivet.com/',
