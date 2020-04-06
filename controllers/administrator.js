@@ -1,4 +1,5 @@
 const administratorService = require('../services/administrator');
+const nodemailer = require('nodemailer');
 
 exports.banUser = async (req, res) => {
   const connection = req.connection;
@@ -418,6 +419,26 @@ exports.registerShelter = async (req, res) => {
   } catch (error) {
     console.log(error);
     await trx.rollback();
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
+
+exports.sendBreachNotification = async (req, res) => {
+  const trx = await req.connection.transaction();
+  try {
+    const params = req.body;
+
+    if (!params.subject || !params.body) {
+      return res.status(404).send({error: 'Missing params'});
+    }
+
+    const user = await administratorService.sendBreachNotification(trx, params, nodemailer);
+    return res.status(200).send({user});
+  } catch (error) {
+    console.log(error);
     if (error.status && error.message) {
       return res.status(error.status).send({error: error.message});
     }
