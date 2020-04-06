@@ -111,7 +111,8 @@ exports.up = (knex) => {
           table
               .foreign('publication_id')
               .references('id')
-              .inTable('publication');
+              .inTable('publication')
+              .onDelete('CASCADE');
           table
               .integer('particular_id')
               .unsigned()
@@ -155,7 +156,8 @@ exports.up = (knex) => {
           table
               .foreign('publication_id')
               .references('id')
-              .inTable('publication');
+              .inTable('publication')
+              .onDelete('CASCADE');
         })
 
     // shelter
@@ -183,7 +185,8 @@ exports.up = (knex) => {
           table
               .foreign('publication_id')
               .references('id')
-              .inTable('publication');
+              .inTable('publication')
+              .onDelete('CASCADE');
           table.integer('shelter_id').unsigned();
           table
               .foreign('shelter_id')
@@ -261,7 +264,8 @@ exports.up = (knex) => {
           table
               .foreign('publication_id')
               .references('id')
-              .inTable('publication');
+              .inTable('publication')
+              .onDelete('CASCADE');
         })
   );
 };

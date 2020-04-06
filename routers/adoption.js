@@ -13,5 +13,6 @@ router.put('/edit/:id', authorization.shelter_particular, (req, res) =>adoptionC
 router.get('/:id', authorization.all, (req, res) =>adoptionController.getAdoption(req, res));
 router.put('/accept/:id', authorization.moderator, (req, res) =>adoptionController.acceptAdoption(req, res));
 router.put('/reject/:id', authorization.moderator, (req, res) =>adoptionController.rejectAdoption(req, res));
+router.delete('/delete/:id', authorization.shelter_particular, (req, res) => adoptionController.deleteAdoption(req, res));
 
 module.exports = router;
