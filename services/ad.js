@@ -23,3 +23,23 @@ exports.getRandomAds = async (trx, numAds) => {
 
   return ads;
 };
+
+exports.addClick = async (trx, adId) => {
+  const ad = await trx('ad_suscription')
+      .select('id', 'click_count')
+      .where('ad_suscription.id', adId)
+      .first();
+
+  if (!ad) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'No ad with that id';
+    throw error;
+  }
+
+  await trx('ad_suscription')
+      .where('ad_suscription.id', ad.id)
+      .update({click_count: ad.click_count + 1});
+
+  return true;
+};
