@@ -606,6 +606,41 @@ exports.getLatLong = async (vet) => {
   return vets[0];
 };
 
+exports.getStatistics = async (connection) => {
+  const statistics = [];
+
+  const breedingPubs = await connection('breeding')
+      .count('id as breedings_count');
+
+  const adoptionPubs = await connection('adoption')
+      .count('id as adoptions_count');
+
+  const pubs = await connection('publication')
+      .count('id as pubs');
+
+  const reject = await connection('publication')
+      .where('publication.document_status', 'Rejected')
+      .count('id as reject_pubs_count');
+
+  const inProgress = await connection('publication')
+      .where('publication.transaction_status', 'In progress')
+      .count('id as in_progress_pubs_count');
+
+  const completed = await connection('publication')
+      .where('publication.transaction_status', 'Completed')
+      .count('id as completed_pubs_count');
+
+  const rejectPubs = reject[0].reject_pubs_count / pubs[0].pubs;
+  const inProgressPubs = inProgress[0].in_progress_pubs_count / pubs[0].pubs;
+  const completedPubs = completed[0].completed_pubs_count / pubs[0].pubs;
+
+  statistics.push(breedingPubs[0], adoptionPubs[0],
+      {'reject_pubs_percentage': rejectPubs}, {'in_progress_pubs_percentage': inProgressPubs},
+      {'completed_pubs_percentage': completedPubs});
+
+  return statistics;
+};
+
 
 exports.sendBreachNotification = async (trx, params, nodemailer) => {
   try {

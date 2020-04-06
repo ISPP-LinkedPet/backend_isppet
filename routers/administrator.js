@@ -16,6 +16,7 @@ router.put('/cancelVetPremium', authorization.administrator, (req, res) => admin
 router.post('/vet/add', authorization.administrator, (req, res) => administratorController.addVet(req, res));
 router.put('/vet/edit/:id', authorization.administrator, (req, res) => administratorController.updateVet(req, res));
 router.post('/registerShelter', authorization.administrator, (req, res) => administratorController.registerShelter(req, res));
+router.get('/statistics', authorization.administrator, (req, res) => administratorController.getStatistics(req, res));
 router.post('/breachNotification', authorization.administrator, (req, res) => administratorController.sendBreachNotification(req, res));
 
 module.exports = router;

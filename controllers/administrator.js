@@ -426,6 +426,24 @@ exports.registerShelter = async (req, res) => {
   }
 };
 
+exports.getStatistics = async (req, res) => {
+  const connection = req.connection;
+
+  try {
+    const statistics = await administratorService.getStatistics(
+        connection,
+    );
+
+    return res.status(200).send(statistics);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
+
 exports.sendBreachNotification = async (req, res) => {
   const trx = await req.connection.transaction();
   try {
