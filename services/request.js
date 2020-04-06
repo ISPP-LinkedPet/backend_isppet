@@ -146,8 +146,7 @@ exports.deleteRequest = async (requestId, userId, trx) => {
     error.message = 'Request not found';
     throw error;
   }
- console.log(particular);
- console.log(request);
+
   if (request.particular_id !== particular.id) {
     const error = new Error();
     error.status = 404;

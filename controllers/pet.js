@@ -203,3 +203,31 @@ exports.getPetsByParticularId = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+
+exports.deletePet = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
+  try {
+    const petId = req.params.id;
+
+    const particularId = req.user.id;
+
+    const pet = await petService.deletePet(petId, particularId, trx);
+
+    // commit
+    await trx.commit();
+
+    return res.status(200).send(pet);
+  } catch (error) {
+    console.log(error);
+    // rollback
+    await trx.rollback();
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};

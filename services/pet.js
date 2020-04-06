@@ -435,3 +435,51 @@ exports.getPetsByParticularId = async (connection, particularId) => {
     throw error;
   }
 };
+
+exports.deletePet = async (petId, userId, trx) => {
+  const particular = await trx('particular')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+  if (!particular) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Particular not found';
+    throw error;
+  }
+
+  const pet = await trx('pet')
+      .where('pet.id', petId)
+      .first();
+
+  if (!pet) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Pet not found';
+    throw error;
+  }
+
+  if (pet.particular_id !== particular.id) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You do not own this pet';
+    throw error;
+  }
+
+  const breeding = await trx('breeding')
+      .where('breeding.pet_id', pet.id)
+      .first();
+
+  if (breeding) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not delete a pet with a publication';
+    throw error;
+  }
+
+  await trx('pet')
+      .where('pet.id', pet.id)
+      .del();
+
+  return true;
+};
