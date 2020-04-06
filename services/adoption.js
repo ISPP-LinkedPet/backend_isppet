@@ -619,3 +619,39 @@ exports.getAdoptions = async (connection, page) => {
 
   return adoptions;
 };
+
+exports.deleteAdoption = async (adoptionId, userId, trx) => {
+  const pub = await trx('publication')
+      .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+      .where('adoption.id', adoptionId)
+      .first();
+
+  if (!pub) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Adoption not found';
+    throw error;
+  }
+
+  if ((pub.shelter_id === null && (pub.particular_id !== userId)) || (pub.particular_id === null && (pub.shelter_id !== userId))) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not delete a publication that you do not own';
+    throw error;
+  }
+
+  if (pub.transaction_status === 'Awaiting payment' ||
+    pub.transaction_status === 'In progress' ||
+    pub.transaction_status === 'In payment') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not delete a publication with an ongoing payment';
+    throw error;
+  }
+
+  await trx('publication')
+      .where('publication.id', pub.publication_id)
+      .del();
+
+  return true;
+};

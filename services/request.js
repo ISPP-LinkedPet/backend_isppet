@@ -123,3 +123,48 @@ exports.hasRequest = async (connection, userId, requestId) => {
 
   return hasRequest;
 };
+
+exports.deleteRequest = async (requestId, userId, trx) => {
+  const particular = await trx('particular')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+  if (!particular) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Particular not found';
+    throw error;
+  }
+
+  const request = await trx('request')
+      .where('request.id', requestId)
+      .first();
+
+  if (!request) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Request not found';
+    throw error;
+  }
+ console.log(particular);
+ console.log(request);
+  if (request.particular_id !== particular.id) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You do not own this request';
+    throw error;
+  }
+
+  if (request.status === 'Accepted') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not delete an accepted request';
+    throw error;
+  }
+
+  await trx('request')
+      .where('request.id', request.id)
+      .del();
+
+  return true;
+};

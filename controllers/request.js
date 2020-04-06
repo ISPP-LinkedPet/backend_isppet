@@ -102,3 +102,31 @@ exports.hasRequest = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+
+exports.deleteRequest = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
+  try {
+    const requestId = req.params.id;
+
+    const particularId = req.user.id;
+
+    const request = await requestService.deleteRequest(requestId, particularId, trx);
+
+    // commit
+    await trx.commit();
+
+    return res.status(200).send(request);
+  } catch (error) {
+    console.log(error);
+    // rollback
+    await trx.rollback();
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};

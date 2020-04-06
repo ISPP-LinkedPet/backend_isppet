@@ -418,3 +418,31 @@ exports.editBreedingWithPet = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+
+exports.deleteBreeding = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
+  try {
+    const breedingId = req.params.id;
+
+    const particularId = req.user.id;
+
+    const breeding = await breedingService.deleteBreeding(breedingId, particularId, trx);
+
+    // commit
+    await trx.commit();
+
+    return res.status(200).send(breeding);
+  } catch (error) {
+    console.log(error);
+    // rollback
+    await trx.rollback();
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};

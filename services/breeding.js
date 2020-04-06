@@ -945,3 +945,50 @@ exports.editBreedingWithPet = async (
     throw error;
   }
 };
+
+exports.deleteBreeding = async (breedingId, userId, trx) => {
+  const particular = await trx('particular')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+  if (!particular) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Particular not found';
+    throw error;
+  }
+
+  const breeding = await trx('breeding')
+      .join('publication', 'breeding.publication_id', '=', 'publication.id')
+      .where('breeding.id', breedingId)
+      .first();
+
+  if (!breeding) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Breeding not found';
+    throw error;
+  }
+
+  if (breeding.particular_id !== particular.id) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You do not own this breeding';
+    throw error;
+  }
+
+  if (breeding.transaction_status === 'Awaiting payment' ||
+    breeding.transaction_status === 'In progress' ||
+    breeding.transaction_status === 'In payment') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You can not delete a publication with an ongoing payment';
+    throw error;
+  }
+
+  await trx('publication')
+      .where('publication.id', breeding.publication_id)
+      .del();
+
+  return true;
+};
