@@ -660,7 +660,7 @@ exports.sendBreachNotification = async (trx, params, nodemailer) => {
       auth: {
         user: 'linkedpetsl@gmail.com',
         pass: 'sU28lZ81Hw',
-      }
+      },
     });
 
     // send mail with defined transport object
