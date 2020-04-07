@@ -18,5 +18,6 @@ router.put('/vet/edit/:id', authorization.administrator, (req, res) => administr
 router.post('/registerShelter', authorization.administrator, (req, res) => administratorController.registerShelter(req, res));
 router.get('/statistics', authorization.administrator, (req, res) => administratorController.getStatistics(req, res));
 router.post('/breachNotification', authorization.administrator, (req, res) => administratorController.sendBreachNotification(req, res));
+router.post('/contactMe', administratorController.contactMe);
 
 module.exports = router;

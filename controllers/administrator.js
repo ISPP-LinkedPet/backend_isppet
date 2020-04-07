@@ -463,3 +463,22 @@ exports.sendBreachNotification = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+exports.contactMe = async (req, res) => {
+  const trx = await req.connection.transaction();
+  try {
+    const params = req.body;
+    console.log(params);
+    if (!params) {
+      return res.status(404).send({error: 'Missing params'});
+    }
+
+    const user = await administratorService.contactMe(trx, params, nodemailer);
+    return res.status(200).send({user});
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
