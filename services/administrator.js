@@ -684,3 +684,30 @@ exports.sendBreachNotification = async (trx, params, nodemailer) => {
     throw error;
   }
 };
+exports.contactMe = async (trx, params, nodemailer) => {
+  // Obtenemos todos los emails
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'linkedpetsl@gmail.com',
+      pass: 'sU28lZ81Hw',
+    },
+  });
+
+  // send mail with defined transport object
+  const info = await transporter.sendMail({
+    from: 'LinkedPet <linkedpetSL@gmail.com>', // sender address
+    bcc: 'LinkedPet <linkedpetSL@gmail.com>', // list of receivers
+    subject: 'Contact me: ' + params.name, // Subject line
+    text: 'Email: '+ params.email + '\n' + 'Phone: ' + params.phone + '\n' + 'Message: ' + params.message, // plain text body
+  });
+
+  console.log('Message sent: %s', info.messageId);
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+  // Preview only available when sending through an Ethereal account
+  console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+
+  return info;
+};
