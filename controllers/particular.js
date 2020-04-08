@@ -93,3 +93,31 @@ exports.getMyData = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+
+exports.deleteParticular = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
+  try {
+    const userId = req.user.id;
+
+    const particular = await particularService.deleteParticular(
+        trx,
+        userId,
+    );
+
+    await trx.commit();
+
+    return res.status(200).send({particular});
+  } catch (error) {
+    // rollback
+    await trx.rollback();
+
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};

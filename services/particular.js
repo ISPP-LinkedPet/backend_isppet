@@ -374,3 +374,23 @@ const crearPdf = async (pdfFile) => {
     });
   });
 };
+
+exports.deleteParticular = async (trx, userId) => {
+  const particular = await trx('particular')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+
+  if (!particular) {
+    const error = new Error();
+    error.status = 400;
+    error.message = 'No particulars with that ID';
+    throw error;
+  }
+
+  await trx('user_account')
+      .where('user_account.id', userId)
+      .del();
+
+  return true;
+};

@@ -234,3 +234,35 @@ const crearPdf = async (pdfFile) => {
     });
   });
 };
+
+exports.deleteShelter = async (trx, userId) => {
+  const shelter = await trx('shelter')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+
+  if (!shelter) {
+    const error = new Error();
+    error.status = 400;
+    error.message = 'No shelters with that ID';
+    throw error;
+  }
+
+  const publications = await trx('adoption')
+      .join('publication', 'publication.id', '=', 'adoption.publication_id')
+      .where('adoption.shelter_id', shelter.id);
+
+  for (i=0; i<publications.length; i++) {
+    if (publications[i]) {
+      await trx('publication')
+          .where('publication.id', publications[i].id)
+          .del();
+    }
+  }
+
+  await trx('user_account')
+      .where('user_account.id', userId)
+      .del();
+
+  return true;
+};

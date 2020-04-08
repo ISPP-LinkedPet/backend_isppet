@@ -68,7 +68,8 @@ exports.up = (knex) => {
           table
               .foreign('user_account_id')
               .references('id')
-              .inTable('user_account');
+              .inTable('user_account')
+              .onDelete('CASCADE');
         })
 
     // publication
@@ -97,7 +98,8 @@ exports.up = (knex) => {
           table
               .foreign('particular_id')
               .references('id')
-              .inTable('particular');
+              .inTable('particular')
+              .onDelete('CASCADE');
         })
 
     // request
@@ -120,7 +122,8 @@ exports.up = (knex) => {
           table
               .foreign('particular_id')
               .references('id')
-              .inTable('particular');
+              .inTable('particular')
+              .onDelete('CASCADE');
         })
 
     // moderator
@@ -148,7 +151,8 @@ exports.up = (knex) => {
           table
               .foreign('particular_id')
               .references('id')
-              .inTable('particular');
+              .inTable('particular')
+              .onDelete('CASCADE');
           table
               .integer('publication_id')
               .unsigned()
@@ -170,7 +174,8 @@ exports.up = (knex) => {
           table
               .foreign('user_account_id')
               .references('id')
-              .inTable('user_account');
+              .inTable('user_account')
+              .onDelete('CASCADE');
         })
 
     // adoption
@@ -191,7 +196,8 @@ exports.up = (knex) => {
           table
               .foreign('shelter_id')
               .references('id')
-              .inTable('shelter');
+              .inTable('shelter')
+              .onDelete('CASCADE');
         })
 
     // vet
@@ -243,7 +249,8 @@ exports.up = (knex) => {
           table
               .foreign('particular_id')
               .references('id')
-              .inTable('particular');
+              .inTable('particular')
+              .onDelete('CASCADE');
         })
         // breeding
         .createTable('breeding', function(table) {
