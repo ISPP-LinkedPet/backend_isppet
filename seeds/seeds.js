@@ -21,7 +21,7 @@ exports.seed = async (knex) => {
     // shelter
     {
       id: 1,
-      user_name: 'elRefugioEscuela',
+      user_name: 'refugioShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a', // hola
       role: 'shelter',
       activate: true,
@@ -33,7 +33,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 2,
-      user_name: 'arcaSevilla',
+      user_name: 'arcaShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -45,7 +45,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 3,
-      user_name: 'protectoraDoggy',
+      user_name: 'doggyShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: false,
@@ -58,7 +58,7 @@ exports.seed = async (knex) => {
     // administrator
     {
       id: 4,
-      user_name: 'mariaCuevas',
+      user_name: 'mariaAdministrator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'administrator',
       activate: false,
@@ -70,7 +70,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 5,
-      user_name: 'danielNegron',
+      user_name: 'danielAdministrator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'administrator',
       activate: true,
@@ -82,7 +82,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 6,
-      user_name: 'jesusHernandez',
+      user_name: 'jesusAdministrator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'administrator',
       activate: true,
@@ -95,7 +95,7 @@ exports.seed = async (knex) => {
     // moderator
     {
       id: 7,
-      user_name: 'rosaSanchez',
+      user_name: 'rosaModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: true,
@@ -107,7 +107,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 8,
-      user_name: 'luciaMontero',
+      user_name: 'luciaModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: false,
@@ -119,7 +119,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 9,
-      user_name: 'christianM',
+      user_name: 'christianModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: true,
@@ -132,7 +132,7 @@ exports.seed = async (knex) => {
     // particular
     {
       id: 10,
-      user_name: 'palina',
+      user_name: 'palinaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a', // hola
       role: 'particular',
       activate: true,
@@ -144,7 +144,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 11,
-      user_name: 'alvarLuciana',
+      user_name: 'lucianaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -156,7 +156,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 12,
-      user_name: 'pidonado',
+      user_name: 'pidonadoParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: false,
@@ -168,7 +168,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 13,
-      user_name: 'pablodmzeta',
+      user_name: 'pabloParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: false,
@@ -180,7 +180,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 14,
-      user_name: 'aliciaps',
+      user_name: 'aliciaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -192,7 +192,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 15,
-      user_name: 'luciGali',
+      user_name: 'luciaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -204,7 +204,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 16,
-      user_name: 'belen.bmas',
+      user_name: 'belenParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: false,
@@ -216,11 +216,11 @@ exports.seed = async (knex) => {
     },
     {
       id: 17,
-      user_name: 'sacaLaCamara',
+      user_name: 'robertoParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
-      name: 'La Cámara',
+      name: 'Roberto',
       email: 'sacalacamarablog@gmail.com',
       address: 'Calle Sol, nº 4. Sevilla.',
       telephone: '688523694',
@@ -228,7 +228,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 18,
-      user_name: 'mgarciacase',
+      user_name: 'mariaaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: false,
@@ -240,7 +240,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 19,
-      user_name: 'mariafvallejo',
+      user_name: 'vallejoParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -252,7 +252,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 20,
-      user_name: 'mcarmen',
+      user_name: 'mcarmenAdministrator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'administrator',
       activate: true,
@@ -264,7 +264,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 21,
-      user_name: 'juanEsp',
+      user_name: 'juanAdministrator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'administrator',
       activate: false,
@@ -276,7 +276,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 22,
-      user_name: 'clauCabanillas',
+      user_name: 'claudiaAdministrator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'administrator',
       activate: true,
@@ -288,7 +288,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 23,
-      user_name: 'mariaRueda',
+      user_name: 'ruedaAdministrator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'administrator',
       activate: true,
@@ -300,7 +300,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 24,
-      user_name: 'candelaRueda',
+      user_name: 'candelaAdministrator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'administrator',
       activate: true,
@@ -312,7 +312,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 25,
-      user_name: 'estrellasabel',
+      user_name: 'estrellaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -324,7 +324,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 26,
-      user_name: 'alfonsoAM',
+      user_name: 'alfonsoParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -336,7 +336,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 27,
-      user_name: 'leticiaGavira',
+      user_name: 'leticiaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -348,7 +348,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 28,
-      user_name: 'nereaOrtiz',
+      user_name: 'nereaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -360,7 +360,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 29,
-      user_name: 'azaharaOrtiz',
+      user_name: 'azaharaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: false,
@@ -372,7 +372,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 30,
-      user_name: 'mariaIsabel',
+      user_name: 'isabelParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: false,
@@ -384,7 +384,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 31,
-      user_name: 'mariAtortosa',
+      user_name: 'tortosaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: false,
@@ -396,7 +396,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 32,
-      user_name: 'hugoGonzalez',
+      user_name: 'hugoParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -408,7 +408,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 33,
-      user_name: 'andreaGo',
+      user_name: 'andreaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -420,7 +420,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 34,
-      user_name: 'evalan',
+      user_name: 'evaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -433,7 +433,7 @@ exports.seed = async (knex) => {
     // moderator
     {
       id: 35,
-      user_name: 'paulaRey',
+      user_name: 'paulaModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: true,
@@ -445,7 +445,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 36,
-      user_name: 'juanValencia',
+      user_name: 'juanModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: false,
@@ -457,7 +457,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 37,
-      user_name: 'victorSar',
+      user_name: 'victorModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: true,
@@ -469,7 +469,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 38,
-      user_name: 'estherExp',
+      user_name: 'estherModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: true,
@@ -481,7 +481,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 39,
-      user_name: 'miguelBer',
+      user_name: 'miguelModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: false,
@@ -493,7 +493,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 40,
-      user_name: 'javierpm',
+      user_name: 'javierModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: true,
@@ -505,7 +505,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 41,
-      user_name: 'Pedro',
+      user_name: 'pedroModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: true,
@@ -518,7 +518,7 @@ exports.seed = async (knex) => {
     {
       // adoption
       id: 42,
-      user_name: 'prodeanse',
+      user_name: 'prodeanseShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -530,7 +530,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 43,
-      user_name: 'mastercat',
+      user_name: 'mastercatShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -542,7 +542,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 44,
-      user_name: 'prodoggy',
+      user_name: 'prodoggyShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -554,7 +554,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 45,
-      user_name: 'gatosamor',
+      user_name: 'gatosamorShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -566,7 +566,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 46,
-      user_name: 'perrosConPasion',
+      user_name: 'perrosConPasionShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -578,7 +578,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 47,
-      user_name: 'arcaDeNoe',
+      user_name: 'arcaDeNoeShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -590,7 +590,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 48,
-      user_name: 'perrosPaCasa',
+      user_name: 'perrosPaCasaShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -602,7 +602,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 49,
-      user_name: 'loveanimals',
+      user_name: 'loveanimalsShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: false,
@@ -614,7 +614,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 50,
-      user_name: 'tuCompañero',
+      user_name: 'tuCompañeroShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: false,
@@ -626,7 +626,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 51,
-      user_name: 'protectoraMairena',
+      user_name: 'protectoraMairenaShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -638,7 +638,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 52,
-      user_name: 'protectoraTomares',
+      user_name: 'protectoraTomaresShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -650,7 +650,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 53,
-      user_name: 'protectoraBormujos',
+      user_name: 'protectoraBormujosShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -662,7 +662,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 54,
-      user_name: 'protectoraPM',
+      user_name: 'protectoraPMShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -674,7 +674,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 55,
-      user_name: 'protectoraTriana',
+      user_name: 'protectoraTrianaShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
