@@ -66,3 +66,31 @@ exports.getMyData = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+
+exports.deleteShelter = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
+  try {
+    const userId = req.user.id;
+
+    const shelter = await shelterService.deleteShelter(
+        trx,
+        userId,
+    );
+
+    await trx.commit();
+
+    return res.status(200).send({shelter});
+  } catch (error) {
+    // rollback
+    await trx.rollback();
+
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
