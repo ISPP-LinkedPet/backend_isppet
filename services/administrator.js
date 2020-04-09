@@ -29,6 +29,13 @@ exports.banUser = async (connection, userId) => {
     throw error;
   }
 
+  if (user.role == 'administrator') {
+    const error = new Error();
+    error.status = 400;
+    error.message = 'This user is an administrator';
+    throw error;
+  }
+
   try {
     user.activate = false;
     await connection('user_account')
