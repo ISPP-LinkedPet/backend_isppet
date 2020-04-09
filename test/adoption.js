@@ -23,6 +23,7 @@ describe('adoptions', function() {
           .expect(200, done());
     });
   });
+
   describe('POST', function() {
     it('Should return 200 status code and adoption along with data', function(done) {
       const adoption = {animal_photo: 'http://ecx.images-amazon.com/images/I/91DpCeCgSBL._SL1500_.jpg',
@@ -36,6 +37,25 @@ describe('adoptions', function() {
       };
 
       r.post('/adoption/')
+          .send(adoption)
+          .expect(200)
+          .expect('adoption.name', 'Paco', done());
+    });
+  });
+
+  describe('PUT', function() {
+    it('Should return 200 status code and adoption along with the update', function(done) {
+      const adoption = {animal_photo: 'http://ecx.images-amazon.com/images/I/91DpCeCgSBL._SL1500_.jpg',
+        type: 'Dog',
+        location: 'Avda. Reina Mercedes',
+        pedigree: true,
+        birth_date: '2020-01-01',
+        genre: 'Male',
+        breed: 'Doberman',
+        name: 'Paco',
+      };
+
+      r.put('/adoption/edit/13')
           .send(adoption)
           .expect(200)
           .expect('adoption.name', 'Paco', done());
