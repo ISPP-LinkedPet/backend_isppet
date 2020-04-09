@@ -825,7 +825,7 @@ exports.seed = async (knex) => {
       id: 2,
 
       animal_photo:
-        'images/animal_photos/bulterrier.jpg, images/animal_photos/bulterrier2.jpg',
+        'images/animal_photos/bullterrier.jpg, images/animal_photos/bullterrier2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
       vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
