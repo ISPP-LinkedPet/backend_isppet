@@ -622,20 +622,28 @@ exports.getStatistics = async (connection) => {
   const adoptionPubs = await connection('adoption')
       .count('id as adoptions_count');
 
-  const pubs = await connection('publication')
+  const pubs = await connection('breeding')
       .count('id as pubs');
 
-  const reject = await connection('publication')
+  const reject = await connection('breeding')
+      .select('*', 'breeding.id as id')
+      .join('publication', 'breeding.publication_id', '=', 'publication.id')
       .where('publication.document_status', 'Rejected')
-      .count('id as reject_pubs_count');
+      .count('price as reject_pubs_count');
 
-  const inProgress = await connection('publication')
+  const inProgress = await connection('breeding')
+      .select('*', 'breeding.id as id')
+      .join('publication', 'breeding.publication_id', '=', 'publication.id')
       .where('publication.transaction_status', 'In progress')
-      .count('id as in_progress_pubs_count');
+      .count('price as in_progress_pubs_count');
+  console.log(inProgress);
 
-  const completed = await connection('publication')
+  const completed = await connection('breeding')
+      .select('*', 'breeding.id as id')
+      .join('publication', 'breeding.publication_id', '=', 'publication.id')
       .where('publication.transaction_status', 'Completed')
-      .count('id as completed_pubs_count');
+      .count('price as completed_pubs_count');
+  console.log(completed);
 
   const rejectPubs = reject[0].reject_pubs_count / pubs[0].pubs;
   const inProgressPubs = inProgress[0].in_progress_pubs_count / pubs[0].pubs;
@@ -647,7 +655,6 @@ exports.getStatistics = async (connection) => {
 
   return statistics;
 };
-
 
 exports.sendBreachNotification = async (trx, params, nodemailer) => {
   try {
@@ -691,6 +698,7 @@ exports.sendBreachNotification = async (trx, params, nodemailer) => {
     throw error;
   }
 };
+
 exports.contactMe = async (trx, params, nodemailer) => {
   // Obtenemos todos los emails
   const transporter = nodemailer.createTransport({
