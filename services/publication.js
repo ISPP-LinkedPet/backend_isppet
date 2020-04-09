@@ -198,6 +198,60 @@ exports.getCreatedAndAcceptedRequests = async (connection, userId) => {
   return res;
 };
 
+exports.getCreatedAndPendingRequests = async (connection, userId) => {
+  const particular = await connection('particular').select('id').where('user_account_id', userId).first();
+  if (!particular) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Not found user';
+    throw error;
+  }
+
+  const requests = await connection('request')
+      .select('*', 'request.id as requestId', 'request.particular_id as requestUserId')
+      .join('publication', 'request.publication_id', '=', 'publication.id')
+      .where('request.particular_id', particular.id)
+      .where('request.status', 'Pending');
+
+  const res = [];
+  for (const request of requests) {
+    const contactData = await getContactDataOfPublication(connection, request.publication_id);
+    request.contactData = contactData;
+    const t = await isBreedingOrAdoption(connection, request.publication_id);
+    request.publicationType = t[0];
+    res.push(request);
+  }
+
+  return res;
+};
+
+exports.getCreatedAndRejectedRequests = async (connection, userId) => {
+  const particular = await connection('particular').select('id').where('user_account_id', userId).first();
+  if (!particular) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Not found user';
+    throw error;
+  }
+
+  const requests = await connection('request')
+      .select('*', 'request.id as requestId', 'request.particular_id as requestUserId')
+      .join('publication', 'request.publication_id', '=', 'publication.id')
+      .where('request.particular_id', particular.id)
+      .where('request.status', 'Rejected');
+
+  const res = [];
+  for (const request of requests) {
+    const contactData = await getContactDataOfPublication(connection, request.publication_id);
+    request.contactData = contactData;
+    const t = await isBreedingOrAdoption(connection, request.publication_id);
+    request.publicationType = t[0];
+    res.push(request);
+  }
+
+  return res;
+};
+
 exports.getReceivedAndAcceptedRequests = async (connection, user) => {
   // id del shelter o del particular (no es el id de la cuenta de usuario)
   let userId;
