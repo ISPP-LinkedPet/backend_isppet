@@ -636,14 +636,12 @@ exports.getStatistics = async (connection) => {
       .join('publication', 'breeding.publication_id', '=', 'publication.id')
       .where('publication.transaction_status', 'In progress')
       .count('price as in_progress_pubs_count');
-  console.log(inProgress);
 
   const completed = await connection('breeding')
       .select('*', 'breeding.id as id')
       .join('publication', 'breeding.publication_id', '=', 'publication.id')
       .where('publication.transaction_status', 'Completed')
       .count('price as completed_pubs_count');
-  console.log(completed);
 
   const rejectPubs = reject[0].reject_pubs_count / pubs[0].pubs;
   const inProgressPubs = inProgress[0].in_progress_pubs_count / pubs[0].pubs;
