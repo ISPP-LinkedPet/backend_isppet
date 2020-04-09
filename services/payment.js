@@ -125,3 +125,122 @@ exports.payUser = async (connection, userId, breedingId) => {
 
   return result;
 };
+
+// este método devulve la url para autenticarse y pagar
+exports.userCreatePayMePaypal = async (connection, userId, breedingId, returnUrl) => {
+  const user = await connection('user_account').where('user_account.id', userId).first();
+  if (!user) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'User not found';
+    throw error;
+  }
+
+  const breeding = await connection('breeding')
+      .join('publication', 'breeding.publication_id', '=', 'publication.id')
+      .where('breeding.id', breedingId)
+      .andWhere('publication.transaction_status', 'In payment').first();
+  if (!breeding) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Breeding not found';
+    throw error;
+  }
+  console.log('HOLA', ((breeding.price) - (breeding.price * 0.025)).toFixed(2));
+
+  let options = {
+    method: 'POST',
+    uri: 'https://AXzMV8vP6xGP74w-ARMMWm3bmdApUn5LJ4SjMtjkR2r5TQVYKxbpjQ-DTHEjwT__42u2XluItKnvYl8b:ELDUQ-uZhZn38iKNwYPsNrrMZnIbq2x8W_ZJgMPcVI8cRsYYT2rGGlFKx4BCgRezLUVLF0Q91h4Z4vbn@api.sandbox.paypal.com/v1/oauth2/token',
+    form: {
+      grant_type: 'client_credentials',
+    },
+    json: true,
+  };
+  let result = await rp(options);
+
+  options = {
+    method: 'POST',
+    uri: 'https://api.sandbox.paypal.com/v1/payments/payment',
+    body: {
+      'intent': 'sale',
+      'payer': {
+        'payment_method': 'paypal',
+      },
+      'transactions': [{
+        'amount': {
+          'currency': 'EUR',
+          'total': ((breeding.price) - (breeding.price * 0.025)).toFixed(2),
+          'details': {
+          },
+        },
+        'payment_options': {
+          'allowed_payment_method': 'IMMEDIATE_PAY',
+        },
+      }],
+      'redirect_urls': {
+        'return_url': returnUrl + `?breedingId=${breedingId}`,
+        'cancel_url': 'https://example.com/cancel',
+      },
+    },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + result.access_token,
+    },
+    json: true,
+  };
+  result = await rp(options);
+
+  return result;
+};
+
+// check payment state
+exports.checkPaypalPayment = async (connection, breedingId, paymentId, userId) => {
+  const user = await connection('user_account').where('user_account.id', userId).first();
+  if (!user) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'User not found';
+    throw error;
+  }
+
+  const breeding = await connection('breeding')
+  .join('publication', 'breeding.publication_id', '=', 'publication.id')
+  .where('breeding.id', breedingId)
+  .andWhere('publication.transaction_status', 'In payment').first();
+  if (!breeding) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Breeding not found';
+    throw error;
+  }
+  
+  let options = {
+    method: 'POST',
+    uri: 'https://AXzMV8vP6xGP74w-ARMMWm3bmdApUn5LJ4SjMtjkR2r5TQVYKxbpjQ-DTHEjwT__42u2XluItKnvYl8b:ELDUQ-uZhZn38iKNwYPsNrrMZnIbq2x8W_ZJgMPcVI8cRsYYT2rGGlFKx4BCgRezLUVLF0Q91h4Z4vbn@api.sandbox.paypal.com/v1/oauth2/token',
+    form: {
+      grant_type: 'client_credentials',
+    },
+    json: true,
+  };
+  let result = await rp(options);
+  console.log('https://api.sandbox.paypal.com/v1/payments/payment/' + paymentId, result.access_token);
+
+  options = {
+    method: 'GET',
+    uri: 'https://api.sandbox.paypal.com/v1/payments/payment/' + paymentId,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + result.access_token,
+    },
+  };
+  result = await rp(options);
+
+  const responseJson = JSON.parse(result);
+  if (responseJson.state == 'created') {
+    await connection('publication').select('id').join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where('breeding.id', breedingId)
+        .update({transaction_status: 'In progress'});
+  }
+
+  return result;
+};
