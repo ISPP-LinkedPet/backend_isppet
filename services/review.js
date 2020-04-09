@@ -1,7 +1,7 @@
 const REVIEW_FIELDS = [
   'review.id',
   'publication_id',
-  'request_id',
+  'review.particular_id',
   'review_description',
   'star',
 ];
@@ -9,7 +9,7 @@ const REVIEW_FIELDS = [
 exports.getReview = async (connection, reviewId) => {
   const review = await connection('review')
       .select(REVIEW_FIELDS)
-      .join('publication', 'review.publication_id', '=', 'publication.id')
+      .join('particular', 'review.particular_id', '=', 'particular.id')
       .where('review.id', reviewId)
       .first();
 
@@ -28,7 +28,6 @@ exports.writeReview = async (reviewData, userId, trx) => {
       .select('id')
       .where('user_account_id', userId)
       .first();
-  console.log(particularId);
   if (!particularId) {
     const error = new Error();
     error.status = 404;
@@ -43,11 +42,36 @@ exports.writeReview = async (reviewData, userId, trx) => {
       star: reviewData.star,
       review_description: reviewData.review_description,
     });
+    const pubData = {};
+    pubData.transaction_status = 'Reviewed';
+
+    await trx('publication')
+        .join('review', 'review.publication_id', '=', 'publication.id')
+        .where({'review.id': reviewId})
+        .update(pubData);
+
     return await trx('review')
         .select('*', 'review.id as id')
         .where({'review.id': reviewId})
         .first();
   } catch (error) {
+    console.err(error);
+    throw error;
+  }
+};
+
+exports.getReviewsByParticularId = async (connection, particularId) => {
+  try {
+    const res = [];
+    let reviews = [];
+    reviews = await connection('review')
+        .select(REVIEW_FIELDS)
+        .join('publication', 'review.publication_id', '=', 'publication.id')
+        .where('publication.particular_id', particularId);
+    res.push(...reviews);
+    return reviews;
+  } catch (error) {
+    console.log(error);
     throw error;
   }
 };

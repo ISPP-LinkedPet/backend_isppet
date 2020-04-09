@@ -19,9 +19,8 @@ exports.createPaymentToMyself = async (connection, token, userId, breedingId, re
     type: 'card',
     card: {token},
   });
-
   const payment = await stripe.paymentIntents.create({
-    amount: Number(breeding.price),
+    amount: parseInt(((breeding.price) - (breeding.price * 0.025)).toFixed(2)) * 1000,
     currency: 'eur',
     payment_method: paymentCreate.id,
     payment_method_types: ['card'],
@@ -32,15 +31,13 @@ exports.createPaymentToMyself = async (connection, token, userId, breedingId, re
   // Obtengo el estado del pago
   if (payment.status === 'succeeded') {
     // si todo va bien, la publication pasa a ' In progress '
-    await connection('publication').where('id', publication.id).update({transaction_status: 'In progress'});
+    await connection('publication').where('id', publication.publication_id).update({transaction_status: 'In progress'});
   }
 
   return payment; // succeeded,requires_action,requires_source
-
 };
 
 exports.confirmPaymentToMyself = async (connection, userId, paymentId, breedingId) => {
-
   const breeding = await connection('breeding').where('breeding.id', breedingId).first();
   const publication = await connection('publication').join('breeding', 'breeding.publication_id', '=', 'publication.id').where('breeding.id', breedingId).first();
   if (!breeding || !publication) {
@@ -60,13 +57,32 @@ exports.confirmPaymentToMyself = async (connection, userId, paymentId, breedingI
     throw error;
   }
 
-  // TODO: por ahora no se hace nada, cuando se añada la nueva db cambiar estado a 'inPayment'
+  // if paymment is success the publication status change
   await connection('publication').where('id', publication.id).update({transaction_status: 'In progress'});
 
   return payment; // succeeded,requires_action,requires_source
 };
 
-exports.payUser = async () => {
+exports.payUser = async (connection, userId, breedingId) => {
+  const user = await connection('user_account').where('user_account.id', userId).first();
+  if (!user) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'User not found';
+    throw error;
+  }
+
+  const breeding = await connection('breeding')
+      .join('publication', 'breeding.publication_id', '=', 'publication.id')
+      .where('breeding.id', breedingId)
+      .andWhere('publication.transaction_status', 'Awaiting payment').first();
+  if (!breeding) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Breeding not found';
+    throw error;
+  }
+
   let options = {
     method: 'POST',
     uri: 'https://AUySj4xr_LUAZYzmtCIGU7ny4xiHwIaZwRV3B4v9K281Aqu-Vj38CGPwqgOAoWiXsESiqj6hZF1nuZYy:EDKcubqJ6hn4D9UvKWjj1WmSKCmb6utCij_sjxYHsiTtrDNkeFjxiBCm789t5xlWkGnHuhfacEjKGEPz@api.sandbox.paypal.com/v1/oauth2/token',
@@ -88,10 +104,10 @@ exports.payUser = async () => {
         {
           'recipient_type': 'EMAIL',
           'amount': {
-            'value': '9.87',
+            'value': (breeding.price - (breeding.price * 0.075)).toFixed(2),
             'currency': 'EUR',
           },
-          'receiver': 'receiver@example.com',
+          'receiver': user.email,
         },
       ],
     },
@@ -101,6 +117,11 @@ exports.payUser = async () => {
     json: true,
   };
   result = await rp(options);
+
+  // poner publication status a Completed
+  await connection('publication').select('id').join('breeding', 'breeding.publication_id', '=', 'publication.id')
+      .where('breeding.id', breedingId)
+      .update({transaction_status: 'Completed'});
 
   return result;
 };

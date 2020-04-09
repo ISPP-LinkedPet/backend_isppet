@@ -13,6 +13,7 @@ exports.seed = async (knex) => {
   await knex('moderator').del();
   await knex('vet').del();
   await knex('user_account').del();
+  await knex('pet').del();
   await knex.raw(`SET FOREIGN_KEY_CHECKS = 1;`);
 
   // user_account
@@ -20,7 +21,7 @@ exports.seed = async (knex) => {
     // shelter
     {
       id: 1,
-      user_name: 'elRefugioEscuela',
+      user_name: 'refugioShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a', // hola
       role: 'shelter',
       activate: true,
@@ -32,7 +33,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 2,
-      user_name: 'arcaSevilla',
+      user_name: 'arcaShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -44,7 +45,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 3,
-      user_name: 'protectoraDoggy',
+      user_name: 'doggyShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: false,
@@ -57,7 +58,7 @@ exports.seed = async (knex) => {
     // administrator
     {
       id: 4,
-      user_name: 'mariaCuevas',
+      user_name: 'mariaAdministrator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'administrator',
       activate: false,
@@ -69,7 +70,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 5,
-      user_name: 'danielNegron',
+      user_name: 'danielAdministrator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'administrator',
       activate: true,
@@ -81,7 +82,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 6,
-      user_name: 'jesusHernandez',
+      user_name: 'jesusAdministrator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'administrator',
       activate: true,
@@ -94,7 +95,7 @@ exports.seed = async (knex) => {
     // moderator
     {
       id: 7,
-      user_name: 'rosaSanchez',
+      user_name: 'rosaModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: true,
@@ -106,7 +107,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 8,
-      user_name: 'luciaMontero',
+      user_name: 'luciaModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: false,
@@ -118,7 +119,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 9,
-      user_name: 'christianM',
+      user_name: 'christianModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: true,
@@ -126,12 +127,12 @@ exports.seed = async (knex) => {
       email: 'chrmarand@alum.us.es',
       address: 'Avenida de Reina Mercedes, nº 34. Sevilla.',
       telephone: '765285432',
-      optional_photo: 'http://www.ejemplo9.com/',
+      optional_photo: null,
     },
     // particular
     {
       id: 10,
-      user_name: 'palina',
+      user_name: 'palinaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a', // hola
       role: 'particular',
       activate: true,
@@ -139,11 +140,11 @@ exports.seed = async (knex) => {
       email: 'palina_lokaziouk@outlook.es',
       address: 'Avenida Blas Infante, nº 23. Sevilla.',
       telephone: '665823954',
-      optional_photo: null,
+      optional_photo: 'images/users/foto8.jpg',
     },
     {
       id: 11,
-      user_name: 'alvarLuciana',
+      user_name: 'lucianaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -151,11 +152,11 @@ exports.seed = async (knex) => {
       email: 'alvar.luciana@gmail.com',
       address: 'Calle de la Paz, nº 56. Sevilla.',
       telephone: '696869357',
-      optional_photo: null,
+      optional_photo: 'images/users/foto2.jpg',
     },
     {
       id: 12,
-      user_name: 'pidonado',
+      user_name: 'pidonadoParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: false,
@@ -163,11 +164,11 @@ exports.seed = async (knex) => {
       email: 'pidonado@agrosavia.com',
       address: 'Calle el Pinar, nº 23. Sevilla.',
       telephone: '954767889',
-      optional_photo: null,
+      optional_photo: 'images/users/foto3.jpg',
     },
     {
       id: 13,
-      user_name: 'pablodmzeta',
+      user_name: 'pabloParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: false,
@@ -175,11 +176,11 @@ exports.seed = async (knex) => {
       email: 'pablodmzeta@gmail.com',
       address: 'Avenida de la Palmera, nº 32. Sevilla.',
       telephone: '668523694',
-      optional_photo: null,
+      optional_photo: 'images/users/foto1.jpg',
     },
     {
       id: 14,
-      user_name: 'aliciaps',
+      user_name: 'aliciaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -187,11 +188,11 @@ exports.seed = async (knex) => {
       email: 'aliciaps21998@gmail.com',
       address: 'Calle el País, nº 76. Sevilla',
       telephone: '678523694',
-      optional_photo: null,
+      optional_photo: 'images/users/foto4.jpg',
     },
     {
       id: 15,
-      user_name: 'luciGali',
+      user_name: 'luciaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -199,11 +200,11 @@ exports.seed = async (knex) => {
       email: 'lucigali37@gmail.com',
       address: 'Calle Trajano, nº 12. Sevilla.',
       telephone: '621523694',
-      optional_photo: null,
+      optional_photo: 'images/users/foto8.jpg',
     },
     {
       id: 16,
-      user_name: 'belen.bmas',
+      user_name: 'belenParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: false,
@@ -215,11 +216,11 @@ exports.seed = async (knex) => {
     },
     {
       id: 17,
-      user_name: 'sacaLaCamara',
+      user_name: 'robertoParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
-      name: 'La Cámara',
+      name: 'Roberto',
       email: 'sacalacamarablog@gmail.com',
       address: 'Calle Sol, nº 4. Sevilla.',
       telephone: '688523694',
@@ -227,7 +228,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 18,
-      user_name: 'mgarciacase',
+      user_name: 'mariaaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: false,
@@ -239,7 +240,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 19,
-      user_name: 'mariafvallejo',
+      user_name: 'vallejoParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -251,7 +252,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 20,
-      user_name: 'mcarmen',
+      user_name: 'mcarmenAdministrator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'administrator',
       activate: true,
@@ -259,11 +260,11 @@ exports.seed = async (knex) => {
       email: 'mcarmen@gmail.com',
       address: 'Calle Lictores',
       telephone: '657527794',
-      optional_photo: null,
+      optional_photo: 'images/users/foto4.jpg',
     },
     {
       id: 21,
-      user_name: 'juanEsp',
+      user_name: 'juanAdministrator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'administrator',
       activate: false,
@@ -275,7 +276,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 22,
-      user_name: 'clauCabanillas',
+      user_name: 'claudiaAdministrator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'administrator',
       activate: true,
@@ -287,7 +288,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 23,
-      user_name: 'mariaRueda',
+      user_name: 'ruedaAdministrator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'administrator',
       activate: true,
@@ -299,7 +300,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 24,
-      user_name: 'candelaRueda',
+      user_name: 'candelaAdministrator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'administrator',
       activate: true,
@@ -311,7 +312,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 25,
-      user_name: 'estrellasabel',
+      user_name: 'estrellaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -323,7 +324,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 26,
-      user_name: 'alfonsoAM',
+      user_name: 'alfonsoParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -331,11 +332,11 @@ exports.seed = async (knex) => {
       email: 'alfonsoalfonsomarin@gmail.com',
       address: 'Calle la fuga, nº 6. Sevilla.',
       telephone: '677523692',
-      optional_photo: null,
+      optional_photo: 'images/users/foto7.jpg',
     },
     {
       id: 27,
-      user_name: 'leticiaGavira',
+      user_name: 'leticiaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -347,7 +348,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 28,
-      user_name: 'nereaOrtiz',
+      user_name: 'nereaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -359,7 +360,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 29,
-      user_name: 'azaharaOrtiz',
+      user_name: 'azaharaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: false,
@@ -371,7 +372,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 30,
-      user_name: 'mariaIsabel',
+      user_name: 'isabelParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: false,
@@ -383,7 +384,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 31,
-      user_name: 'mariAtortosa',
+      user_name: 'tortosaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: false,
@@ -395,7 +396,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 32,
-      user_name: 'hugoGonzalez',
+      user_name: 'hugoParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -407,7 +408,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 33,
-      user_name: 'andreaGo',
+      user_name: 'andreaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -415,11 +416,11 @@ exports.seed = async (knex) => {
       email: 'ejemplo33@gmail.com',
       address: 'Calle ejemplo 33',
       telephone: '658987885',
-      optional_photo: null,
+      optional_photo: 'images/users/foto5.jpg',
     },
     {
       id: 34,
-      user_name: 'evalan',
+      user_name: 'evaParticular',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'particular',
       activate: true,
@@ -427,12 +428,12 @@ exports.seed = async (knex) => {
       email: 'evalan@gmail.com',
       address: 'Calle Tesalónica, nº 1. Sevilla',
       telephone: '648523394',
-      optional_photo: null,
+      optional_photo: 'images/users/foto6.jpg',
     },
     // moderator
     {
       id: 35,
-      user_name: 'paulaRey',
+      user_name: 'paulaModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: true,
@@ -444,7 +445,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 36,
-      user_name: 'juanValencia',
+      user_name: 'juanModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: false,
@@ -456,7 +457,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 37,
-      user_name: 'victorSar',
+      user_name: 'victorModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: true,
@@ -468,7 +469,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 38,
-      user_name: 'estherExp',
+      user_name: 'estherModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: true,
@@ -480,7 +481,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 39,
-      user_name: 'miguelBer',
+      user_name: 'miguelModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: false,
@@ -492,7 +493,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 40,
-      user_name: 'javierpm',
+      user_name: 'javierModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: true,
@@ -504,7 +505,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 41,
-      user_name: 'Pedro',
+      user_name: 'pedroModerator',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'moderator',
       activate: true,
@@ -517,7 +518,7 @@ exports.seed = async (knex) => {
     {
       // adoption
       id: 42,
-      user_name: 'prodeanse',
+      user_name: 'prodeanseShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -529,7 +530,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 43,
-      user_name: 'mastercat',
+      user_name: 'mastercatShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -541,7 +542,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 44,
-      user_name: 'prodoggy',
+      user_name: 'prodoggyShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -553,7 +554,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 45,
-      user_name: 'gatosamor',
+      user_name: 'gatosamorShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -565,7 +566,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 46,
-      user_name: 'perrosConPasion',
+      user_name: 'perrosConPasionShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -577,7 +578,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 47,
-      user_name: 'arcaDeNoe',
+      user_name: 'arcaDeNoeShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -589,7 +590,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 48,
-      user_name: 'perrosPaCasa',
+      user_name: 'perrosPaCasaShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -601,7 +602,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 49,
-      user_name: 'loveanimals',
+      user_name: 'loveanimalsShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: false,
@@ -613,7 +614,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 50,
-      user_name: 'tuCompañero',
+      user_name: 'tuCompañeroShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: false,
@@ -625,7 +626,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 51,
-      user_name: 'protectoraMairena',
+      user_name: 'protectoraMairenaShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -637,7 +638,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 52,
-      user_name: 'protectoraTomares',
+      user_name: 'protectoraTomaresShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -649,7 +650,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 53,
-      user_name: 'protectoraBormujos',
+      user_name: 'protectoraBormujosShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -661,7 +662,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 54,
-      user_name: 'protectoraPM',
+      user_name: 'protectoraPMShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -673,7 +674,7 @@ exports.seed = async (knex) => {
     },
     {
       id: 55,
-      user_name: 'protectoraTriana',
+      user_name: 'protectoraTrianaShelter',
       password: '$2a$10$aSCoNvSmUKhs8jfzuzf/Gu9t53AsXwlUbE3ZCR/n2wTcJPupBjL4a',
       role: 'shelter',
       activate: true,
@@ -831,7 +832,7 @@ exports.seed = async (knex) => {
       birth_date: '2015-06-30',
       genre: 'Female',
       breed: 'Bulldog Terrier',
-      transaction_status: 'Completed',
+      transaction_status: 'Reviewed',
       type: 'Dog',
       location: 'Calle Arroyo nº 3, Sevilla.',
       pedigree: true,
@@ -847,7 +848,7 @@ exports.seed = async (knex) => {
       birth_date: '2018-09-24',
       genre: 'Male',
       breed: 'Yorkshire Terrier',
-      transaction_status: 'Completed',
+      transaction_status: 'Awaiting payment',
       type: 'Dog',
       location: 'Calle Castellar nº 3, Sevilla.',
       pedigree: true,
@@ -881,7 +882,7 @@ exports.seed = async (knex) => {
       birth_date: '2019-12-01',
       genre: 'Female',
       breed: 'Siamés',
-      transaction_status: 'In progress',
+      transaction_status: 'In payment',
       type: 'Cat',
       location: 'Avda. ejemplo, 5',
       pedigree: true,
@@ -913,7 +914,7 @@ exports.seed = async (knex) => {
       birth_date: '2016-12-12',
       genre: 'Female',
       breed: 'Árabe',
-      transaction_status: 'Completed',
+      transaction_status: 'Awaiting payment',
       type: 'Horse',
       location: 'Calle Imagen nº 7, Sevilla.',
       pedigree: true,
@@ -961,7 +962,7 @@ exports.seed = async (knex) => {
       birth_date: '2018-11-04',
       genre: 'Male',
       breed: 'Yorkshire',
-      transaction_status: 'In progress',
+      transaction_status: 'In payment',
       type: 'Dog',
       location: 'Calle Pureza nº 11, Sevilla.',
       pedigree: true,
@@ -1009,7 +1010,7 @@ exports.seed = async (knex) => {
       birth_date: '2015-12-04',
       genre: 'Male',
       breed: 'Islandés',
-      transaction_status: 'In progress',
+      transaction_status: 'In payment',
       type: 'Horse',
       location: 'Calle Niculoso Pisano nº 2, Sevilla.',
       pedigree: false,
@@ -1089,7 +1090,7 @@ exports.seed = async (knex) => {
       birth_date: '2019-12-04',
       genre: 'Male',
       breed: 'Yorkshire',
-      transaction_status: 'Completed',
+      transaction_status: 'Reviewed',
       type: 'Dog',
       location: 'Calle María Ortíz nº 12, Sevilla.',
       pedigree: false,
@@ -1105,7 +1106,7 @@ exports.seed = async (knex) => {
       birth_date: '2013-10-09',
       genre: 'Female',
       breed: 'siames',
-      transaction_status: 'In progress',
+      transaction_status: 'In payment',
       type: 'Cat',
       location: 'Calle Juan Díaz de Solís nº 19, Sevilla.',
       pedigree: true,
@@ -1121,7 +1122,7 @@ exports.seed = async (knex) => {
       birth_date: '2013-06-03',
       genre: 'Female',
       breed: 'Bulldog',
-      transaction_status: 'Completed',
+      transaction_status: 'Reviewed',
       type: 'Dog',
       location: 'Calle Rubén Darío nº 12. Sevilla.',
       pedigree: true,
@@ -1133,7 +1134,7 @@ exports.seed = async (knex) => {
         'images/animal_photos/bullterrier.jpg, images/animal_photos/bulterrier2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
       vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
-      document_status: 'Accepted',
+      document_status: 'In revision',
       birth_date: '2019-01-01',
       genre: 'Male',
       breed: 'Bulldog',
@@ -1421,7 +1422,7 @@ exports.seed = async (knex) => {
         'images/animal_photos/pomerania.jpg, images/animal_photos/pomerania2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
       vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
-      document_status: 'Accepted',
+      document_status: 'In revision',
       birth_date: '2009-07-09',
       genre: 'Male',
       breed: 'Pomerania',
@@ -1429,6 +1430,86 @@ exports.seed = async (knex) => {
       type: 'Dog',
       location: 'Calle Aznalfarache nº 28. Sevilla.',
       pedigree: false,
+      particular_id: 1,
+    },
+    {
+      id: 40,
+      animal_photo:
+        'images/animal_photos/pomerania.jpg, images/animal_photos/pomerania2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      document_status: 'Accepted',
+      birth_date: '2009-07-09',
+      genre: 'Female',
+      breed: 'Pomerania',
+      transaction_status: 'Reviewed',
+      type: 'Dog',
+      location: 'Calle Aznalfarache nº 28. Sevilla.',
+      pedigree: true,
+      particular_id: 1,
+    },
+    {
+      id: 41,
+      animal_photo:
+        'images/animal_photos/yorkshire.jpg, images/animal_photos/yorkshire2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      document_status: 'Accepted',
+      birth_date: '2009-07-09',
+      genre: 'Female',
+      breed: 'Yorkshire',
+      transaction_status: 'Reviewed',
+      type: 'Dog',
+      location: 'Calle Colón nº 28. Sevilla.',
+      pedigree: true,
+      particular_id: 12,
+    },
+    {
+      id: 42,
+      animal_photo:
+        'images/animal_photos/caniche.jpg, images/animal_photos/caniche2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      document_status: 'Accepted',
+      birth_date: '2009-07-09',
+      genre: 'Female',
+      breed: 'Yorkshire',
+      transaction_status: 'Reviewed',
+      type: 'Dog',
+      location: 'Calle Colón nº 28. Sevilla.',
+      pedigree: true,
+      particular_id: 12,
+    },
+    {
+      id: 43,
+      animal_photo:
+        'images/animal_photos/caniche.jpg, images/animal_photos/caniche2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      document_status: 'Accepted',
+      birth_date: '2009-07-09',
+      genre: 'Male',
+      breed: 'Yorkshire',
+      transaction_status: 'Reviewed',
+      type: 'Dog',
+      location: 'Calle Puerto Real nº 28. Sevilla.',
+      pedigree: true,
+      particular_id: 11,
+    },
+    {
+      id: 44,
+      animal_photo:
+        'images/animal_photos/caniche.jpg, images/animal_photos/caniche2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      document_status: 'Accepted',
+      birth_date: '2009-07-09',
+      genre: 'Male',
+      breed: 'Yorkshire',
+      transaction_status: 'Reviewed',
+      type: 'Dog',
+      location: 'Calle Marruecos nº 28. Sevilla.',
+      pedigree: true,
       particular_id: 1,
     },
   ]);
@@ -1697,7 +1778,7 @@ exports.seed = async (knex) => {
       id: 44,
       status: 'Pending',
       publication_id: 29,
-      particular_id: 1,
+      particular_id: 12,
     },
     {
       id: 45,
@@ -1710,6 +1791,36 @@ exports.seed = async (knex) => {
       status: 'Pending',
       publication_id: 4,
       particular_id: 1,
+    },
+    {
+      id: 47,
+      status: 'Accepted',
+      publication_id: 40,
+      particular_id: 12,
+    },
+    {
+      id: 48,
+      status: 'Accepted',
+      publication_id: 41,
+      particular_id: 1,
+    },
+    {
+      id: 49,
+      status: 'Accepted',
+      publication_id: 42,
+      particular_id: 1,
+    },
+    {
+      id: 50,
+      status: 'Accepted',
+      publication_id: 43,
+      particular_id: 2,
+    },
+    {
+      id: 51,
+      status: 'Accepted',
+      publication_id: 44,
+      particular_id: 2,
     },
   ]);
 
@@ -1730,6 +1841,48 @@ exports.seed = async (knex) => {
       publication_id: 20,
       particular_id: 18,
     },
+    {
+      id: 3,
+      star: 5,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 2,
+      particular_id: 3,
+    },
+    {
+      id: 4,
+      star: 5,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 40,
+      particular_id: 12,
+    },
+    {
+      id: 5,
+      star: 5,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 41,
+      particular_id: 1,
+    },
+    {
+      id: 6,
+      star: 4,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 42,
+      particular_id: 1,
+    },
+    {
+      id: 7,
+      star: 4,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 43,
+      particular_id: 2,
+    },
+    {
+      id: 8,
+      star: 4,
+      review_description: 'La crianza fue completada con éxito.',
+      publication_id: 44,
+      particular_id: 2,
+    },
   ]);
 
   // moderator
@@ -1748,31 +1901,38 @@ exports.seed = async (knex) => {
 
   // breeding
   await knex('breeding').insert([
-    {id: 1, codenumber: 'abcd1234', price: 5.5, publication_id: 1},
-    {id: 2, codenumber: 'abcs1234', price: 69, publication_id: 2},
-    {id: 3, codenumber: 'abcd1214', price: 44.1, publication_id: 3},
-    {id: 4, codenumber: 'ddcd1234', price: 23.5, publication_id: 4},
-    {id: 5, codenumber: 'abcddd34', price: 45.8, publication_id: 5},
-    {id: 6, codenumber: 'abcd12ss', price: 50, publication_id: 6},
-    {id: 7, codenumber: 'abcdwq34', price: 87, publication_id: 7},
-    {id: 8, codenumber: 'abcd3434', price: 30, publication_id: 8},
-    {id: 9, codenumber: 'abcd1666', price: 45, publication_id: 9},
-    {id: 10, codenumber: 'abcd1994', price: 56, publication_id: 10},
-    {id: 11, codenumber: 'a4r51234', price: 106, publication_id: 11},
-    {id: 12, codenumber: 'abc7u734', price: 36, publication_id: 12},
-    {id: 13, codenumber: 'ab3e4234', price: 22, publication_id: 13},
-    {id: 14, codenumber: 'a8091234', price: 65, publication_id: 14},
-    {id: 15, codenumber: 'a1231234', price: 61, publication_id: 15},
-    {id: 16, codenumber: 'abc89074', price: 21, publication_id: 16},
-    {id: 17, codenumber: 'abc68974', price: 55, publication_id: 17},
-    {id: 18, codenumber: 'a1e4r234', price: 61, publication_id: 18},
-    {id: 19, codenumber: 'abcdiko9', price: 21, publication_id: 19},
-    {id: 20, codenumber: 'abc3e7u4', price: 55, publication_id: 20},
-    {id: 21, codenumber: 'abc4y7u4', price: 105, publication_id: 29},
-    {id: 22, codenumber: 'abcdol98', price: 50, publication_id: 30},
-    {id: 23, codenumber: 'ab5j12g4', price: 39, publication_id: 31},
-    {id: 24, codenumber: 'abcd7654', price: 45, publication_id: 32},
-    {id: 25, codenumber: 'thukd1234', price: 75, publication_id: 33},
+    {id: 1, codenumber: 'abcd1234', price: 5.5, publication_id: 1, pet_id: null},
+    {id: 2, codenumber: 'abcs1234', price: 69, publication_id: 2, pet_id: null},
+    {id: 3, codenumber: 'abcd1214', price: 44.1, publication_id: 3, pet_id: null},
+    {id: 4, codenumber: 'ddcd1234', price: 23.5, publication_id: 4, pet_id: null},
+    {id: 5, codenumber: 'abcddd34', price: 45.8, publication_id: 5, pet_id: null},
+    {id: 6, codenumber: 'abcd12ss', price: 50, publication_id: 6, pet_id: null},
+    {id: 7, codenumber: 'abcdwq34', price: 87, publication_id: 7, pet_id: null},
+    {id: 8, codenumber: 'abcd3434', price: 30, publication_id: 8, pet_id: null},
+    {id: 9, codenumber: 'abcd1666', price: 45, publication_id: 9, pet_id: null},
+    {id: 10, codenumber: 'abcd1994', price: 56, publication_id: 10, pet_id: null},
+    {id: 11, codenumber: 'a4r51234', price: 106, publication_id: 11, pet_id: null},
+    {id: 12, codenumber: 'abc7u734', price: 36, publication_id: 12, pet_id: null},
+    {id: 13, codenumber: 'ab3e4234', price: 22, publication_id: 13, pet_id: null},
+    {id: 14, codenumber: 'a8091234', price: 65, publication_id: 14, pet_id: null},
+    {id: 15, codenumber: 'a1231234', price: 61, publication_id: 15, pet_id: null},
+    {id: 16, codenumber: 'abc89074', price: 21, publication_id: 16, pet_id: null},
+    {id: 17, codenumber: 'abc68974', price: 55, publication_id: 17, pet_id: null},
+    {id: 18, codenumber: 'a1e4r234', price: 61, publication_id: 18, pet_id: null},
+    {id: 19, codenumber: 'abcdiko9', price: 21, publication_id: 19, pet_id: null},
+    {id: 20, codenumber: 'abc3e7u4', price: 55, publication_id: 20, pet_id: null},
+    {id: 21, codenumber: 'abc4y7u4', price: 105, publication_id: 29, pet_id: null},
+    {id: 22, codenumber: 'abcdol98', price: 50, publication_id: 30, pet_id: null},
+    {id: 23, codenumber: 'ab5j12g4', price: 39, publication_id: 31, pet_id: null},
+    {id: 24, codenumber: 'abcd7654', price: 45, publication_id: 32, pet_id: null},
+    {id: 25, codenumber: 'thukd1234', price: 75, publication_id: 33, pet_id: null},
+    {id: 26, codenumber: 'abc3e7u4', price: 715, publication_id: 38, pet_id: null},
+    {id: 27, codenumber: 'abcd12ss', price: 175, publication_id: 39, pet_id: null},
+    {id: 28, codenumber: 'abc68974', price: 125, publication_id: 40, pet_id: null},
+    {id: 29, codenumber: 'abc68114', price: 125, publication_id: 41, pet_id: null},
+    {id: 30, codenumber: 'abc62114', price: 85, publication_id: 42, pet_id: null},
+    {id: 31, codenumber: 'abc68124', price: 162, publication_id: 43, pet_id: null},
+    {id: 32, codenumber: '5tc68124', price: 144, publication_id: 44, pet_id: null},
   ]);
 
   // shelter
@@ -1897,7 +2057,84 @@ exports.seed = async (knex) => {
       shelter_id: null,
     },
   ]);
-
+  await knex('pet').insert([
+    // breeding
+    {
+      id: 1,
+      animal_photo:
+        'images/animal_photos/doberman.jpg, images/animal_photos/doberman2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      birth_date: '2020-01-01',
+      genre: 'Male',
+      name: 'Roudi',
+      breed: 'Doberman',
+      pet_status: 'Accepted',
+      type: 'Dog',
+      pedigree: true,
+      particular_id: 1,
+    },
+    {
+      id: 2,
+      animal_photo:
+        'images/animal_photos/yorkshire.jpg, images/animal_photos/yorkshire2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      birth_date: '2017-01-01',
+      genre: 'Male',
+      name: 'Wifi',
+      breed: 'Yorkshire',
+      pet_status: 'Accepted',
+      type: 'Dog',
+      pedigree: true,
+      particular_id: 1,
+    },
+    {
+      id: 3,
+      animal_photo:
+        'images/animal_photos/doberman.jpg, images/animal_photos/doberman2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      birth_date: '2020-01-01',
+      genre: 'Male',
+      name: 'Toby',
+      breed: 'Doberman',
+      pet_status: 'Accepted',
+      type: 'Dog',
+      pedigree: true,
+      particular_id: 12,
+    },
+    {
+      id: 4,
+      animal_photo:
+        'images/animal_photos/caniche.jpg, images/animal_photos/caniche2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      birth_date: '2014-01-01',
+      genre: 'Male',
+      name: 'Lambrusco',
+      breed: 'Caniche',
+      pet_status: 'Accepted',
+      type: 'Dog',
+      pedigree: true,
+      particular_id: 1,
+    },
+    {
+      id: 5,
+      animal_photo:
+        'images/animal_photos/bullterrier.jpg, images/animal_photos/bullterrier2.jpg',
+      identification_photo: 'images/identification_photos/PERROPORTE.jpg',
+      vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
+      birth_date: '2012-01-01',
+      genre: 'Male',
+      name: 'Cerbero',
+      breed: 'Bulldog',
+      pet_status: 'In Revision',
+      type: 'Dog',
+      pedigree: true,
+      particular_id: 1,
+    },
+  ]);
   // vet
   await knex('vet').insert([
     {
@@ -1909,7 +2146,7 @@ exports.seed = async (knex) => {
       address: 'Av. del Aljarafe, 68, 41930 Bormujos, Sevilla.',
       telephone: '955725684',
       optional_photo:
-        'https://fastly.4sqi.net/img/general/600x600/33362540_7Ib17cahmEjREuHkg9_h1bisn1GFn5Pyd-2rVtq2qzw.jpg',
+        'images/vets/bormujos.png',
       is_premium: true,
     },
     {
@@ -1920,8 +2157,7 @@ exports.seed = async (knex) => {
       url: 'http://veterinarioslahuella.es/clinica-veterinaria-bormujos/',
       address: 'Calle Jacinto Benavente, 2C, 41930 Bormujos, Sevilla.',
       telephone: '955723761',
-      optional_photo:
-        'https://lh3.googleusercontent.com/P4s80SY2nURV-wmx2M-uack9j8neJoZnITBEwWAD892NUt5UP_ZZLEd9QqOhXFmwZnsRFQHkNw=w1080-h608-p-no-v0',
+      optional_photo: null,
       is_premium: false,
     },
     {
@@ -1944,7 +2180,7 @@ exports.seed = async (knex) => {
       address: 'Calle Aceituna, 3, 41960 Gines, Sevilla.',
       telephone: '954714547',
       optional_photo:
-        'https://2.bp.blogspot.com/_dq4LEWcxxRU/SxGGMhnozzI/AAAAAAAAAVc/UwUeWf_uRLw/s1600/clinica+veterinaria+f+palomo.jpg',
+        'images/vets/palomo.jpg',
       is_premium: true,
     },
     {
@@ -1956,8 +2192,7 @@ exports.seed = async (knex) => {
         'http://catdog.es/nuestras-clinicas-veterinarias-aljarafe/clinica-veterinaria-gines-aljarafe/',
       address: 'Calle la Mogaba, 15, 41960 Gines, Sevilla.',
       telephone: '954717300',
-      optional_photo:
-        'https://lh3.googleusercontent.com/proxy/br_RwwK4_LOaO0eI-8m--kTMf5Gb5t4RjQaBNDwW4_9nPUEfoSUXk6OpXHFpB7xwA2Df1trhamBTLcGqsGY6CA6w7DfHTaoOpXnDrNyGQ7prtABRvZKVxdCoUscd1Q',
+      optional_photo: null,
       is_premium: false,
     },
     {
@@ -1991,8 +2226,7 @@ exports.seed = async (knex) => {
       url: 'http://www.hispalvet.com',
       address: 'Calle José Luis Navarro, 14, 41940 Tomares, Sevilla.',
       telephone: '954044835',
-      optional_photo:
-        'https://t2.ea.ltmcdn.com/es/places/6/7/0/img_7076_clinica-veterinaria-san-bernardo_0_300_150.jpg',
+      optional_photo: null,
       is_premium: false,
     },
     {
@@ -2004,7 +2238,7 @@ exports.seed = async (knex) => {
       address: 'C/ Tomás De Ibarra, 24, 41940 Tomares, Sevilla.',
       telephone: '954151279',
       optional_photo:
-        'https://s3-media0.fl.yelpcdn.com/bphoto/Rh2CTWTKc5L9cs5qWHtdzQ/o.jpg',
+        'images/vets/rita.jpg',
       is_premium: true,
     },
     {
@@ -2026,8 +2260,7 @@ exports.seed = async (knex) => {
       url: 'https://www.mascotasalud.com',
       address: 'Av. de la Arboleda, 40, 41940 Tomares, Sevilla.',
       telephone: '954870057',
-      optional_photo:
-        'https://www.mascotasalud.com/s/cc_images/teaserbox_33684667.jpg?t=1529350544',
+      optional_photo: null,
       is_premium: false,
     },
     {
@@ -2039,8 +2272,7 @@ exports.seed = async (knex) => {
       address:
         'Calle Rodríguez Marín, 67, 41920 San Juan de Aznalfarache, Sevilla.',
       telephone: '954760813',
-      optional_photo:
-        'https://vetalysveterinarios.com/wp-content/uploads/2016/05/clinica_sevilla.jpg',
+      optional_photo: 'images/vets/clinica_sevilla.jpg',
       is_premium: true,
     },
     {
@@ -2051,8 +2283,7 @@ exports.seed = async (knex) => {
       url: 'https://www.centroveterinariotriana.es/es/',
       address: 'Calle San Jacinto, 68, 41010 Sevilla.',
       telephone: '954333472',
-      optional_photo:
-        'https://s3-media0.fl.yelpcdn.com/bphoto/MwcPd94wJJQZXkkI98rWgg/l.jpg',
+      optional_photo: 'images/vets/triana.jpg',
       is_premium: true,
     },
     {
@@ -2063,8 +2294,7 @@ exports.seed = async (knex) => {
       url: 'https://www.veterinariaalameda.com',
       address: 'Alameda de Hércules, 41, 41002 Sevilla.',
       telephone: '954378569',
-      optional_photo:
-        'https://www.mundoanimalia.com/images/veterinario/76/7b/92/9831384e2ed3938f00b8fb98b3424649/fotos_070__5773.jpg',
+      optional_photo: 'images/vets/alamedasevilla.jpg',
       is_premium: false,
     },
     {
@@ -2086,8 +2316,7 @@ exports.seed = async (knex) => {
       url: 'https://www.thedogtorvet.com',
       address: 'Calle Juan de Mata Carriazo, 5, Local 3, 41018 Sevilla.',
       telephone: '954410900',
-      optional_photo:
-        'https://lh3.googleusercontent.com/proxy/ukNTpmPkphSMptwOQ74CFlLkgjVQ5DM7aKIuF0pXnia84BNpUx76yRh5wfXFpmEDhIRZ0hgjxGHwJ7Gr0LnnfwSKUldZkHq2n-yM73qMsWY',
+      optional_photo: null,
       is_premium: false,
     },
     {
@@ -2098,9 +2327,138 @@ exports.seed = async (knex) => {
       url: 'https://www.centroveterinariotamarguillo.com',
       address: 'Calle Nalón, 19, 41005 Sevilla.',
       telephone: '954922075',
-      optional_photo:
-        'https://t1.ea.ltmcdn.com/es/places/9/7/0/img_7079_centro-veterinario-tamarguillo_0_orig.jpg',
+      optional_photo: 'images/vets/tamarugillo.jpg',
       is_premium: true,
+    },
+  ]);
+
+  // ad_suscription
+  await knex('ad_suscription').insert([
+    {
+      id: 1,
+      vet_id: 1,
+      top_banner:
+        'images/ads/laHuella.png',
+      lateral_banner:
+        'images/ads/capuchinos.png',
+      ad_type: 'CPM',
+      price: '9.99',
+      redirect_to: 'https://www.kivet.com/',
+      active: true,
+      view_count: 0,
+      click_count: 0,
+    },
+    {
+      id: 2,
+      vet_id: 1,
+      top_banner:
+        'images/ads/sanGerman.png',
+      lateral_banner:
+        'images/ads/catDog.png',
+      ad_type: 'CPM',
+      price: '9.99',
+      redirect_to: 'https://www.kivet.com/',
+      active: false,
+      view_count: 0,
+      click_count: 0,
+    },
+    {
+      id: 3,
+      vet_id: 1,
+      top_banner:
+        'images/ads/santaRita.png',
+      lateral_banner:
+        'images/ads/tamarguillo.png',
+      ad_type: 'CPM',
+      price: '9.99',
+      redirect_to: 'https://www.kivet.com/',
+      active: false,
+      view_count: 0,
+      click_count: 0,
+    },
+    {
+      id: 4,
+      vet_id: 2,
+      top_banner:
+        'images/ads/triana.png',
+      lateral_banner:
+        'images/ads/capuchinos.png',
+      ad_type: 'CPM',
+      price: '9.99',
+      redirect_to: 'https://www.kivet.com/',
+      active: false,
+      view_count: 0,
+      click_count: 0,
+    },
+    {
+      id: 5,
+      vet_id: 2,
+      top_banner:
+        'images/ads/vetalys.png',
+      lateral_banner:
+        'images/ads/catDog.png',
+      ad_type: 'DXC',
+      price: '0.99',
+      redirect_to: 'https://centroveterinariobormujos.com/',
+      active: true,
+      view_count: 0,
+      click_count: 0,
+    },
+    {
+      id: 6,
+      vet_id: 3,
+      top_banner:
+        'images/ads/laHuella.png',
+      lateral_banner:
+        'images/ads/tamarguillo.png',
+      ad_type: 'DXC',
+      price: '0.99',
+      redirect_to: 'https://centroveterinariobormujos.com/',
+      active: false,
+      view_count: 0,
+      click_count: 0,
+    },
+    {
+      id: 7,
+      vet_id: 4,
+      top_banner:
+        'images/ads/sanGerman.png',
+      lateral_banner:
+        'images/ads/capuchinos.png',
+      ad_type: 'CPM',
+      price: '9.99',
+      redirect_to: 'https://www.kivet.com/',
+      active: true,
+      view_count: 0,
+      click_count: 0,
+    },
+    {
+      id: 8,
+      vet_id: 5,
+      top_banner:
+        'images/ads/santaRita.png',
+      lateral_banner:
+        'images/ads/catDog.png',
+      ad_type: 'DXC',
+      price: '0.99',
+      redirect_to: 'https://centroveterinariobormujos.com/',
+      active: false,
+      view_count: 0,
+      click_count: 0,
+    },
+    {
+      id: 9,
+      vet_id: 5,
+      top_banner:
+        'images/ads/triana.png',
+      lateral_banner:
+        'images/ads/tamarguillo.png',
+      ad_type: 'DXC',
+      price: '0.99',
+      redirect_to: 'https://www.kivet.com/',
+      active: true,
+      view_count: 0,
+      click_count: 0,
     },
   ]);
 };

@@ -52,16 +52,16 @@ exports.payUser = async (req, res) => {
   try {
     const connection = req.connection;
 
-    // // body
-    // const {paymentId, breedingId} = req.body;
-    // if (!paymentId || !breedingId) {
-    //   return res.status(400).send({error: 'Invalid data'});
-    // }
+    // body
+    const breedingId = req.body.breedingId;
+    if (!breedingId) {
+      return res.status(400).send({error: 'Invalid data'});
+    }
 
-    // // authorization
-    // const userId = req.user.id;
+    // authorization
+    const userId = req.user.id;
 
-    const result = await paymentService.payUser();
+    const result = await paymentService.payUser(connection, userId, breedingId);
 
     return res.status(200).send(result);
   } catch (error) {
