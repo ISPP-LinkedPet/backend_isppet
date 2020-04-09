@@ -189,6 +189,7 @@ exports.userCreatePayMePaypal = async (connection, userId, breedingId, returnUrl
     json: true,
   };
   result = await rp(options);
+  console.log(result);
 
   return result;
 };
@@ -223,7 +224,6 @@ exports.checkPaypalPayment = async (connection, breedingId, paymentId, userId) =
     json: true,
   };
   let result = await rp(options);
-  console.log('https://api.sandbox.paypal.com/v1/payments/payment/' + paymentId, result.access_token);
 
   options = {
     method: 'GET',
@@ -236,6 +236,7 @@ exports.checkPaypalPayment = async (connection, breedingId, paymentId, userId) =
   result = await rp(options);
 
   const responseJson = JSON.parse(result);
+  console.log(responseJson.state);
   if (responseJson.state == 'created') {
     await connection('publication').select('id').join('breeding', 'breeding.publication_id', '=', 'publication.id')
         .where('breeding.id', breedingId)
