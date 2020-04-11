@@ -76,6 +76,62 @@ describe('administrator', function(done) {
             done();
           });
     });
+
+    it('Should return 200 status code and vet along with data', function(done) {
+      const vet = {name: 'Veterinaria',
+        surname: 'Tomás',
+        email: 'tomasvet@veterinaria.com',
+        address: 'Calle Hernán Cortés, 12, 41930 Bormujos, Sevilla',
+        telephone: '954154563',
+      };
+
+      r.post('/administrator/vet/add')
+          .field(vet)
+          .set('Authorization', loginToken)
+          .end(function(err, res) {
+            assert.equal(res.body.vet.surname, 'Tomás');
+            done();
+          });
+    });
+
+    it('Should return 200 status code and shelter along with data', function(done) {
+      const shelter = {user_name: 'testShelter',
+        password: 'holahola',
+        repeat_password: 'holahola',
+        name: 'Test',
+        email: 'test@shelter.com',
+        address: 'Avda. test 5, Sevilla',
+        telephone: '956487596',
+      };
+
+      r.post('/administrator/registerShelter')
+          .field(shelter)
+          .set('Authorization', loginToken)
+          .end(function(err, res) {
+            assert.equal(res.body.user.shelterId, 18);
+            done();
+          });
+    });
+  });
+
+  describe('PUT', function(done) {
+    it('Should return 200 status code and banned user', function(done) {
+      r.put('/administrator/ban/1')
+          .set('Authorization', loginToken)
+          .end(function(err, res) {
+            assert.equal(res.body.activate, 0);
+            done();
+          });
+    });
+
+    it('Should return 200 status code and active user ', function(done) {
+      r.put('/administrator/unban/1')
+          .set('Authorization', loginToken)
+          .end(function(err, res) {
+            assert.equal(res.body.activate, 1);
+            done();
+          });
+    });
   });
 });
 

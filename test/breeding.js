@@ -78,6 +78,17 @@ describe('breedings', function(done) {
           });
     });
   });
+
+  describe('DELETE', function(done) {
+    it('Delete a breeding', function(done) {
+      r.delete('/breeding/delete/25')
+          .set('Authorization', loginToken)
+          .end(function(err, res) {
+            assert.equal(res.body, true);
+            done();
+          });
+    });
+  });
 });
 
 after(function(done) {
