@@ -354,41 +354,32 @@ exports.getAd = async (connection, adId) => {
 
   return res;
 };
+exports.getPremiumVets = async (connection) => {
+  const vets = await connection('vet').where({'vet.is_premium': true});
+  const addresses = vets.map((vet) => {
+    if (!vet.latitude || !vet.longitude) {
+      const address = encodeURI(vet.address);
+      const url = `${BASE_URL}?q=${address}&key=${API_KEY}&language=es&pretty=1`;
+      return axios({
+        method: 'get',
+        url,
+      });
+    }
+  });
 
-exports.makeVetPremium = async (trx, vetId) => {
-  const vet = await trx('vet').where('vet.id', vetId).andWhere('vet.is_premium', 0).first();
-  if (!vet) {
-    const error = new Error();
-    error.status = 400;
-    error.message = 'This vet is already premium';
-    throw error;
-  }
+  await axios.all(addresses).then(
+      axios.spread((...responses) => {
+        responses.forEach((r, index) => {
+          const vet = vets[index];
+          if (!vet.latitude || !vet.longitude) {
+            vet.latitude = r.data.results[0].geometry.lat;
+            vet.longitude = r.data.results[0].geometry.lng;
+          }
+        });
+      }),
+  );
 
-  const makeVetPremium = await trx('vet').where('vet.id', vetId).update({is_premium: 1});
-  if (!makeVetPremium) {
-    const error = new Error();
-    error.status = 403;
-    error.message = 'Not make premium';
-    throw error;
-  }
-};
-
-exports.cancelVetPremium = async (trx, vetId) => {
-  const vet = await trx('vet').where('vet.id', vetId).andWhere('vet.is_premium', 1).first();
-  if (!vet) {
-    const error = new Error();
-    error.status = 403;
-    error.message = 'This vet is not premium, so you cannot cancel';
-    throw error;
-  }
-
-  const cancelVetPremium = await trx('vet').where('vet.id', vetId).update({is_premium: 0});
-  if (!cancelVetPremium) {
-    const error = new Error();
-    error.status = 403;
-    error.message = 'Not cancel';
-    throw error;
-  }
+  return vets;
 };
 
 exports.addVet = async (vetData, vetPhoto, role, connection) => {
