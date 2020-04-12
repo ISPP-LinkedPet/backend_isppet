@@ -236,7 +236,6 @@ exports.requestsByAdoption = async (adoptionId, userId, userRole, connection) =>
         .where('particular.id', particular.id)
         .andWhere('publication.id', adoption.publication_id)
         .first();
-    console.log(checkParticular);
     if (!checkParticular) {
       const error = new Error();
       error.status = 404;
