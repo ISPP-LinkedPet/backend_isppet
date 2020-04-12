@@ -1,8 +1,6 @@
 const request = require('supertest');
 const assert = require('chai').assert;
 const app = require('../index.js').app;
-const fs = require('fs');
-const path = require('path');
 const r = request(app);
 
 describe('vet', function(done) {
