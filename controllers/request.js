@@ -130,3 +130,34 @@ exports.deleteRequest = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+
+exports.requestsByBreeding = async (req, res) => {
+  const connection = req.connection;
+  try {
+    const breedingId = req.params.id;
+    const userId = req.user.id;
+    const requests = await requestService.requestsByBreeding(breedingId, userId, connection);
+    return res.status(200).send({requests});
+  } catch (error) {
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
+
+exports.requestsByAdoption = async (req, res) => {
+  const connection = req.connection;
+  try {
+    const adoptionId = req.params.id;
+    const userId = req.user.id;
+    const userRole = req.user.role;
+    const requests = await requestService.requestsByAdoption(adoptionId, userId, userRole, connection);
+    return res.status(200).send({requests});
+  } catch (error) {
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
