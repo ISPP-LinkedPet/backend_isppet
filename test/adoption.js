@@ -59,6 +59,16 @@ describe('adoptions', function(done) {
             done();
           });
     });
+
+    it('Should return 200 status code and adoption in which you are interested along with data', function(done) {
+      r.post('/adoption/interested/2')
+          .set('Authorization', loginToken)
+          .end(function(err, res) {
+            assert.equal(res.body.id, 52);
+            assert.equal(res.body.status, 'Pending');
+            done();
+          });
+    });
   });
 
   describe('PUT', function(done) {
@@ -80,6 +90,17 @@ describe('adoptions', function(done) {
           .end(function(err, res) {
             pub2 = res.body.adoption;
             assert.equal(pub2.name, 'Paco');
+            done();
+          });
+    });
+  });
+
+  describe('DELETE', function(done) {
+    it('Delete a adoption', function(done) {
+      r.delete('/adoption/delete/6')
+          .set('Authorization', loginToken)
+          .end(function(err, res) {
+            assert.equal(res.body, true);
             done();
           });
     });

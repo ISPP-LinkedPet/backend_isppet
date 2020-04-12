@@ -2,8 +2,6 @@ const request = require('supertest');
 const assert = require('chai').assert;
 const app = require('../index.js').app;
 const r = request(app);
-const path = require('path');
-const fs = require('fs');
 
 let loginToken = '';
 
@@ -47,6 +45,26 @@ describe('moderator', function(done) {
           .end(function(err, res) {
             assert.equal(res.body.id, 23);
             assert.equal(res.body.document_status, 'Rejected');
+            done();
+          });
+    });
+
+    it('Should accept a adoption', function(done) {
+      r.put('/adoption/accept/1')
+          .set('Authorization', loginToken)
+          .end(function(err, res) {
+            assert.equal(res.body.document_status, 'Accepted');
+            assert.equal(res.body.id, 1);
+            done();
+          });
+    });
+
+    it('Should reject a adoption', function(done) {
+      r.put('/adoption/reject/14')
+          .set('Authorization', loginToken)
+          .end(function(err, res) {
+            assert.equal(res.body.document_status, 'Rejected');
+            assert.equal(res.body.id, 14);
             done();
           });
     });
