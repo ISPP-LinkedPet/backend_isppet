@@ -167,3 +167,105 @@ exports.deleteRequest = async (requestId, userId, trx) => {
 
   return true;
 };
+
+exports.requestsByBreeding = async (breedingId, userId, connection) => {
+  const particular = await connection('particular')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+  if (!particular) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Particular not found';
+    throw error;
+  }
+
+  const breeding = await connection('breeding')
+      .where('breeding.id', breedingId)
+      .first();
+  if (!breeding) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'No breeding with that id';
+    throw error;
+  }
+
+  const checkParticular = await connection('particular')
+      .join('publication', 'publication.particular_id', '=', 'particular.id')
+      .where('particular.id', particular.id)
+      .andWhere('publication.id', breeding.publication_id)
+      .first();
+  if (!checkParticular) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You are not the owner of the breeding';
+    throw error;
+  }
+
+  const requests = await connection('request')
+      .where('publication_id', breeding.publication_id);
+
+  return requests;
+};
+
+exports.requestsByAdoption = async (adoptionId, userId, userRole, connection) => {
+  const adoption = await connection('adoption')
+      .where('adoption.id', adoptionId)
+      .first();
+  if (!adoption) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'No adoption with that id';
+    throw error;
+  }
+
+  if (userRole === 'particular') {
+    const particular = await connection('particular')
+        .select('id')
+        .where('user_account_id', userId)
+        .first();
+    if (!particular) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'Particular not found';
+      throw error;
+    }
+
+    const checkParticular = await connection('particular')
+        .join('publication', 'publication.particular_id', '=', 'particular.id')
+        .where('particular.id', particular.id)
+        .andWhere('publication.id', adoption.publication_id)
+        .first();
+    console.log(checkParticular);
+    if (!checkParticular) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'You are not the owner of the adoption';
+      throw error;
+    }
+  } else {
+    const shelter = await connection('shelter')
+        .select('id')
+        .where('user_account_id', userId)
+        .first();
+    if (!shelter) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'Shelter not found';
+      throw error;
+    }
+
+    const checkShelter = adoption.shelter_id === shelter.id;
+    if (!checkShelter) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'You are not the owner of the adoption';
+      throw error;
+    }
+  }
+
+  const requests = await connection('request')
+      .where('publication_id', adoption.publication_id);
+
+  return requests;
+};
