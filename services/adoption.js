@@ -615,7 +615,8 @@ exports.getAdoptions = async (connection, page) => {
       .where('publication.transaction_status', 'Offered')
       .andWhere('publication.document_status', 'Accepted')
       .limit(10)
-      .offset(10 * page);
+      .offset(10 * page)
+      .orderBy('adoption_id', 'asc');
 
   return adoptions;
 };
