@@ -102,13 +102,13 @@ exports.checkPaypalPayment = async (req, res) => {
     // authorization
     const userId = req.user.id;
 
-    const breedingId = req.params.breedingId;
     const paymentId = req.params.paymentId;
-    if (!breedingId || !paymentId) {
-      return res.status(400).send({error: 'BreedingId and paymentId must be provided '});
+    const {breedingId, payerId} = req.query;
+    if (!breedingId || !paymentId || !payerId) {
+      return res.status(400).send({error: 'BreedingId, paymentId and payerId must be provided '});
     }
 
-    const payment = await paymentService.checkPaypalPayment(connection, breedingId, paymentId, userId);
+    const payment = await paymentService.checkPaypalPayment(connection, breedingId, paymentId, userId, payerId);
     return res.status(200).send(payment);
   } catch (error) {
     console.log(error);

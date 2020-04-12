@@ -7,6 +7,6 @@ router.post('/', authorization.particular, (req, res) => paymentController.creat
 router.post('/confirm', authorization.particular, (req, res) => paymentController.confirmPaymentToMyself(req, res));
 router.post('/user', authorization.particular, (req, res) => paymentController.payUser(req, res));
 router.post('/paypalCreatePayment', authorization.particular, (req, res) => paymentController.userCreatePayMePaypal(req, res));
-router.get('/checkPaypalPayment/:breedingId/:paymentId', authorization.particular, (req, res) => paymentController.checkPaypalPayment(req, res));
+router.get('/checkPaypalPayment/:paymentId', authorization.particular, (req, res) => paymentController.checkPaypalPayment(req, res));
 
 module.exports = router;

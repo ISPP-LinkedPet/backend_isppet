@@ -3,6 +3,7 @@ const stripe = require('stripe')(process.env.STRIPE_API_KEY, {
 });
 const rp = require('request-promise-native');
 
+// stripe
 exports.createPaymentToMyself = async (connection, token, userId, breedingId, returnUrl) => {
   // obtengo la breeding, y la publication
   const breeding = await connection('breeding').where('breeding.id', breedingId).first();
@@ -63,6 +64,7 @@ exports.confirmPaymentToMyself = async (connection, userId, paymentId, breedingI
   return payment; // succeeded,requires_action,requires_source
 };
 
+// paypal
 exports.payUser = async (connection, userId, breedingId) => {
   const user = await connection('user_account').where('user_account.id', userId).first();
   if (!user) {
@@ -146,7 +148,6 @@ exports.userCreatePayMePaypal = async (connection, userId, breedingId, returnUrl
     error.message = 'Breeding not found';
     throw error;
   }
-  console.log('HOLA', ((breeding.price) - (breeding.price * 0.025)).toFixed(2));
 
   let options = {
     method: 'POST',
@@ -179,7 +180,7 @@ exports.userCreatePayMePaypal = async (connection, userId, breedingId, returnUrl
       }],
       'redirect_urls': {
         'return_url': returnUrl + `?breedingId=${breedingId}`,
-        'cancel_url': 'https://example.com/cancel',
+        'cancel_url': returnUrl,
       },
     },
     headers: {
@@ -189,32 +190,11 @@ exports.userCreatePayMePaypal = async (connection, userId, breedingId, returnUrl
     json: true,
   };
   result = await rp(options);
-  console.log(result);
 
   return result;
 };
 
-// check payment state
-exports.checkPaypalPayment = async (connection, breedingId, paymentId, userId) => {
-  const user = await connection('user_account').where('user_account.id', userId).first();
-  if (!user) {
-    const error = new Error();
-    error.status = 404;
-    error.message = 'User not found';
-    throw error;
-  }
-
-  const breeding = await connection('breeding')
-  .join('publication', 'breeding.publication_id', '=', 'publication.id')
-  .where('breeding.id', breedingId)
-  .andWhere('publication.transaction_status', 'In payment').first();
-  if (!breeding) {
-    const error = new Error();
-    error.status = 404;
-    error.message = 'Breeding not found';
-    throw error;
-  }
-  
+const executeApprovedPayment = async (paymentId, payerId) => {
   let options = {
     method: 'POST',
     uri: 'https://AXzMV8vP6xGP74w-ARMMWm3bmdApUn5LJ4SjMtjkR2r5TQVYKxbpjQ-DTHEjwT__42u2XluItKnvYl8b:ELDUQ-uZhZn38iKNwYPsNrrMZnIbq2x8W_ZJgMPcVI8cRsYYT2rGGlFKx4BCgRezLUVLF0Q91h4Z4vbn@api.sandbox.paypal.com/v1/oauth2/token',
@@ -226,22 +206,67 @@ exports.checkPaypalPayment = async (connection, breedingId, paymentId, userId) =
   let result = await rp(options);
 
   options = {
+    method: 'POST',
+    uri: 'https://api.sandbox.paypal.com/v1/payments/payment/' + paymentId + '/execute',
+    body: {
+      'payer_id': payerId,
+    },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + result.access_token,
+    },
+    json: true,
+  };
+  return await rp(options);
+};
+
+// check payment state
+exports.checkPaypalPayment = async (connection, breedingId, paymentId, userId, payerId) => {
+  const user = await connection('user_account').where('user_account.id', userId).first();
+  if (!user) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'User not found';
+    throw error;
+  }
+
+  const breeding = await connection('breeding')
+      .join('publication', 'breeding.publication_id', '=', 'publication.id')
+      .where('breeding.id', breedingId)
+      .andWhere('publication.transaction_status', 'In payment').first();
+  if (!breeding) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Breeding not found';
+    throw error;
+  }
+
+  let options = {
+    method: 'POST',
+    uri: 'https://AXzMV8vP6xGP74w-ARMMWm3bmdApUn5LJ4SjMtjkR2r5TQVYKxbpjQ-DTHEjwT__42u2XluItKnvYl8b:ELDUQ-uZhZn38iKNwYPsNrrMZnIbq2x8W_ZJgMPcVI8cRsYYT2rGGlFKx4BCgRezLUVLF0Q91h4Z4vbn@api.sandbox.paypal.com/v1/oauth2/token',
+    form: {
+      grant_type: 'client_credentials',
+    },
+    json: true,
+  };
+  let result = await rp(options);
+
+  await executeApprovedPayment(paymentId, payerId);
+
+  options = {
     method: 'GET',
     uri: 'https://api.sandbox.paypal.com/v1/payments/payment/' + paymentId,
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + result.access_token,
     },
+    json: true,
   };
-  result = await rp(options);
-
-  const responseJson = JSON.parse(result);
-  console.log(responseJson.state);
-  if (responseJson.state == 'created') {
+  responseJson = await rp(options);
+  if (responseJson.state == 'approved') {
     await connection('publication').select('id').join('breeding', 'breeding.publication_id', '=', 'publication.id')
         .where('breeding.id', breedingId)
         .update({transaction_status: 'In progress'});
   }
-
-  return result;
+  return responseJson;
 };
