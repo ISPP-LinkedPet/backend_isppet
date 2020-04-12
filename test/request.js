@@ -2,13 +2,8 @@ const request = require('supertest');
 const assert = require('chai').assert;
 const app = require('../index.js').app;
 const r = request(app);
-const path = require('path');
-const fs = require('fs');
 
 let loginToken = '';
-const pub1 = '';
-const pub2 = '';
-const allPhotos = [];
 
 before(function(done) {
   const login = {

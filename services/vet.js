@@ -35,7 +35,6 @@ exports.premiumTrue = async (vetId, trx) => {
       .select('*')
       .where('vet.id', vetId)
       .first();
-  console.log(vet);
   if (!vet) {
     const error = new Error();
     error.status = 404;
@@ -64,7 +63,6 @@ exports.premiumFalse = async (vetId, trx) => {
       .select('*')
       .where('vet.id', vetId)
       .first();
-  console.log(vet);
   if (!vet) {
     const error = new Error();
     error.status = 404;
