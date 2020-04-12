@@ -1,10 +1,16 @@
-'use strict';
-
 const request = require('supertest');
+const assert = require('chai').assert;
+const app = require('../index.js').app;
+const r = request(app);
+const path = require('path');
+const fs = require('fs');
 
-const r = request('http://localhost:8080');
+let loginToken = '';
+let pub1 = '';
+let pub2 = '';
+const allPhotos = [];
 
-before(function() {
+before(function(done) {
   const login = {
     userName: 'palinaParticular',
     password: 'hola',
@@ -12,47 +18,109 @@ before(function() {
 
   r.post('/auth/login')
       .send(login)
-      .expect(200);
+      .end(function(err, res) {
+        loginToken = res.body.access_token;
+        done();
+      });
 });
 
-describe('breedings', function() {
-  describe('GET', function() {
+describe('breedings', function(done) {
+  describe('GET', function(done) {
     it('Should return json as default data format', function(done) {
       r.get('/breeding/offers')
-          .expect('Content-Type', /json/)
-          .expect(200, done());
+          .set('Authorization', loginToken)
+          .expect(200)
+          .end(function(err, res) {
+            assert.equal(res.body[0].codenumber, 'ddcd1234');
+            done();
+          });
     });
   });
 
-  describe('POST', function() {
+  describe('POST', function(done) {
     it('Should return 200 status code and breeding along with data', function(done) {
-      const breeding = {animal_photo: 'http://ecx.images-amazon.com/images/I/91DpCeCgSBL._SL1500_.jpg',
-        identification_photo: 'http://ecx.images-amazon.com/images/I/91DpCeCgSBL._SL1500_.jpg',
-        vaccine_passport: 'http://ecx.images-amazon.com/images/I/91DpCeCgSBL._SL1500_.jpg',
-        location: 'Avda. Reina Mercedes',
+      const breeding = {location: 'Avda. Reina Mercedes',
         price: 100,
       };
 
-      r.post('/breeding/')
-          .send(breeding)
-          .expect(200)
-          .expect('breeding.location', 'Avda. Reina Mercedes', done());
+      r.post('/breeding')
+          .field(breeding)
+          .attach('animal_photo', 'public/images/animal_photos/doberman.jpg')
+          .attach('animal_photo', 'public/images/animal_photos/doberman2.jpg')
+          .attach('identification_photo', 'public/images/ads/laHuella.png')
+          .attach('vaccine_passport', 'public/images/ads/laHuella.png')
+          .set('Authorization', loginToken)
+          .end(function(err, res) {
+            pub1 = res.body;
+            assert.equal(pub1.price, 100);
+            done();
+          });
     });
   });
 
-  describe('PUT', function() {
+  describe('PUT', function(done) {
     it('Should return 200 status code and breeding along with the update', function(done) {
-      const breeding = {animal_photo: 'http://ecx.images-amazon.com/images/I/91DpCeCgSBL._SL1500_.jpg',
-        identification_photo: 'http://ecx.images-amazon.com/images/I/91DpCeCgSBL._SL1500_.jpg',
-        vaccine_passport: 'http://ecx.images-amazon.com/images/I/91DpCeCgSBL._SL1500_.jpg',
-        location: 'Avda. Reina Mercedes',
+      const breeding = {location: 'Avda. Reina Mercedes',
         price: 100,
       };
 
-      r.put('/breeding/edit/1')
-          .send(breeding)
-          .expect(200)
-          .expect('breeding.location', 'Avda. Reina Mercedes', done());
+      r.put('/breeding/edit/25')
+          .field(breeding)
+          .attach('animal_photo', 'public/images/animal_photos/doberman.jpg')
+          .attach('animal_photo', 'public/images/animal_photos/doberman2.jpg')
+          .attach('identification_photo', 'public/images/ads/laHuella.png')
+          .attach('vaccine_passport', 'public/images/ads/laHuella.png')
+          .set('Authorization', loginToken)
+          .end(function(err, res) {
+            pub2 = res.body;
+            assert.equal(pub2.price, 100);
+            done();
+          });
     });
   });
+
+  describe('DELETE', function(done) {
+    it('Delete a breeding', function(done) {
+      r.delete('/breeding/delete/25')
+          .set('Authorization', loginToken)
+          .end(function(err, res) {
+            assert.equal(res.body, true);
+            done();
+          });
+    });
+  });
+});
+
+after(function(done) {
+  String(pub1.animal_photo).split(',').forEach((photo) => {
+    allPhotos.push(photo);
+  });
+
+  String(pub1.identification_photo).split(',').forEach((photo) => {
+    allPhotos.push(photo);
+  });
+
+  String(pub1.vaccine_passport).split(',').forEach((photo) => {
+    allPhotos.push(photo);
+  });
+
+  String(pub2.animal_photo).split(',').forEach((photo) => {
+    allPhotos.push(photo);
+  });
+
+  String(pub2.identification_photo).split(',').forEach((photo) => {
+    allPhotos.push(photo);
+  });
+
+  String(pub2.vaccine_passport).split(',').forEach((photo) => {
+    allPhotos.push(photo);
+  });
+
+  allPhotos.forEach((photo) => {
+    fs.unlink(path.join('public', photo), (err) => {
+      // nothing to do
+    });
+  });
+
+  done();
 });

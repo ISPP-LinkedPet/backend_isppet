@@ -625,6 +625,12 @@ exports.getStatistics = async (connection) => {
   const pubs = await connection('breeding')
       .count('id as pubs');
 
+  const offered = await connection('breeding')
+      .select('*', 'breeding.id as id')
+      .join('publication', 'breeding.publication_id', '=', 'publication.id')
+      .where('publication.transaction_status', 'Offered')
+      .count('price as offered_pubs_count');
+
   const reject = await connection('breeding')
       .select('*', 'breeding.id as id')
       .join('publication', 'breeding.publication_id', '=', 'publication.id')
@@ -637,19 +643,40 @@ exports.getStatistics = async (connection) => {
       .where('publication.transaction_status', 'In progress')
       .count('price as in_progress_pubs_count');
 
+  const inPayment = await connection('breeding')
+      .select('*', 'breeding.id as id')
+      .join('publication', 'breeding.publication_id', '=', 'publication.id')
+      .where('publication.transaction_status', 'In payment')
+      .count('price as in_payment_pubs_count');
+
+  const awaitingPayment = await connection('breeding')
+      .select('*', 'breeding.id as id')
+      .join('publication', 'breeding.publication_id', '=', 'publication.id')
+      .where('publication.transaction_status', 'Awaiting payment')
+      .count('price as awaiting_payment_pubs_count');
+
   const completed = await connection('breeding')
       .select('*', 'breeding.id as id')
       .join('publication', 'breeding.publication_id', '=', 'publication.id')
       .where('publication.transaction_status', 'Completed')
       .count('price as completed_pubs_count');
 
+  const reviewed = await connection('breeding')
+      .select('*', 'breeding.id as id')
+      .join('publication', 'breeding.publication_id', '=', 'publication.id')
+      .where('publication.transaction_status', 'Reviewed')
+      .count('price as reviewed_pubs_count');
+
+  const offeredPubs = offered[0].offered_pubs_count / pubs[0].pubs;
   const rejectPubs = reject[0].reject_pubs_count / pubs[0].pubs;
-  const inProgressPubs = inProgress[0].in_progress_pubs_count / pubs[0].pubs;
+  const inProgressPubs = (inProgress[0].in_progress_pubs_count + inPayment[0].in_payment_pubs_count +
+    awaitingPayment[0].awaiting_payment_pubs_count) / pubs[0].pubs;
   const completedPubs = completed[0].completed_pubs_count / pubs[0].pubs;
+  const reviewedPubs = reviewed[0].reviewed_pubs_count / pubs[0].pubs;
 
   statistics.push(breedingPubs[0], adoptionPubs[0],
-      {'reject_pubs_percentage': rejectPubs}, {'in_progress_pubs_percentage': inProgressPubs},
-      {'completed_pubs_percentage': completedPubs});
+      {'offered_pubs_percentage': offeredPubs}, {'reject_pubs_percentage': rejectPubs}, {'in_progress_pubs_percentage': inProgressPubs},
+      {'completed_pubs_percentage': completedPubs}, {'reviewed_pubs_percentage': reviewedPubs});
 
   return statistics;
 };
