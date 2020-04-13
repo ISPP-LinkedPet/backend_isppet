@@ -77,15 +77,12 @@ exports.getMyData = async (req, res) => {
         userId,
     );
 
-    res.contentType('application/pdf').send(data);
-
-    // Esto es si se quiere descargar en vez de ver en el navegador
-    // res.writeHead(200, {
-    //   'Content-Type': 'application/pdf',
-    //   'Content-Disposition': 'attachment; filename=Mis_datos_LinkedPet.pdf',
-    //   'Content-Length': data.length,
-    // });
-    // return res.end(data);
+    res.writeHead(200, {
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'attachment; filename=Mis_datos_LinkedPet.pdf',
+      'Content-Length': data.length,
+    });
+    return res.end(data);
   } catch (error) {
     if (error.status && error.message) {
       return res.status(error.status).send({error: error.message});
