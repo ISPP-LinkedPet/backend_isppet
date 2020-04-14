@@ -593,10 +593,7 @@ exports.registerShelter = async (trx, params) => {
 
     // Shelter
     const userAccountId = await trx('user_account').insert(userData);
-    const shelterId = await trx('shelter').insert({
-      user_account_id: userAccountId,
-    });
-    console.log(shelterId);
+    const shelterId = await trx('shelter').insert({user_account_id: userAccountId});
 
     const user = await trx('user_account')
         .select(

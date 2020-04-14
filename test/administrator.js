@@ -125,7 +125,7 @@ describe('administrator', function(done) {
     });
 
     it('Should return 200 status code and active user ', function(done) {
-      r.put('/administrator/unban/1')
+      r.put('/administrator/unban/13')
           .set('Authorization', loginToken)
           .end(function(err, res) {
             assert.equal(res.body.activate, 1);

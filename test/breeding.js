@@ -56,6 +56,33 @@ describe('breedings', function(done) {
             done();
           });
     });
+
+    it('Should return 200 status code and request along with data', function(done) {
+      r.post('/breeding/interested/16')
+          .set('Authorization', loginToken)
+          .end(function(err, res) {
+            assert.equal(res.body.id, 53);
+            assert.equal(res.body.status, 'Pending');
+            done();
+          });
+    });
+
+    it('Should return 200 status code and breeding with pet data', function(done) {
+      const breeding = {petId: 1,
+        price: 100,
+        location: 'Calle Virgen de Guía, 35, 41950 Castilleja de la Cuesta, Sevilla',
+      };
+
+      r.post('/breeding/pet')
+          .field(breeding)
+          .set('Authorization', loginToken)
+          .end(function(err, res) {
+            assert.equal(res.body.type, 'Dog');
+            assert.equal(res.body.document_status, 'Accepted');
+            assert.equal(res.body.breed, 'Doberman');
+            done();
+          });
+    });
   });
 
   describe('PUT', function(done) {
@@ -74,6 +101,38 @@ describe('breedings', function(done) {
           .end(function(err, res) {
             pub2 = res.body;
             assert.equal(pub2.price, 100);
+            done();
+          });
+    });
+
+    it('Should return 200 status code and finish a breeding', function(done) {
+      const breeding = {codenumber: 'abcd1234',
+      };
+
+      r.put('/breeding/finish/1')
+          .field(breeding)
+          .set('Authorization', loginToken)
+          .end(function(err, res) {
+            assert.equal(res.body.id, 1);
+            assert.equal(res.body.transaction_status, 'Awaiting payment');
+            done();
+          });
+    });
+
+    it('Should return 200 status code and breeding with pet data', function(done) {
+      const breeding = {petId: 1,
+        price: 100,
+        location: 'Calle Virgen de Guía, 35, 41950 Castilleja de la Cuesta, Sevilla',
+      };
+
+      r.put('/breeding/pet/edit/25')
+          .field(breeding)
+          .set('Authorization', loginToken)
+          .end(function(err, res) {
+            assert.equal(res.body.type, 'Dog');
+            assert.equal(res.body.document_status, 'Accepted');
+            assert.equal(res.body.breed, 'Doberman');
+            assert.equal(res.body.id, 25);
             done();
           });
     });
