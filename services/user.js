@@ -1,5 +1,3 @@
-
-
 exports.getUser = async (connection, userId) => {
   const res = await connection('user_account')
       .where('user_account.id', userId)

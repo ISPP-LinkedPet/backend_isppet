@@ -26,6 +26,12 @@ const IDENTIFICATION_FOLDER = path.join('images', 'identification_photos');
 const VACCINES_FOLDER = path.join('images', 'vaccine_passports');
 
 const ALLOWED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
+
+const utilService = require('../services/util');
+const dirAnimal = './public/images/animal_photos';
+const dirIdentification = './public/images/identification_photos';
+const dirVaccine = './public/images/vaccine_passports';
+
 exports.getAdoption = async (connection, adoptionId) => {
   const adoption = await connection('adoption')
       .select(ADOPTION_FIELDS)
@@ -61,6 +67,10 @@ exports.updateAdoption = async (
   userId,
   trx,
 ) => {
+  utilService.createPhotoDirectory(dirAnimal);
+  utilService.createPhotoDirectory(dirIdentification);
+  utilService.createPhotoDirectory(dirVaccine);
+
   // Se comprueba que este editando un adoption propio y en revision
   const pub = await trx('publication')
       .join('adoption', 'adoption.publication_id', '=', 'publication.id')
@@ -231,6 +241,10 @@ exports.createAdoption = async (
   role,
   trx,
 ) => {
+  utilService.createPhotoDirectory(dirAnimal);
+  utilService.createPhotoDirectory(dirIdentification);
+  utilService.createPhotoDirectory(dirVaccine);
+
   const allPhotos = [];
 
   try {
