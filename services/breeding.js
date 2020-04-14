@@ -30,6 +30,11 @@ const VACCINES_FOLDER = path.join('images', 'vaccine_passports');
 
 const ALLOWED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
 
+const utilService = require('../services/util');
+const dirAnimal = './public/images/animal_photos';
+const dirIdentification = './public/images/identification_photos';
+const dirVaccine = './public/images/vaccine_passports';
+
 exports.getBreeding = async (connection, breedingId) => {
   const breeding = await connection('breeding')
       .select(BREEDING_FIELDS)
@@ -48,6 +53,10 @@ exports.getBreeding = async (connection, breedingId) => {
 };
 
 exports.createBreeding = async (breedingData, breedingPhotos, userId, trx) => {
+  utilService.createPhotoDirectory(dirAnimal);
+  utilService.createPhotoDirectory(dirIdentification);
+  utilService.createPhotoDirectory(dirVaccine);
+
   const allPhotos = [];
   const codenumberBreeding = numbergenerator();
   try {
@@ -352,6 +361,10 @@ exports.editBreeding = async (
   userId,
   trx,
 ) => {
+  utilService.createPhotoDirectory(dirAnimal);
+  utilService.createPhotoDirectory(dirIdentification);
+  utilService.createPhotoDirectory(dirVaccine);
+
   // Se comprueba que este editando un breeding propio y en revision
   const pub = await trx('publication')
       .select('*', 'user_account.id AS userId')
@@ -748,6 +761,10 @@ exports.getAvailableBreedingsForParticular = async (connection, userId) => {
 };
 
 exports.createBreedingWithPet = async (breedingData, userId, trx) => {
+  utilService.createPhotoDirectory(dirAnimal);
+  utilService.createPhotoDirectory(dirIdentification);
+  utilService.createPhotoDirectory(dirVaccine);
+
   const codenumberBreeding = numbergenerator();
   try {
     const pet = await trx('pet')
@@ -827,6 +844,10 @@ exports.editBreedingWithPet = async (
   userId,
   trx,
 ) => {
+  utilService.createPhotoDirectory(dirAnimal);
+  utilService.createPhotoDirectory(dirIdentification);
+  utilService.createPhotoDirectory(dirVaccine);
+
   // Se comprueba que este editando un breeding propio y en revision
   const pub = await trx('publication')
       .select('*', 'user_account.id AS userId')

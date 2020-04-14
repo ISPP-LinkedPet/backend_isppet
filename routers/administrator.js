@@ -11,13 +11,14 @@ router.put('/ad/edit/:id', authorization.administrator, (req, res) => administra
 router.post('/ad/create', authorization.administrator, (req, res) => administratorController.createAd(req, res));
 router.put('/ad/activate/:id', authorization.administrator, (req, res) => administratorController.activateAd(req, res));
 router.put('/ad/deactivate/:id', authorization.administrator, (req, res) => administratorController.deactivateAd(req, res));
-router.put('/makeVetPremium', authorization.administrator, (req, res) => administratorController.makeVetPremium(req, res));
-router.put('/cancelVetPremium', authorization.administrator, (req, res) => administratorController.cancelVetPremium(req, res));
+router.get('/getPremiumVets', authorization.administrator, (req, res) => administratorController.getPremiumVets(req, res));
 router.post('/vet/add', authorization.administrator, (req, res) => administratorController.addVet(req, res));
 router.put('/vet/edit/:id', authorization.administrator, (req, res) => administratorController.updateVet(req, res));
 router.post('/registerShelter', authorization.administrator, (req, res) => administratorController.registerShelter(req, res));
 router.get('/statistics', authorization.administrator, (req, res) => administratorController.getStatistics(req, res));
 router.post('/breachNotification', authorization.administrator, (req, res) => administratorController.sendBreachNotification(req, res));
 router.post('/contactMe', administratorController.contactMe);
+router.get('/allAds', authorization.administrator, (req, res) => administratorController.getAllAds(req, res));
+
 
 module.exports = router;

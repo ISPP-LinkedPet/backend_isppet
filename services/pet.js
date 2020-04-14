@@ -8,7 +8,16 @@ const VACCINES_FOLDER = path.join('images', 'vaccine_passports');
 
 const ALLOWED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
 
+const utilService = require('../services/util');
+const dirAnimal = './public/images/animal_photos';
+const dirIdentification = './public/images/identification_photos';
+const dirVaccine = './public/images/vaccine_passports';
+
 exports.createPet = async (petName, petPhotos, userId, trx) => {
+  utilService.createPhotoDirectory(dirAnimal);
+  utilService.createPhotoDirectory(dirIdentification);
+  utilService.createPhotoDirectory(dirVaccine);
+
   const allPhotos = [];
   try {
     // Mínimo 2 fotos del animal
@@ -133,6 +142,10 @@ exports.createPet = async (petName, petPhotos, userId, trx) => {
 };
 
 exports.editPet = async (petName, petPhotos, petId, userId, trx) => {
+  utilService.createPhotoDirectory(dirAnimal);
+  utilService.createPhotoDirectory(dirIdentification);
+  utilService.createPhotoDirectory(dirVaccine);
+
   // Se comprueba que este editando un pet propio
   const pet = await trx('pet')
       .select('*', 'user_account.id AS userId')
@@ -482,4 +495,33 @@ exports.deletePet = async (petId, userId, trx) => {
       .del();
 
   return true;
+};
+
+exports.getCanDelete = async (connection, userId, petId) => {
+  const particular = await connection('particular')
+      .where('user_account_id', userId)
+      .first();
+
+  const pet = await connection('pet')
+      .where('pet.id', petId)
+      .first();
+
+  if (particular.id !== pet.particular_id) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You do not own this pet';
+    throw error;
+  }
+  const petCanBeDeleted = await connection('pet')
+      .join('breeding', 'pet.id', '=', 'breeding.pet_id')
+      .join('publication', 'publication.id', '=', 'breeding.publication_id')
+      .where('pet.id', petId)
+      .andWhere('publication.particular_id', particular.id)
+      .first();
+
+  if (petCanBeDeleted) {
+    return false;
+  } else {
+    return true;
+  }
 };

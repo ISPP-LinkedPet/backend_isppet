@@ -72,3 +72,49 @@ exports.payUser = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+
+exports.userCreatePayMePaypal = async (req, res) => {
+  try {
+    const connection = req.connection;
+
+    // authorization
+    const userId = req.user.id;
+
+    const {breedingId, returnUrl} = req.body;
+    if (!breedingId || !returnUrl) {
+      return res.status(400).send({error: 'BreedingId and returnUrl must be provided '});
+    }
+
+    const payment = await paymentService.userCreatePayMePaypal(connection, userId, breedingId, returnUrl);
+    return res.status(200).send(payment);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
+
+exports.checkPaypalPayment = async (req, res) => {
+  try {
+    const connection = req.connection;
+    // authorization
+    const userId = req.user.id;
+
+    const paymentId = req.params.paymentId;
+    const {breedingId, payerId} = req.query;
+    if (!breedingId || !paymentId || !payerId) {
+      return res.status(400).send({error: 'BreedingId, paymentId and payerId must be provided '});
+    }
+
+    const payment = await paymentService.checkPaypalPayment(connection, breedingId, paymentId, userId, payerId);
+    return res.status(200).send(payment);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};

@@ -12,6 +12,12 @@ const VETS = path.join('images', 'vets');
 const USERS_FOLDER = path.join('images', 'users');
 const ALLOWED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
 
+const utilService = require('../services/util');
+const dirLateralBanner = './public/images/lateral_banner';
+const dirTopBanner = './public/images/top_banner';
+const dirVets = './public/images/vets';
+const dirUsers = './public/images/users';
+
 exports.banUser = async (connection, userId) => {
   const user = await this.getUserAccount(connection, userId);
 
@@ -134,8 +140,25 @@ exports.getUnbanUsers = async (connection, userId) => {
   });
   return unbanUsers;
 };
+exports.getAllAds = async (connection, userId) => {
+  const user = await connection('administrator')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+  if (!user) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Not found user';
+    throw error;
+  }
 
+  const ads = await connection('ad_suscription').select('*');
+  return ads;
+};
 exports.updateAds = async (connection, adData, adPhotos, adId, role) => {
+  utilService.createPhotoDirectory(dirLateralBanner);
+  utilService.createPhotoDirectory(dirTopBanner);
+
   const ad = await connection('ad_suscription')
       .where('ad_suscription.id', adId)
       .first();
@@ -150,7 +173,8 @@ exports.updateAds = async (connection, adData, adPhotos, adId, role) => {
   if (role != 'administrator') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not edit an ad because you are not an administrator';
+    error.message =
+      'You can not edit an ad because you are not an administrator';
     throw error;
   }
 
@@ -208,10 +232,14 @@ exports.updateAds = async (connection, adData, adPhotos, adId, role) => {
 };
 
 exports.createAds = async (connection, adData, adPhotos, role) => {
+  utilService.createPhotoDirectory(dirLateralBanner);
+  utilService.createPhotoDirectory(dirTopBanner);
+
   if (role != 'administrator') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not create an ad because you are not an administrator';
+    error.message =
+      'You can not create an ad because you are not an administrator';
     throw error;
   }
 
@@ -354,48 +382,42 @@ exports.getAd = async (connection, adId) => {
 
   return res;
 };
+exports.getPremiumVets = async (connection) => {
+  const vets = await connection('vet').where({'vet.is_premium': true});
+  const addresses = vets.map((vet) => {
+    if (!vet.latitude || !vet.longitude) {
+      const address = encodeURI(vet.address);
+      const url = `${BASE_URL}?q=${address}&key=${API_KEY}&language=es&pretty=1`;
+      return axios({
+        method: 'get',
+        url,
+      });
+    }
+  });
 
-exports.makeVetPremium = async (trx, vetId) => {
-  const vet = await trx('vet').where('vet.id', vetId).andWhere('vet.is_premium', 0).first();
-  if (!vet) {
-    const error = new Error();
-    error.status = 400;
-    error.message = 'This vet is already premium';
-    throw error;
-  }
+  await axios.all(addresses).then(
+      axios.spread((...responses) => {
+        responses.forEach((r, index) => {
+          const vet = vets[index];
+          if (!vet.latitude || !vet.longitude) {
+            vet.latitude = r.data.results[0].geometry.lat;
+            vet.longitude = r.data.results[0].geometry.lng;
+          }
+        });
+      }),
+  );
 
-  const makeVetPremium = await trx('vet').where('vet.id', vetId).update({is_premium: 1});
-  if (!makeVetPremium) {
-    const error = new Error();
-    error.status = 403;
-    error.message = 'Not make premium';
-    throw error;
-  }
-};
-
-exports.cancelVetPremium = async (trx, vetId) => {
-  const vet = await trx('vet').where('vet.id', vetId).andWhere('vet.is_premium', 1).first();
-  if (!vet) {
-    const error = new Error();
-    error.status = 403;
-    error.message = 'This vet is not premium, so you cannot cancel';
-    throw error;
-  }
-
-  const cancelVetPremium = await trx('vet').where('vet.id', vetId).update({is_premium: 0});
-  if (!cancelVetPremium) {
-    const error = new Error();
-    error.status = 403;
-    error.message = 'Not cancel';
-    throw error;
-  }
+  return vets;
 };
 
 exports.addVet = async (vetData, vetPhoto, role, connection) => {
+  utilService.createPhotoDirectory(dirVets);
+
   if (role != 'administrator') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not add a vet because you are not an administrator';
+    error.message =
+      'You can not add a vet because you are not an administrator';
     throw error;
   }
 
@@ -428,9 +450,7 @@ exports.addVet = async (vetData, vetPhoto, role, connection) => {
     const data2 = await this.getLatLong(data);
     const vetId = await connection('vet').insert(data2);
 
-    return await connection('vet')
-        .where('vet.id', vetId)
-        .first();
+    return await connection('vet').where('vet.id', vetId).first();
   } catch (error) {
     // Borramos las fotos guardadas en caso de error
     allPhotos.forEach((photo) => {
@@ -443,6 +463,8 @@ exports.addVet = async (vetData, vetPhoto, role, connection) => {
 };
 
 exports.updateVet = async (connection, vetData, vetPhoto, vetId, role) => {
+  utilService.createPhotoDirectory(dirVets);
+
   const vet = await connection('vet')
       .where('vet.id', vetId)
       .first();
@@ -457,7 +479,8 @@ exports.updateVet = async (connection, vetData, vetPhoto, vetId, role) => {
   if (role != 'administrator') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not edit a vet because you are not an administrator';
+    error.message =
+      'You can not edit a vet because you are not an administrator';
     throw error;
   }
 
@@ -489,13 +512,9 @@ exports.updateVet = async (connection, vetData, vetPhoto, vetId, role) => {
     data.is_premium = false;
     const data2 = await this.getLatLong(data);
 
-    await connection('vet')
-        .where('vet.id', vetId)
-        .update(data2);
+    await connection('vet').where('vet.id', vetId).update(data2);
 
-    return await connection('vet')
-        .where('vet.id', vetId)
-        .first();
+    return await connection('vet').where('vet.id', vetId).first();
   } catch (error) {
     // Borramos las fotos guardadas en caso de error
     allPhotos.forEach((photo) => {
@@ -508,6 +527,8 @@ exports.updateVet = async (connection, vetData, vetPhoto, vetId, role) => {
 };
 
 exports.registerShelter = async (trx, params) => {
+  utilService.createPhotoDirectory(dirUsers);
+
   let photoName;
   try {
     // Check user_name
@@ -540,11 +561,16 @@ exports.registerShelter = async (trx, params) => {
 
     if (params.password.length < 8) {
       error.status = 400;
-      error.message = 'La contraseña debe tener una longitud de al menos 8 caracteres';
+      error.message =
+        'La contraseña debe tener una longitud de al menos 8 caracteres';
       throw error;
     }
 
-    if (params.files && params.files.optional_photo && !Array.isArray(params.files.optional_photo)) {
+    if (
+      params.files &&
+      params.files.optional_photo &&
+      !Array.isArray(params.files.optional_photo)
+    ) {
       photoName = path.join(
           USERS_FOLDER,
           `${uuidv4()}.${getExtension(params.files.optional_photo.name)}`,
@@ -570,7 +596,11 @@ exports.registerShelter = async (trx, params) => {
     const shelterId = await trx('shelter').insert({user_account_id: userAccountId});
 
     const user = await trx('user_account')
-        .select('*', 'user_account.id as userAccountId', 'shelter.id as shelterId')
+        .select(
+            '*',
+            'user_account.id as userAccountId',
+            'shelter.id as shelterId',
+        )
         .join('shelter', 'user_account.id', '=', 'shelter.user_account_id')
         .where('shelter.id', shelterId)
         .first();
@@ -615,14 +645,15 @@ exports.getLatLong = async (vet) => {
 exports.getStatistics = async (connection) => {
   const statistics = [];
 
-  const breedingPubs = await connection('breeding')
-      .count('id as breedings_count');
+  const breedingPubs = await connection('breeding').count(
+      'id as breedings_count',
+  );
 
-  const adoptionPubs = await connection('adoption')
-      .count('id as adoptions_count');
+  const adoptionPubs = await connection('adoption').count(
+      'id as adoptions_count',
+  );
 
-  const pubs = await connection('breeding')
-      .count('id as pubs');
+  const pubs = await connection('breeding').count('id as pubs');
 
   const offered = await connection('breeding')
       .select('*', 'breeding.id as id')
@@ -668,14 +699,23 @@ exports.getStatistics = async (connection) => {
 
   const offeredPubs = offered[0].offered_pubs_count / pubs[0].pubs;
   const rejectPubs = reject[0].reject_pubs_count / pubs[0].pubs;
-  const inProgressPubs = (inProgress[0].in_progress_pubs_count + inPayment[0].in_payment_pubs_count +
-    awaitingPayment[0].awaiting_payment_pubs_count) / pubs[0].pubs;
+  const inProgressPubs =
+    (inProgress[0].in_progress_pubs_count +
+      inPayment[0].in_payment_pubs_count +
+      awaitingPayment[0].awaiting_payment_pubs_count) /
+    pubs[0].pubs;
   const completedPubs = completed[0].completed_pubs_count / pubs[0].pubs;
   const reviewedPubs = reviewed[0].reviewed_pubs_count / pubs[0].pubs;
 
-  statistics.push(breedingPubs[0], adoptionPubs[0],
-      {'offered_pubs_percentage': offeredPubs}, {'reject_pubs_percentage': rejectPubs}, {'in_progress_pubs_percentage': inProgressPubs},
-      {'completed_pubs_percentage': completedPubs}, {'reviewed_pubs_percentage': reviewedPubs});
+  statistics.push(
+      breedingPubs[0],
+      adoptionPubs[0],
+      {offered_pubs_percentage: offeredPubs},
+      {reject_pubs_percentage: rejectPubs},
+      {in_progress_pubs_percentage: inProgressPubs},
+      {completed_pubs_percentage: completedPubs},
+      {reviewed_pubs_percentage: reviewedPubs},
+  );
 
   return statistics;
 };
@@ -683,15 +723,13 @@ exports.getStatistics = async (connection) => {
 exports.sendBreachNotification = async (trx, params, nodemailer) => {
   try {
     // Obtenemos todos los emails
-    const emailsQuery = await trx('user_account')
-        .select('email');
+    const emailsQuery = await trx('user_account').select('email');
 
     const emails = [];
 
     emailsQuery.forEach(function(row) {
       emails.push(row.email);
     });
-
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -738,7 +776,15 @@ exports.contactMe = async (trx, params, nodemailer) => {
     from: 'LinkedPet <linkedpetSL@gmail.com>', // sender address
     bcc: 'LinkedPet <linkedpetSL@gmail.com>', // list of receivers
     subject: 'Contact me: ' + params.name, // Subject line
-    text: 'Email: '+ params.email + '\n' + 'Phone: ' + params.phone + '\n' + 'Message: ' + params.message, // plain text body
+    text:
+      'Email: ' +
+      params.email +
+      '\n' +
+      'Phone: ' +
+      params.phone +
+      '\n' +
+      'Message: ' +
+      params.message, // plain text body
   });
 
   console.log('Message sent: %s', info.messageId);

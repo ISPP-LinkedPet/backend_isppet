@@ -6,6 +6,9 @@ const {v4: uuidv4} = require('uuid');
 const USERS_FOLDER = path.join('images', 'users');
 const ALLOWED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
 
+const utilService = require('../services/util');
+const dirUsers = './public/images/users';
+
 exports.getUserLogin = async (connection, userName) =>{
   const rows = await connection('user_account')
       .select('user_account.id AS userId', 'user_account.role', 'user_account.password', 'user_account.activate')
@@ -27,6 +30,8 @@ exports.getUserLogin = async (connection, userName) =>{
 };
 
 exports.register = async (trx, params) => {
+  utilService.createPhotoDirectory(dirUsers);
+
   let photoName;
   try {
     // Check user_name

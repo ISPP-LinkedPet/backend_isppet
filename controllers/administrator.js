@@ -61,10 +61,7 @@ exports.getBanUsers = async (req, res) => {
     const userId = req.user.id;
     // const role = req.user.role;
 
-    const banUsers = await administratorService.getBanUsers(
-        connection,
-        userId,
-    );
+    const banUsers = await administratorService.getBanUsers(connection, userId);
 
     return res.status(200).send(banUsers);
   } catch (error) {
@@ -98,7 +95,28 @@ exports.getUnbanUsers = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+exports.getAllAds = async (req, res) => {
+  const connection = req.connection;
 
+  try {
+    // authorization
+    const userId = req.user.id;
+    // const role = req.user.role;
+
+    const allAds = await administratorService.getAllAds(
+        connection,
+        userId,
+    );
+
+    return res.status(200).send(allAds);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
 exports.updateAd = async (req, res) => {
   const connection = req.connection;
   const trx = await connection.transaction();
@@ -241,57 +259,13 @@ exports.deactivateAd = async (req, res) => {
   }
 };
 
-exports.makeVetPremium = async (req, res) => {
-  const connection = req.connection;
-
-  // Create transaction
-  const trx = await connection.transaction();
-
+exports.getPremiumVets = async (req, res) => {
   try {
-    const vetId = req.body.vetId;
-    if (!vetId) {
-      return res.status(400).send({error: 'Vet id must be provided '});
-    }
-
-    await administratorService.makeVetPremium(trx, vetId);
-
-    // commit
-    await trx.commit();
-
-    return res.status(200).send('Update successful');
+    const connection = req.connection;
+    const vet = await administratorService.getPremiumVets(connection);
+    return res.status(200).send(vet);
   } catch (error) {
     console.log(error);
-    // rollback
-    await trx.rollback();
-    if (error.status && error.message) {
-      return res.status(error.status).send({error: error.message});
-    }
-    return res.status(500).send({error});
-  }
-};
-
-exports.cancelVetPremium = async (req, res) => {
-  const connection = req.connection;
-
-  // Create transaction
-  const trx = await connection.transaction();
-
-  try {
-    const vetId = req.body.vetId;
-    if (!vetId) {
-      return res.status(400).send({error: 'Vet id must be provided '});
-    }
-
-    await administratorService.cancelVetPremium(trx, vetId);
-
-    // commit
-    await trx.commit();
-
-    return res.status(200).send('Update successful');
-  } catch (error) {
-    console.log(error);
-    // rollback
-    await trx.rollback();
     if (error.status && error.message) {
       return res.status(error.status).send({error: error.message});
     }
@@ -325,12 +299,7 @@ exports.addVet = async (req, res) => {
       return res.status(400).send('Invalid params');
     }
 
-    const vet = await administratorService.addVet(
-        vetData,
-        vetPhoto,
-        role,
-        trx,
-    );
+    const vet = await administratorService.addVet(vetData, vetPhoto, role, trx);
 
     // commit
     await trx.commit();
@@ -430,9 +399,7 @@ exports.getStatistics = async (req, res) => {
   const connection = req.connection;
 
   try {
-    const statistics = await administratorService.getStatistics(
-        connection,
-    );
+    const statistics = await administratorService.getStatistics(connection);
 
     return res.status(200).send(statistics);
   } catch (error) {
@@ -453,7 +420,11 @@ exports.sendBreachNotification = async (req, res) => {
       return res.status(404).send({error: 'Missing params'});
     }
 
-    const user = await administratorService.sendBreachNotification(trx, params, nodemailer);
+    const user = await administratorService.sendBreachNotification(
+        trx,
+        params,
+        nodemailer,
+    );
     return res.status(200).send({user});
   } catch (error) {
     console.log(error);

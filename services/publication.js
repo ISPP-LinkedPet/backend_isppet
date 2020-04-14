@@ -290,6 +290,9 @@ const getReceivedAndAcceptedRequestsParticular = async (connection, particularId
     request.publicationType = publicationType[0];
     const contactData = await getContactDataOfRequest(connection, request.requestId);
     request.contactData = contactData;
+    if (request.publicationType == 'breeding') {
+      request.contactData.breedingId = publicationType[2];
+    }
     res.push(request);
   }
 
