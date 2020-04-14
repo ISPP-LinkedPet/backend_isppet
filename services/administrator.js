@@ -134,6 +134,78 @@ exports.getUnbanUsers = async (connection, userId) => {
   });
   return unbanUsers;
 };
+exports.getUnbanParticulars = async (connection, userId) => {
+  const user = await connection('administrator')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+  if (!user) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Not found user';
+    throw error;
+  }
+
+  const unbanUsers = await connection('user_account').where({
+    'user_account.activate': true,
+  }).andWhere({'user_account.role': 'particular'});
+  return unbanUsers;
+};
+
+exports.getUnbanShelter = async (connection, userId) => {
+  const user = await connection('administrator')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+  if (!user) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Not found user';
+    throw error;
+  }
+
+  const unbanUsers = await connection('user_account').where({
+    'user_account.activate': true,
+  }).andWhere({'user_account.role': 'shelter'});
+  return unbanUsers;
+};
+
+exports.getUnbanModerator = async (connection, userId) => {
+  const user = await connection('administrator')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+  if (!user) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Not found user';
+    throw error;
+  }
+
+  const unbanUsers = await connection('user_account').where({
+    'user_account.activate': true,
+  }).andWhere({'user_account.role': 'moderator'});
+  return unbanUsers;
+};
+
+exports.getUnbanAdministrator = async (connection, userId) => {
+  const user = await connection('administrator')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+  if (!user) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Not found user';
+    throw error;
+  }
+
+  const unbanUsers = await connection('user_account').where({
+    'user_account.activate': true,
+  }).andWhere({'user_account.role': 'administrator'});
+  return unbanUsers;
+};
+
 exports.getAllAds = async (connection, userId) => {
   const user = await connection('administrator')
       .select('id')
