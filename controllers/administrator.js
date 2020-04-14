@@ -95,6 +95,95 @@ exports.getUnbanUsers = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+
+exports.getUnbanParticulars = async (req, res) => {
+  const connection = req.connection;
+
+  try {
+    // authorization
+    const userId = req.user.id;
+    // const role = req.user.role;
+
+    const unbanUsers = await administratorService.getUnbanParticulars(
+        connection,
+        userId,
+    );
+
+    return res.status(200).send(unbanUsers);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
+exports.getUnbanShelter = async (req, res) => {
+  const connection = req.connection;
+
+  try {
+    // authorization
+    const userId = req.user.id;
+    // const role = req.user.role;
+
+    const unbanUsers = await administratorService.getUnbanShelter(
+        connection,
+        userId,
+    );
+
+    return res.status(200).send(unbanUsers);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
+exports.getUnbanModerator = async (req, res) => {
+  const connection = req.connection;
+
+  try {
+    // authorization
+    const userId = req.user.id;
+    // const role = req.user.role;
+
+    const unbanUsers = await administratorService.getUnbanModerator(
+        connection,
+        userId,
+    );
+
+    return res.status(200).send(unbanUsers);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
+exports.getUnbanAdministrator = async (req, res) => {
+  const connection = req.connection;
+
+  try {
+    // authorization
+    const userId = req.user.id;
+    // const role = req.user.role;
+
+    const unbanUsers = await administratorService.getUnbanAdministrator(
+        connection,
+        userId,
+    );
+
+    return res.status(200).send(unbanUsers);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
 exports.getAllAds = async (req, res) => {
   const connection = req.connection;
 
