@@ -173,19 +173,19 @@ exports.getMyData = async (connection, userId) => {
     adoptionsData.forEach((adoption) => {
       pdfFile += `<tr class="item">
                         <td>Raza:</td>
-                        <td>${adoption.breed}</td>
+                        <td>${adoption.breed || 'Pendiente de validación'}</td>
                     </tr>
                     <tr class="item">
                         <td>Género:</td>
-                        <td>${adoption.genre}</td>
+                        <td>${adoption.genre || 'Pendiente de validación'}</td>
                     </tr>
                     <tr class="item">
                         <td>Tipo:</td>
-                        <td>${adoption.type}</td>
+                        <td>${adoption.type || 'Pendiente de validación'}</td>
                     </tr>
                     <tr class="item">
                         <td>Fecha de nacimiento:</td>
-                        <td>${adoption.birth_date.toLocaleDateString()}</td>
+                        <td>${adoption.birth_date ? adoption.birth_date.toLocaleDateString() : 'Pendiente de validación'}</td>
                     </tr>
                     <tr class="item">
                         <td>Localización:</td>
