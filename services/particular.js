@@ -239,19 +239,19 @@ exports.getMyData = async (connection, userId) => {
     breedingsData.forEach((breeding) => {
       pdfFile += `<tr class="item">
                         <td>Raza:</td>
-                        <td>${breeding.breed}</td>
+                        <td>${breeding.breed || 'Pendiente de validación'}</td>
                     </tr>
                     <tr class="item">
                         <td>Género:</td>
-                        <td>${breeding.genre}</td>
+                        <td>${breeding.genre || 'Pendiente de validación'}</td>
                     </tr>
                     <tr class="item">
                         <td>Tipo:</td>
-                        <td>${breeding.type}</td>
+                        <td>${breeding.type || 'Pendiente de validación'}</td>
                     </tr>
                     <tr class="item">
                         <td>Fecha de nacimiento:</td>
-                        <td>${breeding.birth_date.toLocaleDateString()}</td>
+                        <td>${breeding.birth_date ? breeding.birth_date.toLocaleDateString() : 'Pendiente de validación'}</td>
                     </tr>
                     <tr class="item">
                         <td>Localización:</td>
@@ -280,19 +280,19 @@ exports.getMyData = async (connection, userId) => {
     adoptionsData.forEach((adoption) => {
       pdfFile += `<tr class="item">
                         <td>Raza:</td>
-                        <td>${adoption.breed}</td>
+                        <td>${adoption.breed || 'Pendiente de validación'}</td>
                     </tr>
                     <tr class="item">
                         <td>Género:</td>
-                        <td>${adoption.genre}</td>
+                        <td>${adoption.genre || 'Pendiente de validación'}</td>
                     </tr>
                     <tr class="item">
                         <td>Tipo:</td>
-                        <td>${adoption.type}</td>
+                        <td>${adoption.type || 'Pendiente de validación'}</td>
                     </tr>
                     <tr class="item">
                         <td>Fecha de nacimiento:</td>
-                        <td>${adoption.birth_date.toLocaleDateString()}</td>
+                        <td>${adoption.birth_date ? adoption.birth_date.toLocaleDateString() : 'Pendiente de validación'}</td>
                     </tr>
                     <tr class="item">
                         <td>Localización:</td>
@@ -325,19 +325,19 @@ exports.getMyData = async (connection, userId) => {
     petsData.forEach((pet) => {
       pdfFile += `<tr class="item">
                         <td>Raza:</td>
-                        <td>${pet.breed}</td>
+                        <td>${pet.breed || 'Pendiente de validación'}</td>
                     </tr>
                     <tr class="item">
                         <td>Género:</td>
-                        <td>${pet.genre}</td>
+                        <td>${pet.genre || 'Pendiente de validación'}</td>
                     </tr>
                     <tr class="item">
                         <td>Tipo:</td>
-                        <td>${pet.type}</td>
+                        <td>${pet.type || 'Pendiente de validación'}</td>
                     </tr>
                     <tr class="item">
                         <td>Fecha de nacimiento:</td>
-                        <td>${pet.birth_date.toLocaleDateString()}</td>
+                        <td>${pet.birth_date ? pet.birth_date.toLocaleDateString() : 'Pendiente de validación'}</td>
                     </tr>
                     <tr class="item">
                         <td>Pedigree:</td>
