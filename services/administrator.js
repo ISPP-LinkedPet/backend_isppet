@@ -12,6 +12,12 @@ const VETS = path.join('images', 'vets');
 const USERS_FOLDER = path.join('images', 'users');
 const ALLOWED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
 
+const utilService = require('../services/util');
+const dirLateralBanner = './public/images/lateral_banner';
+const dirTopBanner = './public/images/top_banner';
+const dirVets = './public/images/vets';
+const dirUsers = './public/images/users';
+
 exports.banUser = async (connection, userId) => {
   const user = await this.getUserAccount(connection, userId);
 
@@ -136,6 +142,9 @@ exports.getUnbanUsers = async (connection, userId) => {
 };
 
 exports.updateAds = async (connection, adData, adPhotos, adId, role) => {
+  utilService.createPhotoDirectory(dirLateralBanner);
+  utilService.createPhotoDirectory(dirTopBanner);
+
   const ad = await connection('ad_suscription')
       .where('ad_suscription.id', adId)
       .first();
@@ -208,6 +217,9 @@ exports.updateAds = async (connection, adData, adPhotos, adId, role) => {
 };
 
 exports.createAds = async (connection, adData, adPhotos, role) => {
+  utilService.createPhotoDirectory(dirLateralBanner);
+  utilService.createPhotoDirectory(dirTopBanner);
+
   if (role != 'administrator') {
     const error = new Error();
     error.status = 404;
@@ -383,6 +395,8 @@ exports.getPremiumVets = async (connection) => {
 };
 
 exports.addVet = async (vetData, vetPhoto, role, connection) => {
+  utilService.createPhotoDirectory(dirVets);
+
   if (role != 'administrator') {
     const error = new Error();
     error.status = 404;
@@ -434,6 +448,8 @@ exports.addVet = async (vetData, vetPhoto, role, connection) => {
 };
 
 exports.updateVet = async (connection, vetData, vetPhoto, vetId, role) => {
+  utilService.createPhotoDirectory(dirVets);
+
   const vet = await connection('vet')
       .where('vet.id', vetId)
       .first();
@@ -499,6 +515,8 @@ exports.updateVet = async (connection, vetData, vetPhoto, vetId, role) => {
 };
 
 exports.registerShelter = async (trx, params) => {
+  utilService.createPhotoDirectory(dirUsers);
+
   let photoName;
   try {
     // Check user_name
