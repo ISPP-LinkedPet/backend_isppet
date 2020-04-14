@@ -18,5 +18,7 @@ router.post('/registerShelter', authorization.administrator, (req, res) => admin
 router.get('/statistics', authorization.administrator, (req, res) => administratorController.getStatistics(req, res));
 router.post('/breachNotification', authorization.administrator, (req, res) => administratorController.sendBreachNotification(req, res));
 router.post('/contactMe', administratorController.contactMe);
+router.get('/allAds', authorization.administrator, (req, res) => administratorController.getAllAds(req, res));
+
 
 module.exports = router;

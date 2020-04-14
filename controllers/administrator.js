@@ -61,10 +61,7 @@ exports.getBanUsers = async (req, res) => {
     const userId = req.user.id;
     // const role = req.user.role;
 
-    const banUsers = await administratorService.getBanUsers(
-        connection,
-        userId,
-    );
+    const banUsers = await administratorService.getBanUsers(connection, userId);
 
     return res.status(200).send(banUsers);
   } catch (error) {
@@ -98,7 +95,28 @@ exports.getUnbanUsers = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+exports.getAllAds = async (req, res) => {
+  const connection = req.connection;
 
+  try {
+    // authorization
+    const userId = req.user.id;
+    // const role = req.user.role;
+
+    const allAds = await administratorService.getAllAds(
+        connection,
+        userId,
+    );
+
+    return res.status(200).send(allAds);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
 exports.updateAd = async (req, res) => {
   const connection = req.connection;
   const trx = await connection.transaction();
@@ -281,12 +299,7 @@ exports.addVet = async (req, res) => {
       return res.status(400).send('Invalid params');
     }
 
-    const vet = await administratorService.addVet(
-        vetData,
-        vetPhoto,
-        role,
-        trx,
-    );
+    const vet = await administratorService.addVet(vetData, vetPhoto, role, trx);
 
     // commit
     await trx.commit();
@@ -386,9 +399,7 @@ exports.getStatistics = async (req, res) => {
   const connection = req.connection;
 
   try {
-    const statistics = await administratorService.getStatistics(
-        connection,
-    );
+    const statistics = await administratorService.getStatistics(connection);
 
     return res.status(200).send(statistics);
   } catch (error) {
@@ -409,7 +420,11 @@ exports.sendBreachNotification = async (req, res) => {
       return res.status(404).send({error: 'Missing params'});
     }
 
-    const user = await administratorService.sendBreachNotification(trx, params, nodemailer);
+    const user = await administratorService.sendBreachNotification(
+        trx,
+        params,
+        nodemailer,
+    );
     return res.status(200).send({user});
   } catch (error) {
     console.log(error);
