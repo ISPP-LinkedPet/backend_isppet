@@ -483,3 +483,32 @@ exports.deletePet = async (petId, userId, trx) => {
 
   return true;
 };
+
+exports.getCanDelete = async (connection, userId, petId) => {
+  const particular = await connection('particular')
+      .where('user_account_id', userId)
+      .first();
+
+  const pet = await connection('pet')
+      .where('pet.id', petId)
+      .first();
+
+  if (particular.id !== pet.particular_id) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You do not own this pet';
+    throw error;
+  }
+  const petCanBeDeleted = await connection('pet')
+      .join('breeding', 'pet.id', '=', 'breeding.pet_id')
+      .join('publication', 'publication.id', '=', 'breeding.publication_id')
+      .where('pet.id', petId)
+      .andWhere('publication.particular_id', particular.id)
+      .first();
+
+  if (petCanBeDeleted) {
+    return false;
+  } else {
+    return true;
+  }
+};
