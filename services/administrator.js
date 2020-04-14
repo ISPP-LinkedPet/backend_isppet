@@ -140,7 +140,21 @@ exports.getUnbanUsers = async (connection, userId) => {
   });
   return unbanUsers;
 };
+exports.getAllAds = async (connection, userId) => {
+  const user = await connection('administrator')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+  if (!user) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Not found user';
+    throw error;
+  }
 
+  const ads = await connection('ad_suscription').select('*');
+  return ads;
+};
 exports.updateAds = async (connection, adData, adPhotos, adId, role) => {
   utilService.createPhotoDirectory(dirLateralBanner);
   utilService.createPhotoDirectory(dirTopBanner);
@@ -159,7 +173,8 @@ exports.updateAds = async (connection, adData, adPhotos, adId, role) => {
   if (role != 'administrator') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not edit an ad because you are not an administrator';
+    error.message =
+      'You can not edit an ad because you are not an administrator';
     throw error;
   }
 
@@ -223,7 +238,8 @@ exports.createAds = async (connection, adData, adPhotos, role) => {
   if (role != 'administrator') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not create an ad because you are not an administrator';
+    error.message =
+      'You can not create an ad because you are not an administrator';
     throw error;
   }
 
@@ -400,7 +416,8 @@ exports.addVet = async (vetData, vetPhoto, role, connection) => {
   if (role != 'administrator') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not add a vet because you are not an administrator';
+    error.message =
+      'You can not add a vet because you are not an administrator';
     throw error;
   }
 
@@ -433,9 +450,7 @@ exports.addVet = async (vetData, vetPhoto, role, connection) => {
     const data2 = await this.getLatLong(data);
     const vetId = await connection('vet').insert(data2);
 
-    return await connection('vet')
-        .where('vet.id', vetId)
-        .first();
+    return await connection('vet').where('vet.id', vetId).first();
   } catch (error) {
     // Borramos las fotos guardadas en caso de error
     allPhotos.forEach((photo) => {
@@ -464,7 +479,8 @@ exports.updateVet = async (connection, vetData, vetPhoto, vetId, role) => {
   if (role != 'administrator') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not edit a vet because you are not an administrator';
+    error.message =
+      'You can not edit a vet because you are not an administrator';
     throw error;
   }
 
@@ -496,13 +512,9 @@ exports.updateVet = async (connection, vetData, vetPhoto, vetId, role) => {
     data.is_premium = false;
     const data2 = await this.getLatLong(data);
 
-    await connection('vet')
-        .where('vet.id', vetId)
-        .update(data2);
+    await connection('vet').where('vet.id', vetId).update(data2);
 
-    return await connection('vet')
-        .where('vet.id', vetId)
-        .first();
+    return await connection('vet').where('vet.id', vetId).first();
   } catch (error) {
     // Borramos las fotos guardadas en caso de error
     allPhotos.forEach((photo) => {
@@ -549,11 +561,16 @@ exports.registerShelter = async (trx, params) => {
 
     if (params.password.length < 8) {
       error.status = 400;
-      error.message = 'La contraseña debe tener una longitud de al menos 8 caracteres';
+      error.message =
+        'La contraseña debe tener una longitud de al menos 8 caracteres';
       throw error;
     }
 
-    if (params.files && params.files.optional_photo && !Array.isArray(params.files.optional_photo)) {
+    if (
+      params.files &&
+      params.files.optional_photo &&
+      !Array.isArray(params.files.optional_photo)
+    ) {
       photoName = path.join(
           USERS_FOLDER,
           `${uuidv4()}.${getExtension(params.files.optional_photo.name)}`,
@@ -576,11 +593,17 @@ exports.registerShelter = async (trx, params) => {
 
     // Shelter
     const userAccountId = await trx('user_account').insert(userData);
-    const shelterId = await trx('shelter').insert({user_account_id: userAccountId});
+    const shelterId = await trx('shelter').insert({
+      user_account_id: userAccountId,
+    });
     console.log(shelterId);
 
     const user = await trx('user_account')
-        .select('*', 'user_account.id as userAccountId', 'shelter.id as shelterId')
+        .select(
+            '*',
+            'user_account.id as userAccountId',
+            'shelter.id as shelterId',
+        )
         .join('shelter', 'user_account.id', '=', 'shelter.user_account_id')
         .where('shelter.id', shelterId)
         .first();
@@ -625,14 +648,15 @@ exports.getLatLong = async (vet) => {
 exports.getStatistics = async (connection) => {
   const statistics = [];
 
-  const breedingPubs = await connection('breeding')
-      .count('id as breedings_count');
+  const breedingPubs = await connection('breeding').count(
+      'id as breedings_count',
+  );
 
-  const adoptionPubs = await connection('adoption')
-      .count('id as adoptions_count');
+  const adoptionPubs = await connection('adoption').count(
+      'id as adoptions_count',
+  );
 
-  const pubs = await connection('breeding')
-      .count('id as pubs');
+  const pubs = await connection('breeding').count('id as pubs');
 
   const offered = await connection('breeding')
       .select('*', 'breeding.id as id')
@@ -678,14 +702,23 @@ exports.getStatistics = async (connection) => {
 
   const offeredPubs = offered[0].offered_pubs_count / pubs[0].pubs;
   const rejectPubs = reject[0].reject_pubs_count / pubs[0].pubs;
-  const inProgressPubs = (inProgress[0].in_progress_pubs_count + inPayment[0].in_payment_pubs_count +
-    awaitingPayment[0].awaiting_payment_pubs_count) / pubs[0].pubs;
+  const inProgressPubs =
+    (inProgress[0].in_progress_pubs_count +
+      inPayment[0].in_payment_pubs_count +
+      awaitingPayment[0].awaiting_payment_pubs_count) /
+    pubs[0].pubs;
   const completedPubs = completed[0].completed_pubs_count / pubs[0].pubs;
   const reviewedPubs = reviewed[0].reviewed_pubs_count / pubs[0].pubs;
 
-  statistics.push(breedingPubs[0], adoptionPubs[0],
-      {'offered_pubs_percentage': offeredPubs}, {'reject_pubs_percentage': rejectPubs}, {'in_progress_pubs_percentage': inProgressPubs},
-      {'completed_pubs_percentage': completedPubs}, {'reviewed_pubs_percentage': reviewedPubs});
+  statistics.push(
+      breedingPubs[0],
+      adoptionPubs[0],
+      {offered_pubs_percentage: offeredPubs},
+      {reject_pubs_percentage: rejectPubs},
+      {in_progress_pubs_percentage: inProgressPubs},
+      {completed_pubs_percentage: completedPubs},
+      {reviewed_pubs_percentage: reviewedPubs},
+  );
 
   return statistics;
 };
@@ -693,15 +726,13 @@ exports.getStatistics = async (connection) => {
 exports.sendBreachNotification = async (trx, params, nodemailer) => {
   try {
     // Obtenemos todos los emails
-    const emailsQuery = await trx('user_account')
-        .select('email');
+    const emailsQuery = await trx('user_account').select('email');
 
     const emails = [];
 
     emailsQuery.forEach(function(row) {
       emails.push(row.email);
     });
-
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -748,7 +779,15 @@ exports.contactMe = async (trx, params, nodemailer) => {
     from: 'LinkedPet <linkedpetSL@gmail.com>', // sender address
     bcc: 'LinkedPet <linkedpetSL@gmail.com>', // list of receivers
     subject: 'Contact me: ' + params.name, // Subject line
-    text: 'Email: '+ params.email + '\n' + 'Phone: ' + params.phone + '\n' + 'Message: ' + params.message, // plain text body
+    text:
+      'Email: ' +
+      params.email +
+      '\n' +
+      'Phone: ' +
+      params.phone +
+      '\n' +
+      'Message: ' +
+      params.message, // plain text body
   });
 
   console.log('Message sent: %s', info.messageId);
