@@ -383,6 +383,7 @@ exports.addVet = async (req, res) => {
       !vetData.email ||
       !vetData.address ||
       !vetData.telephone ||
+      !vetData.is_premium ||
       !user.id
     ) {
       return res.status(400).send('Invalid params');
@@ -426,6 +427,7 @@ exports.updateVet = async (req, res) => {
       !vetData.email ||
       !vetData.address ||
       !vetData.telephone ||
+      !vetData.is_premium ||
       !vetId ||
       !user.id
     ) {

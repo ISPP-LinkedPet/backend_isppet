@@ -516,9 +516,9 @@ exports.addVet = async (vetData, vetPhoto, role, connection) => {
       url: vetData.url || null,
       address: vetData.address,
       telephone: vetData.telephone,
+      is_premium: vetData.is_premium,
     };
 
-    data.is_premium = false;
     const data2 = await this.getLatLong(data);
     const vetId = await connection('vet').insert(data2);
 
@@ -579,9 +579,9 @@ exports.updateVet = async (connection, vetData, vetPhoto, vetId, role) => {
       url: vetData.url || null,
       address: vetData.address,
       telephone: vetData.telephone,
+      is_premium: vetData.is_premium,
     };
 
-    data.is_premium = false;
     const data2 = await this.getLatLong(data);
 
     await connection('vet').where('vet.id', vetId).update(data2);
