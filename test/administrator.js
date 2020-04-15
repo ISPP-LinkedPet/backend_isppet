@@ -83,6 +83,7 @@ describe('administrator', function(done) {
         email: 'tomasvet@veterinaria.com',
         address: 'Calle Hernán Cortés, 12, 41930 Bormujos, Sevilla',
         telephone: '954154563',
+        is_premium: 0,
       };
 
       r.post('/administrator/vet/add')
