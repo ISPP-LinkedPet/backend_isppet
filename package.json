@@ -9,7 +9,8 @@
     "db:rb": "knex migrate:rollback --all",
     "db:lt": "knex migrate:latest",
     "seed": "knex seed:run",
-    "db": "npm run db:rb && npm run db:lt && npm run seed"
+    "db": "npm run db:rb && npm run db:lt && npm run seed",
+    "test": "npm run db && mocha --exit && npm run db"
   },
   "author": "",
   "license": "ISC",
