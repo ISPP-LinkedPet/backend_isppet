@@ -691,25 +691,30 @@ exports.registerShelter = async (trx, params) => {
 
 exports.getLatLong = async (vet) => {
   const vets = [];
-  vets.push(vet);
-  const addresses = vets.map((vet) => {
-    const address = encodeURI(vet.address);
-    const url = `${BASE_URL}?q=${address}&key=${API_KEY}&language=es&pretty=1`;
-    return axios({
-      method: 'get',
-      url,
+  try {
+    vets.push(vet);
+    const addresses = vets.map((vet) => {
+      const address = encodeURI(vet.address);
+      const url = `${BASE_URL}?q=${address}&key=${API_KEY}&language=es&pretty=1`;
+      return axios({
+        method: 'get',
+        url,
+      });
     });
-  });
 
-  await axios.all(addresses).then(
-      axios.spread((...responses) => {
-        responses.forEach((r, index) => {
-          const vet = vets[index];
-          vet.latitude = r.data.results[0].geometry.lat;
-          vet.longitude = r.data.results[0].geometry.lng;
-        });
-      }),
-  );
+    await axios.all(addresses).then(
+        axios.spread((...responses) => {
+          responses.forEach((r, index) => {
+            const vet = vets[index];
+            vet.latitude = r.data.results[0].geometry.lat;
+            vet.longitude = r.data.results[0].geometry.lng;
+          });
+        }),
+    );
+  } catch (error) {
+    vet.latitude = 0.0;
+    vet.longitude = 0.0;
+  };
 
   return vets[0];
 };
