@@ -7,7 +7,7 @@ deploy:
     strategy: git
     run:
     - knex migrate:latest && knex seed:run
-    - mocha --exit
+    - npm test
     - knex migrate:latest && knex seed:run
     api_key:
       secure: uF4gvAp05IjDTHbRazcHQW3qHfo3/n6ksR150IcfnDRSIy5cFMHRvT1N3RNpLaHci64eWHXR3V/FbrhPYU1r1jRa2S4ZLcqOuC8YoDOD2BtNHytF0jGE8NEBi0QtlZ3D5aDl0195jOk0D10+p2qMyLhbIBJSv+D3T1UzpZ9i9fxTnDSAa5n72tqvYkMGbaqz8UyRD3akSi8TfmVYP52PN/ItXZVwjPaevWGiEOK2jU3yqXLvYSk5ktuCvcQQ574dLu6MDrqdCspdHrjY4J7u/mu7Rh5INHkPcm3p5QMGxGGbGWQPF5u2bsWZCnbRqjt/f+5T+FwEMC6QRzcDKHS3SAwsTp2bVyCmYQY5+uO55JLBdhqfJWLxDsG9IM1TXHkUvxIurMq9oBh/DpCJGxgEYK4ULij4p5AjDGGjhtYTPQSYYZEVFxqi9LOzpsHOID+SLB5E/sZi7pCtAyZTJWI2/PPPRblafH/+jE+wBaOP+WfOdx+rFyh3RLvGGo+X52UvKV/PFT1qjcm7ewrRJcUaYR8SYGXr9hL1KiWN/VNIRW69svkyRZpXrlU/eD76YLxs6YzIuVq1roWYjHwTZWduobPleNV13JbD/7h5W55SZ0rv49LAfYw9XQTcOqIgQTkaQdzA9UWLm/y0ipGJ1V+aAjSNiAlNJHJMXVubmN3HWLA=
