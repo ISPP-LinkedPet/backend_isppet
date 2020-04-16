@@ -61,7 +61,7 @@ describe('request', function(done) {
           .expect(200, done);
     });
 
-    it('Accept a request to one of my publications', async function() {
+    /* it('Accept a request to one of my publications', async function() {
       const login = {
         userName: 'pabloParticular',
         password: 'hola',
@@ -75,7 +75,7 @@ describe('request', function(done) {
       const res = await r.put('/request/46/accept/4')
           .set('Authorization', token);
       assert.equal(res.status, 200);
-    });
+    }); */
   });
 });
 

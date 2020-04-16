@@ -12,7 +12,7 @@ exports.getVets = async (connection) => {
         method: 'get',
         url,
       });
-    }
+    };
   });
 
   await axios.all(addresses).then(
@@ -22,7 +22,7 @@ exports.getVets = async (connection) => {
           if (!vet.latitude || !vet.longitude) {
             vet.latitude = r.data.results[0].geometry.lat;
             vet.longitude = r.data.results[0].geometry.lng;
-          }
+          };
         });
       }),
   );
