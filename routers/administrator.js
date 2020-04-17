@@ -19,6 +19,8 @@ router.get('/getPremiumVets', authorization.administrator, (req, res) => adminis
 router.post('/vet/add', authorization.administrator, (req, res) => administratorController.addVet(req, res));
 router.put('/vet/edit/:id', authorization.administrator, (req, res) => administratorController.updateVet(req, res));
 router.post('/registerShelter', authorization.administrator, (req, res) => administratorController.registerShelter(req, res));
+router.post('/registerModerator', authorization.administrator, (req, res) => administratorController.registerModerator(req, res));
+router.post('/registerAdministrator', authorization.administrator, (req, res) => administratorController.registerAdministrator(req, res));
 router.get('/statistics', authorization.administrator, (req, res) => administratorController.getStatistics(req, res));
 router.post('/breachNotification', authorization.administrator, (req, res) => administratorController.sendBreachNotification(req, res));
 router.post('/contactMe', administratorController.contactMe);
