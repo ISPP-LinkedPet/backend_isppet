@@ -591,11 +591,7 @@ exports.getAdoptionsOffers = async (adoptionParams, connection, userId) => {
   if (!particular) {
     const error = new Error();
     error.status = 404;
-<<<<<<< HEAD
     error.message = 'Usuario no encontrado';
-=======
-    error.message = 'Not found particular';
->>>>>>> develop
     throw error;
   }
 
