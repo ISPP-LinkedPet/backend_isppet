@@ -37,7 +37,7 @@ exports.createPet = async (petName, petPhotos, userId, trx) => {
       const error = new Error();
       error.status = 400;
       error.message =
-        'It is required to upload at least two photos of the animal';
+        'Es necesario subir al menos dos fotos del animal';
       throw error;
     }
 
@@ -170,7 +170,7 @@ exports.editPet = async (petName, petPhotos, petId, userId, trx) => {
   if (!pet) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Pet not found';
+    error.message = 'Mascota no encontrada';
     throw error;
   }
 
@@ -203,7 +203,7 @@ exports.editPet = async (petName, petPhotos, petId, userId, trx) => {
         const error = new Error();
         error.status = 400;
         error.message =
-          'It is required to upload at least two photos of the animal';
+          'Es necesario subir al menos dos fotos del animal';
         throw error;
       }
       allPhotos.push(...savedAnimalPhotos);
@@ -234,7 +234,7 @@ exports.editPet = async (petName, petPhotos, petId, userId, trx) => {
         const error = new Error();
         error.status = 400;
         error.message =
-          'It is required to upload at least one identification photo';
+          'Es necesario subir al menos una foto identificativa del animall';
         throw error;
       }
       allPhotos.push(...savedIdentificationPhotos);
@@ -265,7 +265,7 @@ exports.editPet = async (petName, petPhotos, petId, userId, trx) => {
         const error = new Error();
         error.status = 400;
         error.message =
-          'It is required to upload at least one photo of the vaccine passport';
+          'Es necesario subir al menos una foto del pasaporte de las vacunas';
         throw error;
       }
       allPhotos.push(...savedVaccinePhotos);
@@ -327,7 +327,7 @@ const getExtension = (photo) => {
   if (!ALLOWED_EXTENSIONS.includes(extension)) {
     const error = new Error();
     error.status = 404;
-    error.message = 'No valid extension';
+    error.message = 'La extensión de la imagen no es válida.';
     throw error;
   }
   return photo.split('.').pop();
@@ -361,13 +361,13 @@ exports.acceptPet = async (petData, petId, trx) => {
   if (!pet) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Pet not found';
+    error.message = 'Mascota no encontrada';
     throw error;
   }
   if (pet.pet_status !== 'In revision') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not accept a pet which is not in revision';
+    error.message = 'No puedes aceptar una mascota que no está en revisión';
     throw error;
   }
 
@@ -401,13 +401,13 @@ exports.rejectPet = async (petId, trx) => {
   if (!pet) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Pet not found';
+    error.message = 'Mascota no encontrada';
     throw error;
   }
   if (pet.pet_status !== 'In revision') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not reject a pet which is not in revision';
+    error.message = 'No puedes rechazar una mascota que no está en revisión.';
     throw error;
   }
 
@@ -457,7 +457,7 @@ exports.deletePet = async (petId, userId, trx) => {
   if (!particular) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Particular not found';
+    error.message = 'Particular no encontrado';
     throw error;
   }
 
@@ -468,7 +468,7 @@ exports.deletePet = async (petId, userId, trx) => {
   if (!pet) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Pet not found';
+    error.message = 'Mascota no encontrada';
     throw error;
   }
 
@@ -486,7 +486,7 @@ exports.deletePet = async (petId, userId, trx) => {
   if (breeding) {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not delete a pet with a publication';
+    error.message = 'No puedes eliminar una mascota que tenga publicaciones.';
     throw error;
   }
 

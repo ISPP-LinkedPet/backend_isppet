@@ -58,7 +58,7 @@ exports.hasRequestFrom = async (connection, userId, particularId) => {
   if (particular == undefined) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Particular not found';
+    error.message = 'Particular no encontrado';
     throw error;
   }
 

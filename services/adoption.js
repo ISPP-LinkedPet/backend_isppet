@@ -80,28 +80,29 @@ exports.updateAdoption = async (
   if (!pub) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Adoption not found';
+    error.message = 'Adopción no encontrada';
+
     throw error;
   }
 
   if ((pub.shelter_id === null && (pub.particular_id !== userId)) || (pub.particular_id === null && (pub.shelter_id !== userId))) {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not edit a publication that you do not own';
+    error.message = 'No puedes editar una publicación que no sea tuya';
     throw error;
   }
 
   if (pub.document_status === 'Rejected') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not edit a publication which is rejected';
+    error.message = 'No puedes editar una publicación rechazada';
     throw error;
   }
 
   if (pub.transaction_status === 'Completed') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not edit a publication which is completed';
+    error.message = 'No puedes editar una publicación cuyo estado del proceso de transacción es completado.';
     throw error;
   }
 
@@ -128,7 +129,7 @@ exports.updateAdoption = async (
       const error = new Error();
       error.status = 400;
       error.message =
-        'It is required to upload at least two photos of the animal';
+        'Es necesario subir al menos dos fotos del animal';
       throw error;
     }
 
@@ -266,7 +267,7 @@ exports.createAdoption = async (
       const error = new Error();
       error.status = 400;
       error.message =
-        'It is required to upload at least two photos of the animal';
+        'Es necesario subir al menos dos fotos del animal';
       throw error;
     }
 
@@ -400,7 +401,7 @@ const getExtension = (photo) => {
   if (!ALLOWED_EXTENSIONS.includes(extension)) {
     const error = new Error();
     error.status = 404;
-    error.message = 'No valid extension';
+    error.message = 'La extensión de la imagen no es válida.';
     throw error;
   }
   return photo.split('.').pop();
@@ -414,7 +415,7 @@ exports.getPendingAdoptions = async (connection, userId) => {
   if (!user) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -433,13 +434,14 @@ exports.acceptAdoption = async (adoptionId, trx) => {
   if (!pub) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Adoption not found';
+    error.message = 'Adopción no encontrada';
+
     throw error;
   }
   if (pub.document_status !== 'In revision') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not accept a publication which is not in revision';
+    error.message = 'No puedes aceptar una publicación que no está en revisión.';
     throw error;
   }
 
@@ -471,13 +473,14 @@ exports.rejectAdoption = async (adoptionId, trx) => {
   if (!pub) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Adoption not found';
+    error.message = 'Adopción no encontrada';
+
     throw error;
   }
   if (pub.document_status !== 'In revision') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not reject a publication which is not in revision';
+    error.message = 'No puedes rechazar una publicación que no está en revisión';
     throw error;
   }
 
@@ -511,7 +514,7 @@ exports.imInterested = async (userId, adoptionId, trx) => {
   if (!particularId) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
   const pub = await trx('publication')
@@ -522,7 +525,7 @@ exports.imInterested = async (userId, adoptionId, trx) => {
   if (pub == undefined || pub.particular_id === particularId.id) {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not be interested in your own publications';
+    error.message = 'No puedes estar interesado en una publicación que es tuya.';
     throw error;
   }
 
@@ -535,7 +538,7 @@ exports.imInterested = async (userId, adoptionId, trx) => {
   if (rqt && rqt.status === 'Pending') {
     const error = new Error();
     error.status = 404;
-    error.message = 'Already interested or concluded';
+    error.message = 'Ya interesado o está concluida.';
     throw error;
   }
 
@@ -548,7 +551,7 @@ exports.imInterested = async (userId, adoptionId, trx) => {
   if (!wrongPub.length) {
     const error = new Error();
     error.status = 404;
-    error.message = 'The publication documents or status are wrong';
+    error.message = 'Los documentos o estados de la publicación son erróneos';
     throw error;
   }
 
@@ -587,7 +590,7 @@ exports.getAdoptionsOffers = async (adoptionParams, connection, userId) => {
   if (!user) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -644,14 +647,15 @@ exports.deleteAdoption = async (adoptionId, userId, trx) => {
   if (!pub) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Adoption not found';
+    error.message = 'Adopción no encontrada';
+
     throw error;
   }
 
   if ((pub.shelter_id === null && (pub.particular_id !== userId)) || (pub.particular_id === null && (pub.shelter_id !== userId))) {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not delete a publication that you do not own';
+    error.message = 'No puedes eliminar una publicación que no es tuya.';
     throw error;
   }
 
@@ -660,7 +664,7 @@ exports.deleteAdoption = async (adoptionId, userId, trx) => {
     pub.transaction_status === 'In payment') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not delete a publication with an ongoing payment';
+    error.message = 'No puedes eliminar una publicación que está en proceso de pago.';
     throw error;
   }
 
