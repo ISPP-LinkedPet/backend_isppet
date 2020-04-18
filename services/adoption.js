@@ -578,16 +578,17 @@ exports.imInterested = async (userId, adoptionId, trx) => {
 };
 
 exports.getAdoptionsOffers = async (adoptionParams, connection, userId) => {
-  const user = await connection('user_account')
-      .select('id')
+  const particular = await connection('user_account')
+      .select('particular.id')
+      .innerJoin('particular', 'particular.user_account_id', '=', 'user_account.id')
       .where('user_account.id', userId)
       .andWhere('user_account.role', 'particular')
       .first();
 
-  if (!user) {
+  if (!particular) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Not found particular';
     throw error;
   }
 
@@ -597,28 +598,38 @@ exports.getAdoptionsOffers = async (adoptionParams, connection, userId) => {
   const breed = adoptionParams.breed;
   const pedigree = adoptionParams.pedigree;
 
-  const adoptions = await connection('adoption')
-      .join('publication', 'adoption.publication_id', '=', 'publication.id')
+  let adoptions = connection('adoption')
+      .select('*', 'adoption.id as adoption_id', 'publication.type AS typePublic')
+      .innerJoin('publication', 'adoption.publication_id', '=', 'publication.id')
       .where('publication.document_status', 'Accepted')
-      .andWhere('publication.transaction_status', 'Offered')
-      .andWhereNot('publication.particular_id', user.id)
-      .modify(function(queryBuilder) {
-        if (location) {
-          queryBuilder.andWhere('publication.location', 'like', `%${location}%`);
-        }
-        if (birthDate) {
-          queryBuilder.andWhere('publication.birth_date', birthDate);
-        }
-        if (type) {
-          queryBuilder.andWhere('publication.type', 'like', `%${type}%`);
-        }
-        if (breed) {
-          queryBuilder.andWhere('publication.breed', 'like', `%${breed}%`);
-        }
-        if (pedigree) {
-          queryBuilder.andWhere('publication.pedigree', pedigree);
-        }
+      // .andWhere('publication.transaction_status', 'Offered')
+      .andWhere( (row) => {
+        row.whereNot('publication.particular_id', particular.id);
+        row.orWhereNull('publication.particular_id');
       });
+
+  if (location) {
+    adoptions.andWhere('publication.location', 'like', `%${location}%`);
+  }
+  if (birthDate) {
+    adoptions.andWhere('publication.birth_date', birthDate);
+  }
+  if (type) {
+    adoptions.andWhere('publication.type', type);
+  }
+  if (breed) {
+    adoptions.andWhere('publication.breed', 'like', `%${breed}%`);
+  }
+  if (pedigree) {
+    if (pedigree == 'true') {
+      adoptions.andWhere('publication.pedigree', 1);
+    } else {
+      adoptions.andWhere('publication.pedigree', 0);
+    }
+  }
+
+  adoptions.orderBy('adoption_id', 'asc');
+  adoptions = await adoptions;
   return adoptions;
 };
 
@@ -626,10 +637,8 @@ exports.getAdoptions = async (connection, page) => {
   const adoptions = await connection('adoption')
       .select('*', 'adoption.id as adoption_id')
       .innerJoin('publication', 'adoption.publication_id', '=', 'publication.id')
-      .where('publication.transaction_status', 'Offered')
+      // .where('publication.transaction_status', 'Offered')
       .andWhere('publication.document_status', 'Accepted')
-      .limit(10)
-      .offset(10 * page)
       .orderBy('adoption_id', 'asc');
 
   return adoptions;
