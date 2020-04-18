@@ -1,6 +1,6 @@
 const axios = require('axios');
 const BASE_URL = 'https://api.opencagedata.com/geocode/v1/json';
-const API_KEY = '53125aca466345fd809c44468d122456';
+const API_KEY = 'f794d68c5906450bb4972b68c69cf8fb';
 
 exports.getVets = async (connection) => {
   const vets = await connection('vet').orderBy('is_premium', 'desc');
