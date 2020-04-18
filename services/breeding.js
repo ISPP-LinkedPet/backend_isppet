@@ -209,13 +209,14 @@ exports.getMyInterestedBreedings = async (connection, userId) => {
 };
 
 exports.getBreedingsOffers = async (breedingParams, connection, userId) => {
-  const user = await connection('user_account')
-      .select('id')
+  const particular = await connection('user_account')
+      .select('particular.id')
+      .join('particular', 'particular.user_account_id', '=', 'user_account.id')
       .where('user_account.id', userId)
       .andWhere('user_account.role', 'particular')
       .first();
 
-  if (!user) {
+  if (!particular) {
     const error = new Error();
     error.status = 404;
     error.message = 'Usuario no encontrado';
@@ -233,7 +234,7 @@ exports.getBreedingsOffers = async (breedingParams, connection, userId) => {
       .join('publication', 'breeding.publication_id', '=', 'publication.id')
       .where('publication.document_status', 'Accepted')
       .andWhere('publication.transaction_status', 'Offered')
-      .andWhereNot('publication.particular_id', user.id)
+      .andWhereNot('publication.particular_id', particular.id)
       .modify(function(queryBuilder) {
         if (price) {
           queryBuilder.andWhere('breeding.price', '<=', parseFloat(price));
