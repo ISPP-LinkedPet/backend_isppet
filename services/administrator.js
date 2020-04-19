@@ -4,7 +4,7 @@ const fs = require('fs');
 const {v4: uuidv4} = require('uuid');
 const axios = require('axios');
 const BASE_URL = 'https://api.opencagedata.com/geocode/v1/json';
-const API_KEY = 'f794d68c5906450bb4972b68c69cf8fb';
+const API_KEY = '618ea96fc0f54c96a0698390953f0c79';
 
 const TOP_BANNER = path.join('images', 'top_banner');
 const LATERAL_BANNER = path.join('images', 'lateral_banner');
@@ -24,21 +24,21 @@ exports.banUser = async (connection, userId) => {
   if (!user) {
     const error = new Error();
     error.status = 400;
-    error.message = 'No user with that ID';
+    error.message = 'No existe ningún usuario con esa ID.';
     throw error;
   }
 
   if (!user.activate) {
     const error = new Error();
     error.status = 400;
-    error.message = 'This user has already been banned';
+    error.message = 'Este usuario ya ha sido baneado.';
     throw error;
   }
 
   if (user.role == 'administrator') {
     const error = new Error();
     error.status = 400;
-    error.message = 'This user is an administrator';
+    error.message = 'Este usuario es un administrador';
     throw error;
   }
 
@@ -71,14 +71,14 @@ exports.unbanUser = async (connection, userId) => {
   if (!user) {
     const error = new Error();
     error.status = 400;
-    error.message = 'No user with that ID';
+    error.message = 'No existe ningún usuario con esa ID.';
     throw error;
   }
 
   if (user.activate) {
     const error = new Error();
     error.status = 400;
-    error.message = 'This user has already been unbanned';
+    error.message = 'Este usuario ya ha sido desbaneado.';
     throw error;
   }
 
@@ -113,7 +113,7 @@ exports.getBanUsers = async (connection, userId) => {
   if (!user) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -131,7 +131,7 @@ exports.getUnbanUsers = async (connection, userId) => {
   if (!user) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -148,7 +148,7 @@ exports.getUnbanParticulars = async (connection, userId) => {
   if (!user) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -166,7 +166,7 @@ exports.getUnbanShelter = async (connection, userId) => {
   if (!user) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -184,7 +184,7 @@ exports.getUnbanModerator = async (connection, userId) => {
   if (!user) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -202,7 +202,7 @@ exports.getUnbanAdministrator = async (connection, userId) => {
   if (!user) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -220,7 +220,7 @@ exports.getAllAds = async (connection, userId) => {
   if (!user) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -377,7 +377,7 @@ const getExtension = (photo) => {
   if (!ALLOWED_EXTENSIONS.includes(extension)) {
     const error = new Error();
     error.status = 404;
-    error.message = 'No valid extension';
+    error.message = 'La extensión de la imagen no es válida.';
     throw error;
   }
   return photo.split('.').pop();
@@ -396,7 +396,7 @@ exports.activateAd = async (connection, adId) => {
   if (ad.active) {
     const error = new Error();
     error.status = 400;
-    error.message = 'This ad is already in active status.';
+    error.message = 'Este anuncio ya está activo.';
     throw error;
   }
 
@@ -428,7 +428,7 @@ exports.deactivateAd = async (connection, adId) => {
   if (!ad.active) {
     const error = new Error();
     error.status = 400;
-    error.message = 'This ad is already in a deactivated state.';
+    error.message = 'Este anuncio ya está desactivado.';
     throw error;
   }
 
@@ -489,7 +489,7 @@ exports.addVet = async (vetData, vetPhoto, role, connection) => {
     const error = new Error();
     error.status = 404;
     error.message =
-      'You can not add a vet because you are not an administrator';
+      'No puedes crear una cuenta refugio ya que no eres administrador.';
     throw error;
   }
 
@@ -544,7 +544,7 @@ exports.updateVet = async (connection, vetData, vetPhoto, vetId, role) => {
   if (!vet) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Vet not found';
+    error.message = 'Veterinario no encontrado';
     throw error;
   }
 
@@ -552,7 +552,7 @@ exports.updateVet = async (connection, vetData, vetPhoto, vetId, role) => {
     const error = new Error();
     error.status = 404;
     error.message =
-      'You can not edit a vet because you are not an administrator';
+      'No puedes editar la cuenta de un refugio porque no eres un administrador.';
     throw error;
   }
 

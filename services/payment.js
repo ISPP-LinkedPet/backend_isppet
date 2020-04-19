@@ -70,7 +70,8 @@ exports.payUser = async (connection, userId, breedingId) => {
   if (!user) {
     const error = new Error();
     error.status = 404;
-    error.message = 'User not found';
+    error.message = 'Usuario no encontrado';
+
     throw error;
   }
 
@@ -81,7 +82,8 @@ exports.payUser = async (connection, userId, breedingId) => {
   if (!breeding) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Breeding not found';
+    error.message = 'Crianza no encontrada';
+
     throw error;
   }
 
@@ -134,7 +136,8 @@ exports.userCreatePayMePaypal = async (connection, userId, breedingId, returnUrl
   if (!user) {
     const error = new Error();
     error.status = 404;
-    error.message = 'User not found';
+    error.message = 'Usuario no encontrado';
+
     throw error;
   }
 
@@ -145,7 +148,8 @@ exports.userCreatePayMePaypal = async (connection, userId, breedingId, returnUrl
   if (!breeding) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Breeding not found';
+    error.message = 'Crianza no encontrada';
+
     throw error;
   }
 
@@ -226,7 +230,8 @@ exports.checkPaypalPayment = async (connection, breedingId, paymentId, userId, p
   if (!user) {
     const error = new Error();
     error.status = 404;
-    error.message = 'User not found';
+    error.message = 'Usuario no encontrado';
+
     throw error;
   }
 
@@ -237,7 +242,8 @@ exports.checkPaypalPayment = async (connection, breedingId, paymentId, userId, p
   if (!breeding) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Breeding not found';
+    error.message = 'Crianza no encontrada';
+
     throw error;
   }
 

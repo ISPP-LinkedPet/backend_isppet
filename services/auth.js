@@ -131,7 +131,7 @@ const getExtension = (photo) => {
   if (!ALLOWED_EXTENSIONS.includes(extension)) {
     const error = new Error();
     error.status = 404;
-    error.message = 'No valid extension';
+    error.message = 'La extensión de la imagen no es válida.';
     throw error;
   }
   return photo.split('.').pop();
