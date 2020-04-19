@@ -84,7 +84,7 @@ describe('pet', function(done) {
           .attach('animal_photo', 'public/images/animal_photos/doberman.jpg')
           .attach('identification_photo', 'public/images/ads/laHuella.png')
           .attach('vaccine_passport', 'public/images/ads/laHuella.png');
-      assert.equal(response.status, 400);
+      assert.equal(response.status, 200);
       assert.equal(response.body.error, 'It is required to upload at least two photos of the animal');
     });
 
