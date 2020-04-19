@@ -831,7 +831,7 @@ exports.seed = async (knex) => {
       document_status: 'Accepted',
       birth_date: '2015-06-30',
       genre: 'Female',
-      breed: 'Bulldog Terrier',
+      breed: 'Bulldog',
       transaction_status: 'Reviewed',
       type: 'Dog',
       location: 'Calle Arroyo nº 3, Sevilla.',
@@ -1229,7 +1229,7 @@ exports.seed = async (knex) => {
       birth_date: '2015-12-10',
       genre: 'Male',
       breed: 'Pomerania',
-      transaction_status: 'In progress',
+      transaction_status: 'Offered',
       type: 'Dog',
       location: 'Calle Juan Núñez nº 27, Sevilla.',
       pedigree: true,
@@ -1385,7 +1385,7 @@ exports.seed = async (knex) => {
       birth_date: '2015-12-10',
       genre: 'Male',
       breed: 'Pomerania',
-      transaction_status: 'In progress',
+      transaction_status: 'Offered',
       type: 'Dog',
       location: 'Calle Lictores nº 27, Sevilla.',
       pedigree: true,
@@ -1437,7 +1437,7 @@ exports.seed = async (knex) => {
     {
       id: 42,
       animal_photo:
-        'images/animal_photos/caniche.jpg, images/animal_photos/caniche2.jpg',
+        'images/animal_photos/yorkshire.jpg, images/animal_photos/yorkshire2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
       vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
@@ -1453,7 +1453,7 @@ exports.seed = async (knex) => {
     {
       id: 43,
       animal_photo:
-        'images/animal_photos/caniche.jpg, images/animal_photos/caniche2.jpg',
+        'images/animal_photos/yorkshire.jpg, images/animal_photos/yorkshire2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
       vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
@@ -1469,7 +1469,7 @@ exports.seed = async (knex) => {
     {
       id: 44,
       animal_photo:
-        'images/animal_photos/caniche.jpg, images/animal_photos/caniche2.jpg',
+        'images/animal_photos/yorkshire.jpg, images/animal_photos/yorkshire2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
       vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
       document_status: 'Accepted',
@@ -1871,7 +1871,7 @@ exports.seed = async (knex) => {
 
   // breeding
   await knex('breeding').insert([
-    {id: 1, codenumber: 'abcd1234', price: 5.5, publication_id: 1, pet_id: null},
+    {id: 1, codenumber: 'abcd1234', price: 5.5, publication_id: 1, pet_id: 1},
     {id: 2, codenumber: 'abcs1234', price: 69, publication_id: 2, pet_id: null},
     {id: 3, codenumber: 'abcd1214', price: 44.1, publication_id: 3, pet_id: null},
     {id: 4, codenumber: 'ddcd1234', price: 23.5, publication_id: 4, pet_id: null},
@@ -1891,7 +1891,7 @@ exports.seed = async (knex) => {
     {id: 18, codenumber: 'a1e4r234', price: 61, publication_id: 18, pet_id: null},
     {id: 19, codenumber: 'abcdiko9', price: 21, publication_id: 19, pet_id: null},
     {id: 20, codenumber: 'abc3e7u4', price: 55, publication_id: 20, pet_id: null},
-    {id: 21, codenumber: 'abc4y7u4', price: 105, publication_id: 29, pet_id: null},
+    {id: 21, codenumber: 'abc4y7u4', price: 105, publication_id: 29, pet_id: 4},
     {id: 22, codenumber: 'abcdol98', price: 50, publication_id: 30, pet_id: null},
     {id: 23, codenumber: 'ab5j12g4', price: 39, publication_id: 31, pet_id: null},
     {id: 24, codenumber: 'abcd7654', price: 45, publication_id: 32, pet_id: null},
@@ -1902,7 +1902,7 @@ exports.seed = async (knex) => {
     {id: 29, codenumber: 'abc68114', price: 125, publication_id: 41, pet_id: null},
     {id: 30, codenumber: 'abc62114', price: 85, publication_id: 42, pet_id: null},
     {id: 31, codenumber: 'abc68124', price: 162, publication_id: 43, pet_id: null},
-    {id: 32, codenumber: '5tc68124', price: 144, publication_id: 44, pet_id: null},
+    {id: 32, codenumber: '5tc68124', price: 144, publication_id: 44, pet_id: 2},
   ]);
 
   // shelter
@@ -2077,13 +2077,13 @@ exports.seed = async (knex) => {
     {
       id: 4,
       animal_photo:
-        'images/animal_photos/caniche.jpg, images/animal_photos/caniche2.jpg',
+        'images/animal_photos/rottweiler.jpg, images/animal_photos/rottweiler2.jpg',
       identification_photo: 'images/identification_photos/PERROPORTE.jpg',
       vaccine_passport: 'images/vaccine_passports/vaccine.jpg',
-      birth_date: '2014-01-01',
+      birth_date: '2011-04-04',
       genre: 'Male',
       name: 'Lambrusco',
-      breed: 'Caniche',
+      breed: 'rottweiler2',
       pet_status: 'Accepted',
       type: 'Dog',
       pedigree: true,
