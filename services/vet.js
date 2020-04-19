@@ -1,6 +1,6 @@
 const axios = require('axios');
 const BASE_URL = 'https://api.opencagedata.com/geocode/v1/json';
-const API_KEY = 'f794d68c5906450bb4972b68c69cf8fb';
+const API_KEY = '618ea96fc0f54c96a0698390953f0c79';
 
 exports.getVets = async (connection) => {
   const vets = await connection('vet').orderBy('is_premium', 'desc');
@@ -22,12 +22,39 @@ exports.getVets = async (connection) => {
           if (!vet.latitude || !vet.longitude) {
             vet.latitude = r.data.results[0].geometry.lat;
             vet.longitude = r.data.results[0].geometry.lng;
+            this.updateLatLong(connection, vet);
           };
         });
       }),
   );
 
   return vets;
+};
+
+exports.updateLatLong = async (connection, vet) => {
+  const vetId = vet.id;
+
+  if (!vet) {
+    const error = new Error();
+    error.status = 400;
+    error.message = 'No vet with that ID';
+    throw error;
+  }
+
+  try {
+    await connection('vet')
+        .where({'vet.id': vetId})
+        .update(vet);
+
+    await connection.commit();
+
+    return await connection('vet')
+        .where({'vet.id': vetId})
+        .first();
+  } catch (error) {
+    console.err(error);
+    throw error;
+  }
 };
 
 exports.premiumTrue = async (vetId, trx) => {
