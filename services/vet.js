@@ -65,7 +65,7 @@ exports.premiumTrue = async (vetId, trx) => {
   if (!vet) {
     const error = new Error();
     error.status = 404;
-    error.message = 'vet not found';
+    error.message = 'Veterinario no encontrado';
     throw error;
   }
   try {
@@ -93,7 +93,7 @@ exports.premiumFalse = async (vetId, trx) => {
   if (!vet) {
     const error = new Error();
     error.status = 404;
-    error.message = 'vet not found';
+    error.message = 'Veterinario no encontrado';
     throw error;
   }
   try {
