@@ -4,7 +4,7 @@ const fs = require('fs');
 const {v4: uuidv4} = require('uuid');
 const axios = require('axios');
 const BASE_URL = 'https://api.opencagedata.com/geocode/v1/json';
-const API_KEY = '53125aca466345fd809c44468d122456';
+const API_KEY = '618ea96fc0f54c96a0698390953f0c79';
 
 const TOP_BANNER = path.join('images', 'top_banner');
 const LATERAL_BANNER = path.join('images', 'lateral_banner');
