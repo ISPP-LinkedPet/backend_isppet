@@ -106,7 +106,7 @@ exports.hasRequest = async (connection, userId, requestId) => {
   if (particular == undefined) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Particular not found';
+    error.message = 'Particular no encontrado';
     throw error;
   }
 
@@ -132,7 +132,7 @@ exports.deleteRequest = async (requestId, userId, trx) => {
   if (!particular) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Particular not found';
+    error.message = 'Particular no encontrado';
     throw error;
   }
 
@@ -176,7 +176,7 @@ exports.requestsByBreeding = async (breedingId, userId, connection) => {
   if (!particular) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Particular not found';
+    error.message = 'Particular no encontrado';
     throw error;
   }
 
@@ -227,7 +227,7 @@ exports.requestsByAdoption = async (adoptionId, userId, userRole, connection) =>
     if (!particular) {
       const error = new Error();
       error.status = 404;
-      error.message = 'Particular not found';
+      error.message = 'Particular no encontrado';
       throw error;
     }
 

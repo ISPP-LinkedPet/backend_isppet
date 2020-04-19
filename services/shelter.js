@@ -19,7 +19,7 @@ exports.getShelter = async (connection, shelterId) => {
   if (!shelter) {
     const error = new Error();
     error.status = 400;
-    error.message = 'No shelters with that ID';
+    error.message = 'No existe ningún refugio con esta ID';
     throw error;
   }
 
@@ -244,7 +244,7 @@ exports.deleteShelter = async (trx, userId) => {
   if (!shelter) {
     const error = new Error();
     error.status = 400;
-    error.message = 'No shelters with that ID';
+    error.message = 'No existe ningún refugio con esta ID';
     throw error;
   }
 

@@ -5,7 +5,7 @@ exports.getUser = async (connection, userId) => {
   if (!res) {
     const error = new Error();
     error.status = 400;
-    error.message = 'No user with that ID';
+    error.message = 'No existe ningún usuario con esa ID.';
     throw error;
   }
 

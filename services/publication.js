@@ -67,7 +67,7 @@ exports.getPublicationsStatus = async (connection, status) => {
   if (!breedings || !adoptions) {
     const error = new Error();
     error.status = 400;
-    error.message = 'No publication in revision';
+    error.message = 'No hay ninguna publicación en revisión';
     throw error;
   }
 
@@ -82,7 +82,7 @@ exports.getPublication = async (connection, publicationId) => {
   if (!publication) {
     const error = new Error();
     error.status = 400;
-    error.message = 'No publication with that ID';
+    error.message = 'No existe ninguna publicación con esa ID';
     throw error;
   }
 
@@ -120,7 +120,7 @@ exports.getAcceptedRequestsToMyPublications = async (connection, userId) => {
   if (!actor) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -147,7 +147,7 @@ exports.getPendingRequestsToMyPublications = async (connection, userId) => {
   if (!actor) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -176,7 +176,7 @@ exports.getCreatedAndAcceptedRequests = async (connection, userId) => {
   if (!particular) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -203,7 +203,7 @@ exports.getCreatedAndPendingRequests = async (connection, userId) => {
   if (!particular) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -230,7 +230,7 @@ exports.getCreatedAndRejectedRequests = async (connection, userId) => {
   if (!particular) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -263,7 +263,7 @@ exports.getReceivedAndAcceptedRequests = async (connection, user) => {
   if (!userId) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
