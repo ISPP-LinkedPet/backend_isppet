@@ -84,7 +84,7 @@ describe('pet', function(done) {
           .attach('identification_photo', 'public/images/ads/laHuella.png')
           .attach('vaccine_passport', 'public/images/ads/laHuella.png');
       assert.equal(response.status, 400);
-      assert.equal(response.body.error, 'It is required to upload at least two photos of the animal');
+      assert.equal(response.body.error, 'Es necesario subir al menos dos fotos del animal');
     });
 
     it('Should create a pet', async function() {

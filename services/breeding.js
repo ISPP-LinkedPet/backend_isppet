@@ -219,7 +219,7 @@ exports.getBreedingsOffers = async (breedingParams, connection, userId) => {
   if (!particular) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found particular';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
