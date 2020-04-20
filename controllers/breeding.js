@@ -42,7 +42,7 @@ exports.createBreading = async (req, res) => {
       !breedingData.price ||
       !breedingData.location
     ) {
-      return res.status(400).send({error: 'Invalid params'});
+      return res.status(400).send({error: 'Parámetros invalidos'});
     }
 
     const breeding = await breedingService.createBreeding(

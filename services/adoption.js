@@ -19,6 +19,7 @@ const ADOPTION_FIELDS = [
   'pedigree',
   'type',
   'vaccine_passport',
+  'creation_date'
 ];
 
 const ANIMAL_FOLDER = path.join('images', 'animal_photos');
