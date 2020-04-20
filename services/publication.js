@@ -67,7 +67,7 @@ exports.getPublicationsStatus = async (connection, status) => {
   if (!breedings || !adoptions) {
     const error = new Error();
     error.status = 400;
-    error.message = 'No publication in revision';
+    error.message = 'No hay ninguna publicación en revisión';
     throw error;
   }
 
@@ -82,7 +82,7 @@ exports.getPublication = async (connection, publicationId) => {
   if (!publication) {
     const error = new Error();
     error.status = 400;
-    error.message = 'No publication with that ID';
+    error.message = 'No existe ninguna publicación con esa ID';
     throw error;
   }
 
@@ -120,7 +120,7 @@ exports.getAcceptedRequestsToMyPublications = async (connection, userId) => {
   if (!actor) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -147,7 +147,7 @@ exports.getPendingRequestsToMyPublications = async (connection, userId) => {
   if (!actor) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -176,7 +176,7 @@ exports.getCreatedAndAcceptedRequests = async (connection, userId) => {
   if (!particular) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -185,6 +185,60 @@ exports.getCreatedAndAcceptedRequests = async (connection, userId) => {
       .join('publication', 'request.publication_id', '=', 'publication.id')
       .where('request.particular_id', particular.id)
       .where('request.status', 'Accepted');
+
+  const res = [];
+  for (const request of requests) {
+    const contactData = await getContactDataOfPublication(connection, request.publication_id);
+    request.contactData = contactData;
+    const t = await isBreedingOrAdoption(connection, request.publication_id);
+    request.publicationType = t[0];
+    res.push(request);
+  }
+
+  return res;
+};
+
+exports.getCreatedAndPendingRequests = async (connection, userId) => {
+  const particular = await connection('particular').select('id').where('user_account_id', userId).first();
+  if (!particular) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Usuario no encontrado';
+    throw error;
+  }
+
+  const requests = await connection('request')
+      .select('*', 'request.id as requestId', 'request.particular_id as requestUserId')
+      .join('publication', 'request.publication_id', '=', 'publication.id')
+      .where('request.particular_id', particular.id)
+      .where('request.status', 'Pending');
+
+  const res = [];
+  for (const request of requests) {
+    const contactData = await getContactDataOfPublication(connection, request.publication_id);
+    request.contactData = contactData;
+    const t = await isBreedingOrAdoption(connection, request.publication_id);
+    request.publicationType = t[0];
+    res.push(request);
+  }
+
+  return res;
+};
+
+exports.getCreatedAndRejectedRequests = async (connection, userId) => {
+  const particular = await connection('particular').select('id').where('user_account_id', userId).first();
+  if (!particular) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Usuario no encontrado';
+    throw error;
+  }
+
+  const requests = await connection('request')
+      .select('*', 'request.id as requestId', 'request.particular_id as requestUserId')
+      .join('publication', 'request.publication_id', '=', 'publication.id')
+      .where('request.particular_id', particular.id)
+      .where('request.status', 'Rejected');
 
   const res = [];
   for (const request of requests) {
@@ -209,7 +263,7 @@ exports.getReceivedAndAcceptedRequests = async (connection, user) => {
   if (!userId) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -236,6 +290,9 @@ const getReceivedAndAcceptedRequestsParticular = async (connection, particularId
     request.publicationType = publicationType[0];
     const contactData = await getContactDataOfRequest(connection, request.requestId);
     request.contactData = contactData;
+    if (request.publicationType == 'breeding') {
+      request.contactData.breedingId = publicationType[2];
+    }
     res.push(request);
   }
 

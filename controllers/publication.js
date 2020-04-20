@@ -223,6 +223,36 @@ exports.getCreatedAndAcceptedRequests = async (req, res) => {
   }
 };
 
+exports.getCreatedAndPendingRequests = async (req, res) => {
+  try {
+    const connection = req.connection;
+    const userId = req.user.id;
+    const requests = await publicationService.getCreatedAndPendingRequests(connection, userId);
+    return res.status(200).send(requests);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
+
+exports.getCreatedAndRejectedRequests = async (req, res) => {
+  try {
+    const connection = req.connection;
+    const userId = req.user.id;
+    const requests = await publicationService.getCreatedAndRejectedRequests(connection, userId);
+    return res.status(200).send(requests);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
+
 exports.getReceivedAndAcceptedRequests = async (req, res) => {
   try {
     const connection = req.connection;

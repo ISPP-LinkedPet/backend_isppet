@@ -20,12 +20,9 @@ const permission = (req, res, next, roles) => {
 
 // a user with a specific role
 exports.vet = (req, res, next) => permission(req, res, next, ['vet']);
-exports.administrator = (req, res, next) =>
-  permission(req, res, next, ['administrator']);
-exports.moderator = (req, res, next) =>
-  permission(req, res, next, ['moderator']);
-exports.particular = (req, res, next) =>
-  permission(req, res, next, ['particular']);
+exports.administrator = (req, res, next) => permission(req, res, next, ['administrator']);
+exports.moderator = (req, res, next) => permission(req, res, next, ['moderator']);
+exports.particular = (req, res, next) => permission(req, res, next, ['particular']);
 exports.shelter = (req, res, next) => permission(req, res, next, ['shelter']);
 
 // every body register

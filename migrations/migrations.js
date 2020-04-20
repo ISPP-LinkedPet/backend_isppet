@@ -68,7 +68,8 @@ exports.up = (knex) => {
           table
               .foreign('user_account_id')
               .references('id')
-              .inTable('user_account');
+              .inTable('user_account')
+              .onDelete('CASCADE');
         })
 
     // publication
@@ -88,7 +89,7 @@ exports.up = (knex) => {
           table.enu('genre', ['Male', 'Female']);
           table.string('breed', 100);
           table
-              .enu('transaction_status', ['Offered', 'In payment', 'In progress', 'Awaiting payment', 'Completed'])
+              .enu('transaction_status', ['Offered', 'In payment', 'In progress', 'Awaiting payment', 'Completed', 'Reviewed', 'Adoption'])
               .notNullable();
           table.string('type', 100);
           table.string('location', 500).notNullable();
@@ -97,7 +98,8 @@ exports.up = (knex) => {
           table
               .foreign('particular_id')
               .references('id')
-              .inTable('particular');
+              .inTable('particular')
+              .onDelete('CASCADE');
         })
 
     // request
@@ -111,7 +113,8 @@ exports.up = (knex) => {
           table
               .foreign('publication_id')
               .references('id')
-              .inTable('publication');
+              .inTable('publication')
+              .onDelete('CASCADE');
           table
               .integer('particular_id')
               .unsigned()
@@ -119,7 +122,8 @@ exports.up = (knex) => {
           table
               .foreign('particular_id')
               .references('id')
-              .inTable('particular');
+              .inTable('particular')
+              .onDelete('CASCADE');
         })
 
     // moderator
@@ -147,7 +151,8 @@ exports.up = (knex) => {
           table
               .foreign('particular_id')
               .references('id')
-              .inTable('particular');
+              .inTable('particular')
+              .onDelete('CASCADE');
           table
               .integer('publication_id')
               .unsigned()
@@ -155,21 +160,8 @@ exports.up = (knex) => {
           table
               .foreign('publication_id')
               .references('id')
-              .inTable('publication');
-        })
-    // breeding
-        .createTable('breeding', function(table) {
-          table.increments().primary();
-          table.double('price').notNullable();
-          table.string('codenumber');
-          table
-              .integer('publication_id')
-              .unsigned()
-              .notNullable();
-          table
-              .foreign('publication_id')
-              .references('id')
-              .inTable('publication');
+              .inTable('publication')
+              .onDelete('CASCADE');
         })
 
     // shelter
@@ -182,7 +174,8 @@ exports.up = (knex) => {
           table
               .foreign('user_account_id')
               .references('id')
-              .inTable('user_account');
+              .inTable('user_account')
+              .onDelete('CASCADE');
         })
 
     // adoption
@@ -197,12 +190,14 @@ exports.up = (knex) => {
           table
               .foreign('publication_id')
               .references('id')
-              .inTable('publication');
+              .inTable('publication')
+              .onDelete('CASCADE');
           table.integer('shelter_id').unsigned();
           table
               .foreign('shelter_id')
               .references('id')
-              .inTable('shelter');
+              .inTable('shelter')
+              .onDelete('CASCADE');
         })
 
     // vet
@@ -244,6 +239,7 @@ exports.up = (knex) => {
           table.date('birth_date');
           table.enu('genre', ['Male', 'Female']);
           table.string('breed', 100);
+          table.string('name', 100).notNullable();
           table.string('type', 100);
           table.boolean('pedigree');
           table
@@ -253,7 +249,30 @@ exports.up = (knex) => {
           table
               .foreign('particular_id')
               .references('id')
-              .inTable('particular');
+              .inTable('particular')
+              .onDelete('CASCADE');
+        })
+        // breeding
+        .createTable('breeding', function(table) {
+          table.increments().primary();
+          table.double('price').notNullable();
+          table.string('codenumber');
+          table
+              .integer('publication_id')
+              .unsigned()
+              .notNullable();
+          table
+              .integer('pet_id')
+              .unsigned();
+          table
+              .foreign('pet_id')
+              .references('id')
+              .inTable('pet');
+          table
+              .foreign('publication_id')
+              .references('id')
+              .inTable('publication')
+              .onDelete('CASCADE');
         })
   );
 };

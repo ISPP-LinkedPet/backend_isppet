@@ -16,7 +16,7 @@ exports.getReview = async (connection, reviewId) => {
   if (!review) {
     const error = new Error();
     error.status = 400;
-    error.message = 'No review with that ID';
+    error.message = 'No existe ninguna review con esta ID';
     throw error;
   }
 
@@ -31,7 +31,7 @@ exports.writeReview = async (reviewData, userId, trx) => {
   if (!particularId) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -42,6 +42,14 @@ exports.writeReview = async (reviewData, userId, trx) => {
       star: reviewData.star,
       review_description: reviewData.review_description,
     });
+    const pubData = {};
+    pubData.transaction_status = 'Reviewed';
+
+    await trx('publication')
+        .join('review', 'review.publication_id', '=', 'publication.id')
+        .where({'review.id': reviewId})
+        .update(pubData);
+
     return await trx('review')
         .select('*', 'review.id as id')
         .where({'review.id': reviewId})

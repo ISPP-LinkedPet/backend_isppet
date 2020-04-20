@@ -21,6 +21,7 @@ const BREEDING_FIELDS = [
   'publication.pedigree',
   'publication.type',
   'publication.vaccine_passport',
+  'breeding.pet_id',
 ];
 
 const ANIMAL_FOLDER = path.join('images', 'animal_photos');
@@ -28,6 +29,11 @@ const IDENTIFICATION_FOLDER = path.join('images', 'identification_photos');
 const VACCINES_FOLDER = path.join('images', 'vaccine_passports');
 
 const ALLOWED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
+
+const utilService = require('../services/util');
+const dirAnimal = './public/images/animal_photos';
+const dirIdentification = './public/images/identification_photos';
+const dirVaccine = './public/images/vaccine_passports';
 
 exports.getBreeding = async (connection, breedingId) => {
   const breeding = await connection('breeding')
@@ -39,7 +45,7 @@ exports.getBreeding = async (connection, breedingId) => {
   if (!breeding) {
     const error = new Error();
     error.status = 400;
-    error.message = 'No breeding with that ID';
+    error.message = 'No existe crianza con esa id';
     throw error;
   }
 
@@ -47,6 +53,10 @@ exports.getBreeding = async (connection, breedingId) => {
 };
 
 exports.createBreeding = async (breedingData, breedingPhotos, userId, trx) => {
+  utilService.createPhotoDirectory(dirAnimal);
+  utilService.createPhotoDirectory(dirIdentification);
+  utilService.createPhotoDirectory(dirVaccine);
+
   const allPhotos = [];
   const codenumberBreeding = numbergenerator();
   try {
@@ -68,7 +78,7 @@ exports.createBreeding = async (breedingData, breedingPhotos, userId, trx) => {
       const error = new Error();
       error.status = 400;
       error.message =
-        'It is required to upload at least two photos of the animal';
+        'Es necesario subir al menos dos fotos del animal';
       throw error;
     }
 
@@ -100,7 +110,7 @@ exports.createBreeding = async (breedingData, breedingPhotos, userId, trx) => {
       const error = new Error();
       error.status = 400;
       error.message =
-        'It is required to upload at least one identification photo';
+        'Es necesario subir al menos una foto identificativa del animal';
       throw error;
     }
 
@@ -130,7 +140,7 @@ exports.createBreeding = async (breedingData, breedingPhotos, userId, trx) => {
       const error = new Error();
       error.status = 400;
       error.message =
-        'It is required to upload at least one photo of the vaccine passport';
+        'Es necesario subir al menos una foto del pasaporte de las vacunas';
       throw error;
     }
 
@@ -164,6 +174,7 @@ exports.createBreeding = async (breedingData, breedingPhotos, userId, trx) => {
       publication_id: publicationId,
       price: breedingData.price,
       codenumber: codenumberBreeding,
+      pet_id: null,
     });
 
     return await trx('breeding')
@@ -198,16 +209,17 @@ exports.getMyInterestedBreedings = async (connection, userId) => {
 };
 
 exports.getBreedingsOffers = async (breedingParams, connection, userId) => {
-  const user = await connection('user_account')
-      .select('id')
+  const particular = await connection('user_account')
+      .select('particular.id')
+      .join('particular', 'particular.user_account_id', '=', 'user_account.id')
       .where('user_account.id', userId)
       .andWhere('user_account.role', 'particular')
       .first();
 
-  if (!user) {
+  if (!particular) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -222,7 +234,7 @@ exports.getBreedingsOffers = async (breedingParams, connection, userId) => {
       .join('publication', 'breeding.publication_id', '=', 'publication.id')
       .where('publication.document_status', 'Accepted')
       .andWhere('publication.transaction_status', 'Offered')
-      .andWhereNot('publication.particular_id', user.id)
+      .andWhereNot('publication.particular_id', particular.id)
       .modify(function(queryBuilder) {
         if (price) {
           queryBuilder.andWhere('breeding.price', '<=', parseFloat(price));
@@ -256,7 +268,7 @@ exports.getPendingBreedings = async (connection, userId) => {
   if (!user) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
 
@@ -276,7 +288,7 @@ exports.imInterested = async (userId, breedingId, trx) => {
   if (!particularId) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Not found user';
+    error.message = 'Usuario no encontrado';
     throw error;
   }
   // Se comprueba que no se intenta estar interesado en una publication propia
@@ -288,7 +300,7 @@ exports.imInterested = async (userId, breedingId, trx) => {
   if (pub == undefined || pub.particular_id === particularId.id) {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not be interested in your own publications';
+    error.message = 'Usted no puede estar interesado en una publicación propia.';
     throw error;
   }
 
@@ -301,7 +313,7 @@ exports.imInterested = async (userId, breedingId, trx) => {
   if (rqt && rqt.status === 'Pending') {
     const error = new Error();
     error.status = 404;
-    error.message = 'Already interested or concluded';
+    error.message = 'Ya está interesado o ha concluido.';
     throw error;
   }
 
@@ -315,7 +327,7 @@ exports.imInterested = async (userId, breedingId, trx) => {
   if (!wrongPub.length) {
     const error = new Error();
     error.status = 404;
-    error.message = 'The publication documents or status are wrong';
+    error.message = 'Los documentos o estado de la publicación están mal.';
     throw error;
   }
 
@@ -350,6 +362,10 @@ exports.editBreeding = async (
   userId,
   trx,
 ) => {
+  utilService.createPhotoDirectory(dirAnimal);
+  utilService.createPhotoDirectory(dirIdentification);
+  utilService.createPhotoDirectory(dirVaccine);
+
   // Se comprueba que este editando un breeding propio y en revision
   const pub = await trx('publication')
       .select('*', 'user_account.id AS userId')
@@ -362,28 +378,28 @@ exports.editBreeding = async (
   if (!pub) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Breeding not found';
+    error.message = 'Crianza no encontrada';
     throw error;
   }
 
   if (pub.userId !== userId) {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not edit a publication that you do not own';
+    error.message = 'No puedes editar una publicación que no es tuya.';
     throw error;
   }
 
   if (pub.document_status === 'Rejected') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not edit a publication which is rejected';
+    error.message = 'No puedes editar una publicación cuyo estado de los documentos es rechazada.';
     throw error;
   }
 
-  if (pub.transaction_status === 'Completed') {
+  if (pub.transaction_status !== 'Offered') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not edit a publication which is completed';
+    error.message = 'No puedes editar una publicación cuyo estado de publicación no sea ofrecida.';
     throw error;
   }
 
@@ -412,7 +428,7 @@ exports.editBreeding = async (
         const error = new Error();
         error.status = 400;
         error.message =
-          'It is required to upload at least two photos of the animal';
+          'Es necesario subir al menos dos fotos del animal';
         throw error;
       }
       allPhotos.push(...savedAnimalPhotos);
@@ -445,7 +461,7 @@ exports.editBreeding = async (
         const error = new Error();
         error.status = 400;
         error.message =
-          'It is required to upload at least one identification photo';
+          'Es necesario subir al menos una foto identificativa del animall';
         throw error;
       }
       allPhotos.push(...savedIdentificationPhotos);
@@ -476,7 +492,7 @@ exports.editBreeding = async (
         const error = new Error();
         error.status = 400;
         error.message =
-          'It is required to upload at least one photo of the vaccine passport';
+          'Es necesario subir al menos una foto del pasaporte de las vacunas';
         throw error;
       }
       allPhotos.push(...savedVaccinePhotos);
@@ -511,6 +527,7 @@ exports.editBreeding = async (
           .where({'breeding.id': breedingId})
           .update({
             price: breedingData.price,
+            pet_id: null,
           });
     }
 
@@ -540,13 +557,14 @@ exports.acceptBreeding = async (breedingData, breedingId, trx) => {
   if (!pub) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Breeding not found';
+    error.message = 'Crianza no encontrada';
+
     throw error;
   }
   if (pub.document_status !== 'In revision') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not accept a publication which is not in revision';
+    error.message = 'No puedes aceptar una publicación que no está en revisión.';
     throw error;
   }
 
@@ -586,13 +604,14 @@ exports.rejectBreeding = async (breedingId, trx) => {
   if (!pub) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Breeding not found';
+    error.message = 'Crianza no encontrada';
+
     throw error;
   }
   if (pub.document_status !== 'In revision') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not reject a publication which is not in revision';
+    error.message = 'No puedes rechazar una publicación que no está en revisión';
     throw error;
   }
 
@@ -627,7 +646,8 @@ exports.finishBreeding = async (breedingData, breedingId, trx) => {
   if (!pub) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Breeding not found';
+    error.message = 'Crianza no encontrada';
+
     throw error;
   }
   if ((pub.transaction_status !== 'In progress') &&
@@ -636,13 +656,13 @@ exports.finishBreeding = async (breedingData, breedingId, trx) => {
     const error = new Error();
     error.status = 404;
     error.message =
-      'You can not finish a publication which is not in progress.';
+      'No puedes finalizar una publicación que no está en progreso.';
     throw error;
   }
   if (pub.codenumber !== breedingData.codenumber) {
     const error = new Error();
     error.status = 404;
-    error.message = 'This Verification code is not correct.';
+    error.message = 'El código de verificación no es correcto';
     throw error;
   }
 
@@ -688,7 +708,7 @@ const getExtension = (photo) => {
   if (!ALLOWED_EXTENSIONS.includes(extension)) {
     const error = new Error();
     error.status = 404;
-    error.message = 'No valid extension';
+    error.message = 'La extensión de la imagen no es válida.';
     throw error;
   }
   return photo.split('.').pop();
@@ -703,7 +723,7 @@ exports.breedingHasRequest = async (connection, userId, breedingId) => {
   if (particular == undefined) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Particular not found';
+    error.message = 'Particular no encontrado';
     throw error;
   }
 
@@ -730,7 +750,7 @@ exports.getAvailableBreedingsForParticular = async (connection, userId) => {
   if (!particular) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Particular not found';
+    error.message = 'Particular no encontrado';
     throw error;
   }
 
@@ -742,4 +762,260 @@ exports.getAvailableBreedingsForParticular = async (connection, userId) => {
       .andWhere('publication.transaction_status', 'Offered');
 
   return breedings;
+};
+
+exports.createBreedingWithPet = async (breedingData, userId, trx) => {
+  utilService.createPhotoDirectory(dirAnimal);
+  utilService.createPhotoDirectory(dirIdentification);
+  utilService.createPhotoDirectory(dirVaccine);
+
+  const codenumberBreeding = numbergenerator();
+  try {
+    const pet = await trx('pet')
+        .where('pet.id', breedingData.petId)
+        .first();
+
+    // Get particular by user account id
+    const particular = await trx('particular')
+        .select('id')
+        .where('user_account_id', userId)
+        .first();
+
+    if (!pet) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'Mascota no encontrada';
+      throw error;
+    }
+
+    if (!particular) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'Particular no encontrado';
+      throw error;
+    }
+
+    if (pet.particular_id != particular.id) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'Esta mascota no es tuya';
+      throw error;
+    }
+
+    if (pet.pet_status !== 'Accepted') {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'Mascota inválida, sus documentos están sin revisar o rechazados';
+      throw error;
+    }
+
+    const pubData = {
+      animal_photo: pet.animal_photo,
+      identification_photo: pet.identification_photo,
+      vaccine_passport: pet.vaccine_passport,
+      document_status: pet.pet_status,
+      birth_date: pet.birth_date,
+      genre: pet.genre,
+      breed: pet.breed,
+      location: breedingData.location,
+      type: pet.type,
+      pedigree: pet.pedigree,
+      transaction_status: 'Offered',
+      particular_id: particular.id,
+    };
+
+    const publicationId = await trx('publication').insert(pubData);
+    const breedingId = await trx('breeding').insert({
+      publication_id: publicationId,
+      price: breedingData.price,
+      codenumber: codenumberBreeding,
+      pet_id: pet.id,
+    });
+
+    return await trx('breeding')
+        .join('publication', 'breeding.publication_id', '=', 'publication.id')
+        .select(BREEDING_FIELDS)
+        .where({'breeding.id': breedingId})
+        .first();
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.editBreedingWithPet = async (
+  breedingData,
+  breedingId,
+  userId,
+  trx,
+) => {
+  utilService.createPhotoDirectory(dirAnimal);
+  utilService.createPhotoDirectory(dirIdentification);
+  utilService.createPhotoDirectory(dirVaccine);
+
+  // Se comprueba que este editando un breeding propio y en revision
+  const pub = await trx('publication')
+      .select('*', 'user_account.id AS userId')
+      .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+      .join('particular', 'particular.id', '=', 'publication.particular_id')
+      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
+      .where('breeding.id', breedingId)
+      .first();
+
+  // Get particular by user account id
+  const particular = await trx('particular')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+
+  const pet = await trx('pet')
+      .where('pet.id', breedingData.petId)
+      .first();
+
+  if (!pet) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Mascota no encontrada';
+    throw error;
+  }
+
+  if (!particular) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Particular no encontrado';
+    throw error;
+  }
+
+  if (pet.particular_id != particular.id) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You do not own this pet';
+    throw error;
+  }
+
+  if (pet.pet_status !== 'Accepted') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Pet is not valid, documents unrevised or rejected';
+    throw error;
+  }
+  if (!pub) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Crianza no encontrada';
+
+    throw error;
+  }
+
+  if (pub.userId !== userId) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'No puedes editar una publicación que no sea tuya';
+    throw error;
+  }
+
+  if (pub.document_status === 'Rejected') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'No puedes editar una publicación rechazada';
+    throw error;
+  }
+
+  if (pub.transaction_status !== 'Offered') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'No puedes editar una publicación cuyo estado no es ofrecida';
+    throw error;
+  }
+
+  try {
+    // Moderators will modify the breeding publication
+    const pubData = {
+      animal_photo: pet.animal_photo,
+      identification_photo: pet.identification_photo,
+      vaccine_passport: pet.vaccine_passport,
+      document_status: pet.pet_status,
+      birth_date: pet.birth_date,
+      genre: pet.genre,
+      breed: pet.breed,
+      location: breedingData.location,
+      type: pet.type,
+      pedigree: pet.pedigree,
+    };
+
+    await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .update(pubData);
+
+    // Update price
+    if (breedingData.price) {
+      await trx('breeding')
+          .where({'breeding.id': breedingId})
+          .update({
+            price: breedingData.price,
+            pet_id: pet.id,
+          });
+    }
+
+    return await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where({'breeding.id': breedingId})
+        .first();
+  } catch (error) {
+    // Borramos las fotos guardadas en caso de error
+    allPhotos.forEach((photo) => {
+      fs.unlink(path.join('public', photo), (err) => {
+        // nothing to do
+      });
+    });
+    throw error;
+  }
+};
+
+exports.deleteBreeding = async (breedingId, userId, trx) => {
+  const particular = await trx('particular')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+  if (!particular) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Particular no encontrado';
+    throw error;
+  }
+
+  const breeding = await trx('breeding')
+      .join('publication', 'breeding.publication_id', '=', 'publication.id')
+      .where('breeding.id', breedingId)
+      .first();
+
+  if (!breeding) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Crianza no encontrada';
+
+    throw error;
+  }
+
+  if (breeding.particular_id !== particular.id) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Esta crianza no está creada por ti.';
+    throw error;
+  }
+
+  if (breeding.transaction_status === 'Awaiting payment' ||
+    breeding.transaction_status === 'In progress' ||
+    breeding.transaction_status === 'In payment') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'No puedes eliminar una publicación que tiene un pago en proceso.';
+    throw error;
+  }
+
+  await trx('publication')
+      .where('publication.id', breeding.publication_id)
+      .del();
+
+  return true;
 };

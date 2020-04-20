@@ -6,6 +6,9 @@ const {v4: uuidv4} = require('uuid');
 const USERS_FOLDER = path.join('images', 'users');
 const ALLOWED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
 
+const utilService = require('../services/util');
+const dirUsers = './public/images/users';
+
 exports.getUserLogin = async (connection, userName) =>{
   const rows = await connection('user_account')
       .select('user_account.id AS userId', 'user_account.role', 'user_account.password', 'user_account.activate')
@@ -19,7 +22,7 @@ exports.getUserLogin = async (connection, userName) =>{
   if (rows[0].activate == 0) {
     const error = new Error();
     error.status = 400;
-    error.message = 'Account desactivate';
+    error.message = 'This user account has been banned.';
     throw error;
   }
 
@@ -27,6 +30,8 @@ exports.getUserLogin = async (connection, userName) =>{
 };
 
 exports.register = async (trx, params) => {
+  utilService.createPhotoDirectory(dirUsers);
+
   let photoName;
   try {
     // Check user_name
@@ -108,22 +113,6 @@ exports.register = async (trx, params) => {
           .first();
     }
 
-    // Shelter
-    if (params.role === 'shelter') {
-      const userAccountId = await trx('user_account').insert(userData);
-      const shelterId = await trx('shelter').insert({
-        user_account_id: userAccountId,
-      });
-
-      const user = await trx('user_account')
-          .select('*', 'user_account.id as userAccountId', 'shelter.id as shelterId')
-          .join('shelter', 'user_account.id', '=', 'shelter.user_account_id')
-          .where('shelter.id', shelterId)
-          .first();
-      delete user.password; // Quitamos la contraseña para no devolverla
-      return user;
-    }
-
     error.status = 400;
     error.message = 'Role not allowed';
     throw error;
@@ -142,7 +131,7 @@ const getExtension = (photo) => {
   if (!ALLOWED_EXTENSIONS.includes(extension)) {
     const error = new Error();
     error.status = 404;
-    error.message = 'No valid extension';
+    error.message = 'La extensión de la imagen no es válida.';
     throw error;
   }
   return photo.split('.').pop();

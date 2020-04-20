@@ -8,7 +8,16 @@ const VACCINES_FOLDER = path.join('images', 'vaccine_passports');
 
 const ALLOWED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
 
-exports.createPet = async (petPhotos, userId, trx) => {
+const utilService = require('../services/util');
+const dirAnimal = './public/images/animal_photos';
+const dirIdentification = './public/images/identification_photos';
+const dirVaccine = './public/images/vaccine_passports';
+
+exports.createPet = async (petName, petPhotos, userId, trx) => {
+  utilService.createPhotoDirectory(dirAnimal);
+  utilService.createPhotoDirectory(dirIdentification);
+  utilService.createPhotoDirectory(dirVaccine);
+
   const allPhotos = [];
   try {
     // Mínimo 2 fotos del animal
@@ -28,7 +37,7 @@ exports.createPet = async (petPhotos, userId, trx) => {
       const error = new Error();
       error.status = 400;
       error.message =
-        'It is required to upload at least two photos of the animal';
+        'Es necesario subir al menos dos fotos del animal';
       throw error;
     }
 
@@ -111,6 +120,7 @@ exports.createPet = async (petPhotos, userId, trx) => {
       breed: null,
       type: null,
       pedigree: null,
+      name: petName.name,
       pet_status: 'In revision',
       particular_id: particular.id,
     };
@@ -131,7 +141,11 @@ exports.createPet = async (petPhotos, userId, trx) => {
   }
 };
 
-exports.editPet = async (petPhotos, petId, userId, trx) => {
+exports.editPet = async (petName, petPhotos, petId, userId, trx) => {
+  utilService.createPhotoDirectory(dirAnimal);
+  utilService.createPhotoDirectory(dirIdentification);
+  utilService.createPhotoDirectory(dirVaccine);
+
   // Se comprueba que este editando un pet propio
   const pet = await trx('pet')
       .select('*', 'user_account.id AS userId')
@@ -140,10 +154,23 @@ exports.editPet = async (petPhotos, petId, userId, trx) => {
       .where('pet.id', petId)
       .first();
 
+  const publication = await trx('publication')
+      .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+      .where('breeding.pet_id', pet.id)
+      .first();
+
+
+  if (publication) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You cannot edit a pet with publications';
+    throw error;
+  }
+
   if (!pet) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Pet not found';
+    error.message = 'Mascota no encontrada';
     throw error;
   }
 
@@ -176,7 +203,7 @@ exports.editPet = async (petPhotos, petId, userId, trx) => {
         const error = new Error();
         error.status = 400;
         error.message =
-          'It is required to upload at least two photos of the animal';
+          'Es necesario subir al menos dos fotos del animal';
         throw error;
       }
       allPhotos.push(...savedAnimalPhotos);
@@ -207,7 +234,7 @@ exports.editPet = async (petPhotos, petId, userId, trx) => {
         const error = new Error();
         error.status = 400;
         error.message =
-          'It is required to upload at least one identification photo';
+          'Es necesario subir al menos una foto identificativa del animall';
         throw error;
       }
       allPhotos.push(...savedIdentificationPhotos);
@@ -238,7 +265,7 @@ exports.editPet = async (petPhotos, petId, userId, trx) => {
         const error = new Error();
         error.status = 400;
         error.message =
-          'It is required to upload at least one photo of the vaccine passport';
+          'Es necesario subir al menos una foto del pasaporte de las vacunas';
         throw error;
       }
       allPhotos.push(...savedVaccinePhotos);
@@ -255,6 +282,10 @@ exports.editPet = async (petPhotos, petId, userId, trx) => {
     }
     if (petPhotos.vaccine_passport) {
       editPetData.vaccine_passport = savedVaccinePhotos.join(',');
+    }
+
+    if (petName.name) {
+      editPetData.name = petName.name;
     }
 
     if (pet.pet_status !== 'In revision') {
@@ -296,7 +327,7 @@ const getExtension = (photo) => {
   if (!ALLOWED_EXTENSIONS.includes(extension)) {
     const error = new Error();
     error.status = 404;
-    error.message = 'No valid extension';
+    error.message = 'La extensión de la imagen no es válida.';
     throw error;
   }
   return photo.split('.').pop();
@@ -330,13 +361,13 @@ exports.acceptPet = async (petData, petId, trx) => {
   if (!pet) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Pet not found';
+    error.message = 'Mascota no encontrada';
     throw error;
   }
   if (pet.pet_status !== 'In revision') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not accept a pet which is not in revision';
+    error.message = 'No puedes aceptar una mascota que no está en revisión';
     throw error;
   }
 
@@ -370,13 +401,13 @@ exports.rejectPet = async (petId, trx) => {
   if (!pet) {
     const error = new Error();
     error.status = 404;
-    error.message = 'Pet not found';
+    error.message = 'Mascota no encontrada';
     throw error;
   }
   if (pet.pet_status !== 'In revision') {
     const error = new Error();
     error.status = 404;
-    error.message = 'You can not reject a pet which is not in revision';
+    error.message = 'No puedes rechazar una mascota que no está en revisión.';
     throw error;
   }
 
@@ -415,5 +446,82 @@ exports.getPetsByParticularId = async (connection, particularId) => {
   } catch (error) {
     console.log(error);
     throw error;
+  }
+};
+
+exports.deletePet = async (petId, userId, trx) => {
+  const particular = await trx('particular')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+  if (!particular) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Particular no encontrado';
+    throw error;
+  }
+
+  const pet = await trx('pet')
+      .where('pet.id', petId)
+      .first();
+
+  if (!pet) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Mascota no encontrada';
+    throw error;
+  }
+
+  if (pet.particular_id !== particular.id) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You do not own this pet';
+    throw error;
+  }
+
+  const breeding = await trx('breeding')
+      .where('breeding.pet_id', pet.id)
+      .first();
+
+  if (breeding) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'No puedes eliminar una mascota que tenga publicaciones.';
+    throw error;
+  }
+
+  await trx('pet')
+      .where('pet.id', pet.id)
+      .del();
+
+  return true;
+};
+
+exports.getCanDelete = async (connection, userId, petId) => {
+  const particular = await connection('particular')
+      .where('user_account_id', userId)
+      .first();
+
+  const pet = await connection('pet')
+      .where('pet.id', petId)
+      .first();
+
+  if (particular.id !== pet.particular_id) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You do not own this pet';
+    throw error;
+  }
+  const petCanBeDeleted = await connection('pet')
+      .join('breeding', 'pet.id', '=', 'breeding.pet_id')
+      .join('publication', 'publication.id', '=', 'breeding.publication_id')
+      .where('pet.id', petId)
+      .andWhere('publication.particular_id', particular.id)
+      .first();
+
+  if (petCanBeDeleted) {
+    return false;
+  } else {
+    return true;
   }
 };

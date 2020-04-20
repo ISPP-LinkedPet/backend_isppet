@@ -12,15 +12,19 @@ exports.createPet = async (req, res) => {
     // file
     const petPhotos = req.files;
 
+    const petData = req.body;
+
     if (
       !petPhotos.animal_photo ||
       !petPhotos.identification_photo ||
-      !petPhotos.vaccine_passport
+      !petPhotos.vaccine_passport ||
+      !petData.name
     ) {
       return res.status(400).send({error: 'Invalid params'});
     }
 
     const pet = await petService.createPet(
+        petData,
         petPhotos,
         particularId,
         trx,
@@ -50,8 +54,10 @@ exports.editPet = async (req, res) => {
     const userId = req.user.id;
     const petPhotos = req.files;
     const petId = req.params.id;
+    const petData = req.body;
 
     const pet = await petService.editPet(
+        petData,
         petPhotos,
         petId,
         userId,
@@ -187,6 +193,58 @@ exports.getPetsByParticularId = async (req, res) => {
     }
 
     const pet = await petService.getPetsByParticularId(connection, particularId);
+
+    return res.status(200).send(pet);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
+
+exports.deletePet = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
+  try {
+    const petId = req.params.id;
+
+    const particularId = req.user.id;
+
+    const pet = await petService.deletePet(petId, particularId, trx);
+
+    // commit
+    await trx.commit();
+
+    return res.status(200).send(pet);
+  } catch (error) {
+    console.log(error);
+    // rollback
+    await trx.rollback();
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
+
+exports.getCanDelete = async (req, res) => {
+  const connection = req.connection;
+
+  try {
+    // authorization
+    const userId = req.user.id;
+    const petId = req.params.id
+
+    const pet = await petService.getCanDelete(
+        connection,
+        userId,
+        petId,
+    );
 
     return res.status(200).send(pet);
   } catch (error) {
