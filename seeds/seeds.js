@@ -22,7 +22,7 @@ exports.seed = async (knex) => {
     {
       id: 1,
       user_name: 'admin',
-      password: '200ceb26807d6bf99fd6f4f0d1ca54d4', // administrator
+      password: '$2y$12$tXf2LZPRnf7Qs9KhmnUbKei0ipe4QVaANIgQ3Ai63b4f0bmK5REi2', // administrator
       role: 'administrator',
       activate: true,
       name: 'Admin',
