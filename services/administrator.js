@@ -227,6 +227,7 @@ exports.getAllAds = async (connection, userId) => {
   const ads = await connection('ad_suscription').select('*');
   return ads;
 };
+
 exports.updateAds = async (connection, adData, adPhotos, adId, role) => {
   utilService.createPhotoDirectory(dirLateralBanner);
   utilService.createPhotoDirectory(dirTopBanner);
@@ -454,6 +455,7 @@ exports.getAd = async (connection, adId) => {
 
   return res;
 };
+
 exports.getPremiumVets = async (connection) => {
   const vets = await connection('vet').where({'vet.is_premium': true});
   const addresses = vets.map((vet) => {

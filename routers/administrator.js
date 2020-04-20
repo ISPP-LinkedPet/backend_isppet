@@ -25,6 +25,6 @@ router.get('/statistics', authorization.administrator, (req, res) => administrat
 router.post('/breachNotification', authorization.administrator, (req, res) => administratorController.sendBreachNotification(req, res));
 router.post('/contactMe', administratorController.contactMe);
 router.get('/allAds', authorization.administrator, (req, res) => administratorController.getAllAds(req, res));
-
+router.get('/ad/:id', authorization.administrator, (req, res) => administratorController.getAd(req, res));
 
 module.exports = router;
