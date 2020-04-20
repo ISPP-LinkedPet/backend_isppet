@@ -15,13 +15,20 @@ exports.createPaymentToMyself = async (connection, token, userId, breedingId, re
     throw error;
   }
 
+  if (breeding.price > 999) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Breeding price not allow';
+    throw error;
+  }
+
   // Realizo el pago
   const paymentCreate = await stripe.paymentMethods.create({
     type: 'card',
     card: {token},
   });
   const payment = await stripe.paymentIntents.create({
-    amount: parseInt(((breeding.price) - (breeding.price * 0.025)).toFixed(2)) * 1000,
+    amount: parseInt(((breeding.price) + (breeding.price * 0.025)).toFixed(2)),
     currency: 'eur',
     payment_method: paymentCreate.id,
     payment_method_types: ['card'],
@@ -30,7 +37,7 @@ exports.createPaymentToMyself = async (connection, token, userId, breedingId, re
   });
 
   // Obtengo el estado del pago
-  if (payment.status === 'succeeded') {
+  if (payment.status == 'succeeded') {
     // si todo va bien, la publication pasa a ' In progress '
     await connection('publication').where('id', publication.publication_id).update({transaction_status: 'In progress'});
   }
@@ -50,8 +57,7 @@ exports.confirmPaymentToMyself = async (connection, userId, paymentId, breedingI
 
   // Compruebo el pago
   const payment = await stripe.paymentIntents.retrieve(paymentId);
-
-  if (payment.status !== 'succeeded') {
+  if (payment.status != 'succeeded') {
     const error = new Error();
     error.status = 404;
     error.message = 'Payment not success';
@@ -59,7 +65,7 @@ exports.confirmPaymentToMyself = async (connection, userId, paymentId, breedingI
   }
 
   // if paymment is success the publication status change
-  await connection('publication').where('id', publication.id).update({transaction_status: 'In progress'});
+  if (payment.status == 'succeeded') await connection('publication').where('id', publication.id).update({transaction_status: 'In progress'});
 
   return payment; // succeeded,requires_action,requires_source
 };
@@ -108,7 +114,7 @@ exports.payUser = async (connection, userId, breedingId) => {
         {
           'recipient_type': 'EMAIL',
           'amount': {
-            'value': (breeding.price - (breeding.price * 0.075)).toFixed(2),
+            'value': (breeding.price - (breeding.price * 0.025)).toFixed(2),
             'currency': 'EUR',
           },
           'receiver': user.email,
@@ -174,7 +180,7 @@ exports.userCreatePayMePaypal = async (connection, userId, breedingId, returnUrl
       'transactions': [{
         'amount': {
           'currency': 'EUR',
-          'total': ((breeding.price) - (breeding.price * 0.025)).toFixed(2),
+          'total': ((breeding.price) + (breeding.price * 0.025)).toFixed(2),
           'details': {
           },
         },
