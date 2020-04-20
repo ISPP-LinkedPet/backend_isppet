@@ -20,7 +20,7 @@ exports.createPet = async (req, res) => {
       !petPhotos.vaccine_passport ||
       !petData.name
     ) {
-      return res.status(400).send({error: 'Invalid params'});
+      return res.status(400).send({error: 'Parámetros inválidos'});
     }
 
     const pet = await petService.createPet(
@@ -129,7 +129,7 @@ exports.acceptPet = async (req, res) => {
       !petData.pedigree ||
       !petData.breed
     ) {
-      return res.status(400).send({error: 'Invalid params'});
+      return res.status(400).send({error: 'Parámetros inválidos'});
     }
 
     const pet = await petService.acceptPet(
