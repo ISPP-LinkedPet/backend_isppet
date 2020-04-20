@@ -15,7 +15,7 @@ exports.createPaymentToMyself = async (connection, token, userId, breedingId, re
     throw error;
   }
 
-  if (breeding.price > 999) {
+  if (breeding.price > 950000) {
     const error = new Error();
     error.status = 404;
     error.message = 'Breeding price not allow';
