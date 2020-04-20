@@ -348,6 +348,23 @@ exports.deactivateAd = async (req, res) => {
   }
 };
 
+exports.getAd = async (req, res) => {
+  const connection = req.connection;
+
+  try {
+    const adId = req.params.id;
+    const ad = await administratorService.getAd(connection, adId);
+
+    return res.status(200).send(ad);
+  } catch (error) {
+    console.log(error);
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
+
 exports.getPremiumVets = async (req, res) => {
   try {
     const connection = req.connection;
