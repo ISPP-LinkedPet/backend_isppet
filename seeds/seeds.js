@@ -11,6 +11,7 @@ exports.seed = async (knex) => {
   await knex('publication').del();
   await knex('particular').del();
   await knex('moderator').del();
+  await knex('ad_suscription').del();
   await knex('vet').del();
   await knex('user_account').del();
   await knex('pet').del();
