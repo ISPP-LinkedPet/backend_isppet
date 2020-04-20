@@ -31,6 +31,17 @@ exports.getVets = async (connection) => {
   return vets;
 };
 
+exports.getVetById = async (connection, id) => {
+  const vet = await connection('vet').select('*').where('id', id).first();
+  if (!vet) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Veterinario no encontrado';
+    throw error;
+  }
+  return vet;
+};
+
 exports.updateLatLong = async (connection, vet) => {
   const vetId = vet.id;
 
