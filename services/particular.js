@@ -388,6 +388,19 @@ exports.deleteParticular = async (trx, userId) => {
     throw error;
   }
 
+  const publications = await trx('publication')
+      .where({particular_id: particular.id, transaction_status: 'In payment'})
+      .orWhere({particular_id: particular.id, transaction_status: 'In progress'})
+      .orWhere({particular_id: particular.id, transaction_status: 'Awaiting payment'})
+      .first();
+
+  if (publications) {
+    const error = new Error();
+    error.status = 400;
+    error.message = 'Particular has publications in payment process';
+    throw error;
+  }
+
   await trx('user_account')
       .where('user_account.id', userId)
       .del();
