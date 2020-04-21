@@ -987,44 +987,41 @@ exports.getStatistics = async (connection) => {
 };
 
 exports.sendBreachNotification = async (trx, params, nodemailer) => {
-  try {
-    // Obtenemos todos los emails
-    const emailsQuery = await trx('user_account').select('email');
+  // Obtenemos todos los emails
+  const emailsQuery = await trx('user_account').select('email');
 
-    const emails = [];
+  const emails = [];
 
-    emailsQuery.forEach(function(row) {
-      emails.push(row.email);
-    });
+  emailsQuery.forEach(function(row) {
+    emails.push(row.email);
+  });
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'linkedpetsl@gmail.com',
-        pass: 'sU28lZ81Hw',
-      },
-    });
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'linkedpetsl@gmail.com',
+      pass: 'sU28lZ81Hw',
+    },
+  });
 
-    // send mail with defined transport object
-    const info = await transporter.sendMail({
-      from: 'LinkedPet <linkedpetSL@gmail.com>', // sender address
-      bcc: emails, // list of receivers
-      subject: params.subject, // Subject line
-      text: params.body, // plain text body
-      html: params.body, // html body
-    });
+  // send mail with defined transport object
+  const info = await transporter.sendMail({
+    from: 'LinkedPet <linkedpetSL@gmail.com>', // sender address
+    bcc: emails, // list of receivers
+    subject: params.subject, // Subject line
+    text: params.body, // plain text body
+    html: params.body, // html body
+  });
 
-    console.log('Message sent: %s', info.messageId);
-    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+  console.log('Message sent: %s', info.messageId);
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 
-    // Preview only available when sending through an Ethereal account
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+  // Preview only available when sending through an Ethereal account
+  console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 
-    return info;
-  } catch (error) {
-    throw error;
-  }
+  return info;
+
 };
 
 exports.contactMe = async (trx, params, nodemailer) => {

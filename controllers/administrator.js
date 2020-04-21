@@ -582,7 +582,7 @@ exports.getStatistics = async (req, res) => {
 };
 
 exports.sendBreachNotification = async (req, res) => {
-  const trx = await req.connection.transaction();
+  const trx = await req.connection;
   try {
     const params = req.body;
 
