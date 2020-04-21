@@ -21,5 +21,5 @@ deploy:
     api_key:
       secure: YcUGxwklQI6BCWNMdAULyB5ajqEhIaJprwI/jXFgJVPqaMMIcYmeLcN9fPcWiEW+N5GQ3+Q5FA5E+HHXzy65/YnrvvbRGlbi2aFUNmJtxXSqjb8TYlrUKsioPW5N6UY0EM2AqEaumR6UEk6esqv2zVp99l1mzAzMtMiundPIynmWksggkwxCMBf75F7RRGOyaXp+ie33Umlq+IiWKVNCKLyjcQ/79lxt8T6mJQPde1gbATk/U8qwftdXxjBTdJq/1Wp+6Q3Iw98U60xeesUuK5XpB33ifSGv/hStfcM1au0rr96tWxi+SJk9vrDV3Miu3Tu9rmGrGq9d1a/Lnwo1W8osT6VDGUMpqNnNXOETEthTlmgXYEbvR4d66piHJTHzSjo8jQM8UbSxhHv4US/u6QYoumyvO9a4y+SrKZrtS4X+yRshGrC6NIcHAoWcEmsnptE0fayiu9lpPgKUtRb5mIm8pWkTcsfh0d3nucL6IBqp5bSbykt+KitdzYCrlkoj9yciZe59G81YXtuVRlg87PFvsUViImlxsKpC7XVQRKksrDofazeI0r6di02A2JLlS5CWUvuQMQO5/qsQ40EdDSBPvlOZIFmYE2mEAHEOPS9UrA7Pl213Gnz4zsg0NAYlSRbovTrBcJA226bgQVIQnCdNG99TWNbaM/EYMpv1KUQ=
     on:
-      branch: master
+      all_branches: true
       tags: true
