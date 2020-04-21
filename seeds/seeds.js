@@ -19,7 +19,6 @@ exports.seed = async (knex) => {
 
   // user_account
   await knex('user_account').insert([
-    // shelter
     {
       id: 1,
       user_name: 'admin',
@@ -32,10 +31,27 @@ exports.seed = async (knex) => {
       telephone: '954556817',
       optional_photo: null,
     },
+    {
+      id: 2,
+      user_name: 'validator',
+      password: '$2y$12$H1orqC6jOUV2/sQeXXSNr.CYXEDf5CyO5wCO08ODkimwq.QUQ5XCK', // validator
+      role: 'moderator',
+      activate: true,
+      name: 'Validator',
+      email: 'linkedpet2020@gmail.com',
+      address: 'Escuela Técnica Superior de Ingeniería Informática, Universidad de Sevilla, 41012 Sevilla',
+      telephone: '954556817',
+      optional_photo: null,
+    },
   ]);
 
   // administrator
   await knex('administrator').insert([
     {id: 1, surname: 'Admin', user_account_id: 1},
+  ]);
+
+  // moderator
+  await knex('moderator').insert([
+    {id: 1, surname: 'Validator', user_account_id: 2},
   ]);
 };
