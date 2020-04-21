@@ -316,3 +316,49 @@ exports.getAdoptions = async (req, res) => {
     return res.status(500).send({error});
   }
 };
+
+exports.deleteAdoption = async (req, res) => {
+  const connection = req.connection;
+
+  // create transaction
+  const trx = await connection.transaction();
+
+  try {
+    const adoptionId = req.params.id;
+
+    let user = null;
+
+    const role = req.user.role;
+
+    if (role === 'shelter') {
+      user = await connection('shelter')
+          .select('id')
+          .where('user_account_id', req.user.id)
+          .first();
+    } else if (role === 'particular') {
+      user = await connection('particular')
+          .select('id')
+          .where('user_account_id', req.user.id)
+          .first();
+    }
+
+    if (!user.id) {
+      return res.status(400).send({error: 'Invalid params'});
+    }
+
+    const adoption = await adoptionService.deleteAdoption(adoptionId, user.id, trx);
+
+    // commit
+    await trx.commit();
+
+    return res.status(200).send(adoption);
+  } catch (error) {
+    console.log(error);
+    // rollback
+    await trx.rollback();
+    if (error.status && error.message) {
+      return res.status(error.status).send({error: error.message});
+    }
+    return res.status(500).send({error});
+  }
+};
