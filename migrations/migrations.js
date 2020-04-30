@@ -178,28 +178,6 @@ exports.up = (knex) => {
               .onDelete('CASCADE');
         })
 
-    // adoption
-        .createTable('adoption', function(table) {
-          table.increments().primary();
-          table.string('name').notNullable();
-          table.double('taxes');
-          table
-              .integer('publication_id')
-              .unsigned()
-              .notNullable();
-          table
-              .foreign('publication_id')
-              .references('id')
-              .inTable('publication')
-              .onDelete('CASCADE');
-          table.integer('shelter_id').unsigned();
-          table
-              .foreign('shelter_id')
-              .references('id')
-              .inTable('shelter')
-              .onDelete('CASCADE');
-        })
-
     // vet
         .createTable('vet', function(table) {
           table.increments().primary();
@@ -251,7 +229,14 @@ exports.up = (knex) => {
               .references('id')
               .inTable('particular')
               .onDelete('CASCADE');
+          table.integer('shelter_id').unsigned();
+          table
+              .foreign('shelter_id')
+              .references('id')
+              .inTable('shelter')
+              .onDelete('CASCADE');
         })
+
         // breeding
         .createTable('breeding', function(table) {
           table.increments().primary();
@@ -273,6 +258,35 @@ exports.up = (knex) => {
               .references('id')
               .inTable('publication')
               .onDelete('CASCADE');
+        })
+
+    // adoption
+        .createTable('adoption', function(table) {
+          table.increments().primary();
+          table.string('name').notNullable();
+          table.double('taxes');
+          table
+              .integer('publication_id')
+              .unsigned()
+              .notNullable();
+          table
+              .foreign('publication_id')
+              .references('id')
+              .inTable('publication')
+              .onDelete('CASCADE');
+          table.integer('shelter_id').unsigned();
+          table
+              .foreign('shelter_id')
+              .references('id')
+              .inTable('shelter')
+              .onDelete('CASCADE');
+          table
+              .integer('pet_id')
+              .unsigned();
+          table
+              .foreign('pet_id')
+              .references('id')
+              .inTable('pet');
         })
   );
 };
