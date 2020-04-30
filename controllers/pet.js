@@ -8,25 +8,42 @@ exports.createPet = async (req, res) => {
 
   try {
     const particularId = req.user.id;
+    const role = req.user.role;
 
     // file
     const petPhotos = req.files;
 
     const petData = req.body;
-
-    if (
-      !petPhotos.animal_photo ||
+    if (role === 'particular') {
+      if (
+        !petPhotos.animal_photo ||
       !petPhotos.identification_photo ||
       !petPhotos.vaccine_passport ||
       !petData.name
-    ) {
-      return res.status(400).send({error: 'Parámetros inválidos'});
+      ) {
+        return res.status(400).send({error: 'Parámetros inválidos'});
+      }
+    } else {
+      if (
+        !petPhotos.animal_photo ||
+        !petPhotos.identification_photo ||
+        !petPhotos.vaccine_passport ||
+        !petData.name ||
+        !petData.genre ||
+        !petData.type ||
+        !petData.birth_date ||
+        !petData.pedigree ||
+        !petData.breed
+      ) {
+        return res.status(400).send({error: 'Parámetros inválidos'});
+      }
     }
 
     const pet = await petService.createPet(
         petData,
         petPhotos,
         particularId,
+        role,
         trx,
     );
 
@@ -55,12 +72,14 @@ exports.editPet = async (req, res) => {
     const petPhotos = req.files;
     const petId = req.params.id;
     const petData = req.body;
+    const role = req.user.role;
 
     const pet = await petService.editPet(
         petData,
         petPhotos,
         petId,
         userId,
+        role,
         trx,
     );
 
@@ -215,7 +234,9 @@ exports.deletePet = async (req, res) => {
 
     const particularId = req.user.id;
 
-    const pet = await petService.deletePet(petId, particularId, trx);
+    const role = req.user.role;
+
+    const pet = await petService.deletePet(petId, particularId, role, trx);
 
     // commit
     await trx.commit();
@@ -238,12 +259,14 @@ exports.getCanDelete = async (req, res) => {
   try {
     // authorization
     const userId = req.user.id;
-    const petId = req.params.id
+    const petId = req.params.id;
+    const role = req.user.role;
 
     const pet = await petService.getCanDelete(
         connection,
         userId,
         petId,
+        role,
     );
 
     return res.status(200).send(pet);
