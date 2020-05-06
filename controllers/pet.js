@@ -14,7 +14,7 @@ exports.createPet = async (req, res) => {
     const petPhotos = req.files;
 
     const petData = req.body;
-    if (role === 'particular' || role === 'shelter') {
+    if (role === 'particular') {
       if (
         !petPhotos.animal_photo ||
       !petPhotos.identification_photo ||
