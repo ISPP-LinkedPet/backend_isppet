@@ -488,6 +488,7 @@ exports.rejectPet = async (petId, trx) => {
     throw error;
   }
 };
+
 exports.getPetsByParticularId = async (connection, particularId) => {
   try {
     const res = [];
@@ -644,5 +645,26 @@ exports.getCanDelete = async (connection, userId, petId, role) => {
     return false;
   } else {
     return true;
+  }
+};
+
+exports.getPetsByShelterId = async (connection, shelterId) => {
+  try {
+    const res = [];
+    let pets = [];
+    pets = await connection('pet')
+        .select('*')
+        .where('pet.shelter_id', shelterId);
+    res.push(...pets);
+    if (!pets.length) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'Este shelter no tiene ninguna mascota registrada.';
+      throw error;
+    }
+    return pets;
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
 };

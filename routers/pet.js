@@ -11,6 +11,7 @@ router.get('/revision', authorization.moderator, (req, res) => petController.get
 router.post('/', authorization.shelter_particular, (req, res) => petController.createPet(req, res));
 router.get('/:id', authorization.shelter_particular_moderator, (req, res) => petController.getPet(req, res));
 router.get('/user/:id', authorization.all, (req, res) => petController.getPetsByParticularId(req, res));
+router.get('/shelter/:id', authorization.all, (req, res) => petController.getPetsByShelterId(req, res));
 router.get('/canDelete/:id', authorization.shelter_particular, (req, res) => petController.getCanDelete(req, res));
 
 module.exports = router;
