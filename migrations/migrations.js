@@ -235,6 +235,11 @@ exports.up = (knex) => {
               .references('id')
               .inTable('shelter')
               .onDelete('CASCADE');
+          table
+              .integer('number_breeding')
+              .defaultTo(0)
+              .unsigned()
+              .notNullable();
         })
 
         // breeding
