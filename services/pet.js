@@ -502,7 +502,7 @@ exports.getPetsByParticularId = async (connection, particularId, breeding) => {
     }
     const availablePets = [];
     if (breeding == 'true') {
-      availablePets.push(...pets.filter( (x) => x.genre == 'Male' || (x.genre=='Female' && x.number_breeding < 3)));
+      availablePets.push(...pets.filter( (x) => x.genre == 'Male' || (x.genre=='Female' && x.number_breeding > 3)));
     } else {
       availablePets.push(...pets);
     }
