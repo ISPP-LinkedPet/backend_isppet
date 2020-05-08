@@ -207,11 +207,15 @@ exports.getPetsByParticularId = async (req, res) => {
 
     // params
     const particularId = req.params.id;
+    const breeding = req.query.breeding;
     if (isNaN(particularId)) {
       return res.status(400).send('ID must be a number');
     }
+    if (!breeding) {
+      return res.status(400).send('The type of the list of animals to be returned must be indicated');
+    }
 
-    const pet = await petService.getPetsByParticularId(connection, particularId);
+    const pet = await petService.getPetsByParticularId(connection, particularId, breeding);
 
     return res.status(200).send(pet);
   } catch (error) {

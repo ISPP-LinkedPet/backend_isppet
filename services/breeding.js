@@ -676,6 +676,10 @@ exports.finishBreeding = async (breedingData, breedingId, trx) => {
         .where({'breeding.id': breedingId})
         .update(pubData);
 
+    // increment pet breeding counter
+    await trx('pet').join('breeding', 'breeding.pet_id', '=', 'pet.id')
+        .where('breeding.id', breedingId).increment('number_breeding', 1);
+
     return await trx('publication')
         .join('breeding', 'breeding.publication_id', '=', 'publication.id')
         .where({'breeding.id': breedingId})

@@ -489,21 +489,25 @@ exports.rejectPet = async (petId, trx) => {
   }
 };
 
-exports.getPetsByParticularId = async (connection, particularId) => {
+exports.getPetsByParticularId = async (connection, particularId, breeding) => {
   try {
-    const res = [];
-    let pets = [];
-    pets = await connection('pet')
+    const pets = await connection('pet')
         .select('*')
         .where('pet.particular_id', particularId);
-    res.push(...pets);
     if (!pets.length) {
       const error = new Error();
       error.status = 404;
       error.message = 'Este particular no tiene ninguna mascota registrada.';
       throw error;
     }
-    return pets;
+    const availablePets = [];
+    if (breeding == 'true') {
+      availablePets.push(...pets.filter( (x) => x.genre == 'Male' || !(x.genre=='Female' && x.number_breeding > 3)));
+    } else {
+      availablePets.push(...pets);
+    }
+
+    return availablePets;
   } catch (error) {
     console.log(error);
     throw error;
