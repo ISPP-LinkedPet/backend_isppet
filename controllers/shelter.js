@@ -43,7 +43,7 @@ exports.getMyData = async (req, res) => {
   try {
     const connection = req.connection;
 
-    const userId = 1;
+    const userId = req.user.id;
 
     const data = await shelterService.getMyData(
         connection,
