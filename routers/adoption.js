@@ -14,5 +14,7 @@ router.get('/:id', authorization.all, (req, res) =>adoptionController.getAdoptio
 router.put('/accept/:id', authorization.moderator, (req, res) =>adoptionController.acceptAdoption(req, res));
 router.put('/reject/:id', authorization.moderator, (req, res) =>adoptionController.rejectAdoption(req, res));
 router.delete('/delete/:id', authorization.shelter_particular, (req, res) => adoptionController.deleteAdoption(req, res));
+router.post('/pet', authorization.shelter, (req, res) => adoptionController.createAdoptionWithPet(req, res));
+router.put('/pet/edit/:id', authorization.shelter, (req, res) => adoptionController.editAdoptionWithPet(req, res));
 
 module.exports = router;

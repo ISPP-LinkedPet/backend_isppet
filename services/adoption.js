@@ -19,7 +19,7 @@ const ADOPTION_FIELDS = [
   'pedigree',
   'type',
   'vaccine_passport',
-  'creation_date'
+  'creation_date',
 ];
 
 const ANIMAL_FOLDER = path.join('images', 'animal_photos');
@@ -66,6 +66,7 @@ exports.updateAdoption = async (
   adoptionPhotos,
   adoptionId,
   userId,
+  role,
   trx,
 ) => {
   utilService.createPhotoDirectory(dirAnimal);
@@ -86,7 +87,7 @@ exports.updateAdoption = async (
     throw error;
   }
 
-  if ((pub.shelter_id === null && (pub.particular_id !== userId)) || (pub.particular_id === null && (pub.shelter_id !== userId))) {
+  if ((role === 'particular' && (pub.particular_id !== userId)) || (role === 'shelter' && (pub.shelter_id !== userId))) {
     const error = new Error();
     error.status = 404;
     error.message = 'No puedes editar una publicación que no sea tuya';
@@ -198,15 +199,10 @@ exports.updateAdoption = async (
       breed: adoptionData.breed,
     };
 
-    if (pub.document_status === 'In revision') {
-      if (adoptionPhotos.identification_photo) {
-        pubData.identification_photo = savedIdentificationPhotos.join(',');
-      }
-      if (adoptionPhotos.vaccine_passport) {
-        pubData.vaccine_passport = savedVaccinePhotos.join(',');
-      }
+    if (role === 'particular') {
+      pubData.document_status = 'In revision';
     }
-    pubData.document_status = 'In revision';
+
 
     await trx('publication')
         .join('adoption', 'adoption.publication_id', '=', 'publication.id')
@@ -218,6 +214,7 @@ exports.updateAdoption = async (
         .update({
           name: adoptionData.name,
           taxes: adoptionData.taxes,
+          pet_id: null,
         });
 
     return await trx('publication')
@@ -367,6 +364,7 @@ exports.createAdoption = async (
         name: adoptionData.name,
         taxes: adoptionData.taxes,
         shelter_id: userId,
+        pet_id: null,
       });
     } else if (role === 'particular') {
       adoptionId = await trx('adoption').insert({
@@ -374,6 +372,7 @@ exports.createAdoption = async (
         name: adoptionData.name,
         taxes: null,
         shelter_id: null,
+        pet_id: null,
       });
     }
 
@@ -683,4 +682,179 @@ exports.deleteAdoption = async (adoptionId, userId, trx) => {
       .del();
 
   return true;
+};
+
+exports.createAdoptionWithPet = async (adoptionData, userId, trx) => {
+  try {
+    const pet = await trx('pet')
+        .where('pet.id', adoptionData.petId)
+        .first();
+
+    // Get shelter by user account id
+    const shelter = await trx('shelter')
+        .select('id')
+        .where('user_account_id', userId)
+        .first();
+
+    if (!pet) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'Mascota no encontrada';
+      throw error;
+    }
+
+    if (!shelter) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'Shelter no encontrado';
+      throw error;
+    }
+
+    if (pet.shelter_id != shelter.id) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'Esta mascota no es tuya';
+      throw error;
+    }
+
+    const pubData = {
+      animal_photo: pet.animal_photo,
+      identification_photo: pet.identification_photo,
+      vaccine_passport: pet.vaccine_passport,
+      document_status: pet.pet_status,
+      birth_date: pet.birth_date,
+      genre: pet.genre,
+      breed: pet.breed,
+      location: adoptionData.location,
+      type: pet.type,
+      pedigree: pet.pedigree,
+      transaction_status: 'Offered',
+      particular_id: null,
+    };
+
+    const publicationId = await trx('publication').insert(pubData);
+    const adoptionId = await trx('adoption').insert({
+      publication_id: publicationId,
+      name: pet.name,
+      taxes: adoptionData.taxes,
+      shelter_id: shelter.id,
+      pet_id: pet.id,
+    });
+
+    return await trx('adoption')
+        .select('*', 'adoption.id as id')
+        .join('publication', 'adoption.publication_id', '=', 'publication.id')
+        .where({'adoption.id': adoptionId})
+        .first();
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.editAdoptionWithPet = async (
+  adoptionData,
+  adoptionId,
+  userId,
+  trx,
+) => {
+  // Se comprueba que este editando un adoption propio y en revision
+  const pub = await trx('publication')
+      .select('*', 'user_account.id AS userId')
+      .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+      .join('shelter', 'shelter.id', '=', 'adoption.shelter_id')
+      .join('user_account', 'user_account.id', '=', 'shelter.user_account_id')
+      .where('adoption.id', adoptionId)
+      .first();
+
+  // Get shelter by user account id
+  const shelter = await trx('shelter')
+      .select('id')
+      .where('user_account_id', userId)
+      .first();
+
+  const pet = await trx('pet')
+      .where('pet.id', adoptionData.petId)
+      .first();
+
+  if (!pet) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Mascota no encontrada';
+    throw error;
+  }
+
+  if (!shelter) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Shelter no encontrado';
+    throw error;
+  }
+
+  if (pet.shelter_id != shelter.id) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'You do not own this pet';
+    throw error;
+  }
+
+  if (!pub) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Adopcion no encontrada';
+
+    throw error;
+  }
+
+  if (pub.userId !== userId) {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'No puedes editar una publicación que no sea tuya';
+    throw error;
+  }
+
+  if (pub.transaction_status !== 'Offered') {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'No puedes editar una publicación cuyo estado no es ofrecida';
+    throw error;
+  }
+
+  try {
+    // Moderators will modify the adoption publication
+    const pubData = {
+      animal_photo: pet.animal_photo,
+      identification_photo: pet.identification_photo,
+      vaccine_passport: pet.vaccine_passport,
+      document_status: pet.pet_status,
+      birth_date: pet.birth_date,
+      genre: pet.genre,
+      breed: pet.breed,
+      location: adoptionData.location,
+      type: pet.type,
+      pedigree: pet.pedigree,
+    };
+
+    await trx('publication')
+        .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+        .where({'adoption.id': adoptionId})
+        .update(pubData);
+
+    // Update taxes
+    if (adoptionData.taxes) {
+      await trx('adoption')
+          .where({'adoption.id': adoptionId})
+          .update({
+            taxes: adoptionData.taxes,
+            pet_id: pet.id,
+            name: pet.name,
+          });
+    }
+
+    return await trx('publication')
+        .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+        .where({'adoption.id': adoptionId})
+        .first();
+  } catch (error) {
+    throw error;
+  }
 };

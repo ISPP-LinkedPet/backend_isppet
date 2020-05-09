@@ -1,5 +1,19 @@
 const pdf = require('html-pdf');
 
+const REVIEW_FIELDS = [
+  'user_account_id',
+  'shelter.id',
+  'user_account.name',
+  'user_account.user_name',
+  'user_account.role',
+  'user_account.name',
+  'user_account.register_date',
+  'user_account.address',
+  'user_account.optional_photo',
+  'user_account.email',
+  'user_account.telephone',
+];
+
 exports.getShelters = async (connection, page) => {
   const shelters = await connection('shelter').select('*')
       .innerJoin('user_account', 'shelter.user_account_id', '=', 'user_account.id')
@@ -265,4 +279,21 @@ exports.deleteShelter = async (trx, userId) => {
       .del();
 
   return true;
+};
+
+exports.getShelterLogged = async (connection, userId) => {
+  const shelter = await connection('shelter')
+      .select(REVIEW_FIELDS)
+      .join('user_account', 'shelter.user_account_id', '=', 'user_account.id')
+      .where('shelter.user_account_id', userId)
+      .first();
+
+  if (!shelter) {
+    const error = new Error();
+    error.status = 400;
+    error.message = 'No shelters with that ID';
+    throw error;
+  }
+
+  return shelter;
 };

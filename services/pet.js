@@ -13,7 +13,7 @@ const dirAnimal = './public/images/animal_photos';
 const dirIdentification = './public/images/identification_photos';
 const dirVaccine = './public/images/vaccine_passports';
 
-exports.createPet = async (petName, petPhotos, userId, trx) => {
+exports.createPet = async (petData, petPhotos, userId, role, trx) => {
   utilService.createPhotoDirectory(dirAnimal);
   utilService.createPhotoDirectory(dirIdentification);
   utilService.createPhotoDirectory(dirVaccine);
@@ -103,27 +103,53 @@ exports.createPet = async (petName, petPhotos, userId, trx) => {
 
     allPhotos.push(...savedVaccinePhotos);
 
-    // Get particular by user account id
-    const particular = await trx('particular')
-        .select('id')
-        .where('user_account_id', userId)
-        .first();
-
     // Some values are not required during creation
     // Moderators will modify the pet publication
-    const newPetData = {
-      animal_photo: savedAnimalPhotos.join(','),
-      identification_photo: savedIdentificationPhotos.join(','),
-      vaccine_passport: savedVaccinePhotos.join(','),
-      birth_date: null,
-      genre: null,
-      breed: null,
-      type: null,
-      pedigree: null,
-      name: petName.name,
-      pet_status: 'In revision',
-      particular_id: particular.id,
-    };
+    let newPetData = {};
+
+    if (role === 'particular') {
+    // Get particular by user account id
+      const particular = await trx('particular')
+          .select('id')
+          .where('user_account_id', userId)
+          .first();
+
+      newPetData = {
+        animal_photo: savedAnimalPhotos.join(','),
+        identification_photo: savedIdentificationPhotos.join(','),
+        vaccine_passport: savedVaccinePhotos.join(','),
+        birth_date: null,
+        genre: null,
+        breed: null,
+        type: null,
+        pedigree: null,
+        name: petData.name,
+        pet_status: 'In revision',
+        particular_id: particular.id,
+        shelter_id: null,
+      };
+    } else {
+      const shelter = await trx('shelter')
+          .select('id')
+          .where('user_account_id', userId)
+          .first();
+
+      newPetData = {
+        animal_photo: savedAnimalPhotos.join(','),
+        identification_photo: savedIdentificationPhotos.join(','),
+        vaccine_passport: savedVaccinePhotos.join(','),
+        birth_date: petData.birth_date,
+        genre: petData.genre,
+        breed: petData.breed,
+        type: petData.type,
+        pedigree: petData.pedigree,
+        name: petData.name,
+        pet_status: 'Accepted',
+        particular_id: null,
+        shelter_id: shelter.id,
+      };
+    }
+
 
     const petId = await trx('pet').insert(newPetData);
 
@@ -141,24 +167,41 @@ exports.createPet = async (petName, petPhotos, userId, trx) => {
   }
 };
 
-exports.editPet = async (petName, petPhotos, petId, userId, trx) => {
+exports.editPet = async (petData, petPhotos, petId, userId, role, trx) => {
   utilService.createPhotoDirectory(dirAnimal);
   utilService.createPhotoDirectory(dirIdentification);
   utilService.createPhotoDirectory(dirVaccine);
 
   // Se comprueba que este editando un pet propio
-  const pet = await trx('pet')
-      .select('*', 'user_account.id AS userId')
-      .join('particular', 'particular.id', '=', 'pet.particular_id')
-      .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
-      .where('pet.id', petId)
-      .first();
 
-  const publication = await trx('publication')
-      .join('breeding', 'breeding.publication_id', '=', 'publication.id')
-      .where('breeding.pet_id', pet.id)
-      .first();
+  let pet = {};
+  let publication = {};
 
+  if (role === 'particular') {
+    pet = await trx('pet')
+        .select('*', 'user_account.id AS userId')
+        .join('particular', 'particular.id', '=', 'pet.particular_id')
+        .join('user_account', 'user_account.id', '=', 'particular.user_account_id')
+        .where('pet.id', petId)
+        .first();
+
+    publication = await trx('publication')
+        .join('breeding', 'breeding.publication_id', '=', 'publication.id')
+        .where('breeding.pet_id', pet.id)
+        .first();
+  } else {
+    pet = await trx('pet')
+        .select('*', 'user_account.id AS userId')
+        .join('shelter', 'shelter.id', '=', 'pet.shelter_id')
+        .join('user_account', 'user_account.id', '=', 'shelter.user_account_id')
+        .where('pet.id', petId)
+        .first();
+
+    publication = await trx('publication')
+        .join('adoption', 'adoption.publication_id', '=', 'publication.id')
+        .where('adoption.pet_id', pet.id)
+        .first();
+  }
 
   if (publication) {
     const error = new Error();
@@ -284,19 +327,36 @@ exports.editPet = async (petName, petPhotos, petId, userId, trx) => {
       editPetData.vaccine_passport = savedVaccinePhotos.join(',');
     }
 
-    if (petName.name) {
-      editPetData.name = petName.name;
+    if (petData.name) {
+      editPetData.name = petData.name;
     }
 
-    if (pet.pet_status !== 'In revision') {
-      editPetData.breed = null;
-      editPetData.type = null;
-      editPetData.birth_date = null;
-      editPetData.pedigree = null;
-      editPetData.genre = null;
-      editPetData.pet_status = 'In revision';
+    if (role === 'particular') {
+      if (pet.pet_status !== 'In revision') {
+        editPetData.breed = null;
+        editPetData.type = null;
+        editPetData.birth_date = null;
+        editPetData.pedigree = null;
+        editPetData.genre = null;
+        editPetData.pet_status = 'In revision';
+      }
+    } else {
+      if (petData.breed) {
+        editPetData.breed = petData.breed;
+      }
+      if (petData.type) {
+        editPetData.type = petData.type;
+      }
+      if (petData.birth_date) {
+        editPetData.birth_date = petData.birth_date;
+      }
+      if (petData.pedigree) {
+        editPetData.pedigree = petData.pedigree;
+      }
+      if (petData.genre) {
+        editPetData.genre = petData.genre;
+      }
     }
-
     await trx('pet')
         .where({'pet.id': petId})
         .update(editPetData);
@@ -428,39 +488,33 @@ exports.rejectPet = async (petId, trx) => {
     throw error;
   }
 };
-exports.getPetsByParticularId = async (connection, particularId) => {
+
+exports.getPetsByParticularId = async (connection, particularId, breeding) => {
   try {
-    const res = [];
-    let pets = [];
-    pets = await connection('pet')
+    const pets = await connection('pet')
         .select('*')
         .where('pet.particular_id', particularId);
-    res.push(...pets);
     if (!pets.length) {
       const error = new Error();
       error.status = 404;
       error.message = 'Este particular no tiene ninguna mascota registrada.';
       throw error;
     }
-    return pets;
+    const availablePets = [];
+    if (breeding == 'true') {
+      availablePets.push(...pets.filter( (x) => x.genre == 'Male' || !(x.genre=='Female' && x.number_breeding > 3)));
+    } else {
+      availablePets.push(...pets);
+    }
+
+    return availablePets;
   } catch (error) {
     console.log(error);
     throw error;
   }
 };
 
-exports.deletePet = async (petId, userId, trx) => {
-  const particular = await trx('particular')
-      .select('id')
-      .where('user_account_id', userId)
-      .first();
-  if (!particular) {
-    const error = new Error();
-    error.status = 404;
-    error.message = 'Particular no encontrado';
-    throw error;
-  }
-
+exports.deletePet = async (petId, userId, role, trx) => {
   const pet = await trx('pet')
       .where('pet.id', petId)
       .first();
@@ -472,22 +526,64 @@ exports.deletePet = async (petId, userId, trx) => {
     throw error;
   }
 
-  if (pet.particular_id !== particular.id) {
-    const error = new Error();
-    error.status = 404;
-    error.message = 'You do not own this pet';
-    throw error;
-  }
+  if (role === 'particular') {
+    const particular = await trx('particular')
+        .select('id')
+        .where('user_account_id', userId)
+        .first();
+    if (!particular) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'Particular no encontrado';
+      throw error;
+    }
 
-  const breeding = await trx('breeding')
-      .where('breeding.pet_id', pet.id)
-      .first();
+    if (pet.particular_id !== particular.id) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'You do not own this pet';
+      throw error;
+    }
 
-  if (breeding) {
-    const error = new Error();
-    error.status = 404;
-    error.message = 'No puedes eliminar una mascota que tenga publicaciones.';
-    throw error;
+    const breeding = await trx('breeding')
+        .where('breeding.pet_id', pet.id)
+        .first();
+
+    if (breeding) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'No puedes eliminar una mascota que tenga publicaciones.';
+      throw error;
+    }
+  } else {
+    const shelter = await trx('shelter')
+        .select('id')
+        .where('user_account_id', userId)
+        .first();
+    if (!shelter) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'Shelter no encontrado';
+      throw error;
+    }
+
+    if (pet.shelter_id !== shelter.id) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'You do not own this pet';
+      throw error;
+    }
+
+    const adoption = await trx('adoption')
+        .where('adoption.pet_id', pet.id)
+        .first();
+
+    if (adoption) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'No puedes eliminar una mascota que tenga publicaciones.';
+      throw error;
+    }
   }
 
   await trx('pet')
@@ -497,31 +593,82 @@ exports.deletePet = async (petId, userId, trx) => {
   return true;
 };
 
-exports.getCanDelete = async (connection, userId, petId) => {
-  const particular = await connection('particular')
-      .where('user_account_id', userId)
-      .first();
-
+exports.getCanDelete = async (connection, userId, petId, role) => {
   const pet = await connection('pet')
       .where('pet.id', petId)
       .first();
 
-  if (particular.id !== pet.particular_id) {
+  if (!pet) {
     const error = new Error();
     error.status = 404;
-    error.message = 'You do not own this pet';
+    error.message = 'Pet not found';
     throw error;
   }
-  const petCanBeDeleted = await connection('pet')
-      .join('breeding', 'pet.id', '=', 'breeding.pet_id')
-      .join('publication', 'publication.id', '=', 'breeding.publication_id')
-      .where('pet.id', petId)
-      .andWhere('publication.particular_id', particular.id)
-      .first();
+
+  let petCanBeDeleted = {};
+
+  if (role === 'particular') {
+    const particular = await connection('particular')
+        .where('user_account_id', userId)
+        .first();
+
+    if (particular.id !== pet.particular_id) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'You do not own this pet';
+      throw error;
+    }
+
+    petCanBeDeleted = await connection('pet')
+        .join('breeding', 'pet.id', '=', 'breeding.pet_id')
+        .join('publication', 'publication.id', '=', 'breeding.publication_id')
+        .where('pet.id', petId)
+        .andWhere('publication.particular_id', particular.id)
+        .first();
+  } else {
+    const shelter = await connection('shelter')
+        .where('user_account_id', userId)
+        .first();
+
+    if (shelter.id !== pet.shelter_id) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'You do not own this pet';
+      throw error;
+    }
+
+    petCanBeDeleted = await connection('pet')
+        .join('adoption', 'pet.id', '=', 'adoption.pet_id')
+        .where('pet.id', petId)
+        .andWhere('adoption.shelter_id', shelter.id)
+        .first();
+  }
+
 
   if (petCanBeDeleted) {
     return false;
   } else {
     return true;
+  }
+};
+
+exports.getPetsByShelterId = async (connection, shelterId) => {
+  try {
+    const res = [];
+    let pets = [];
+    pets = await connection('pet')
+        .select('*')
+        .where('pet.shelter_id', shelterId);
+    res.push(...pets);
+    if (!pets.length) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'Este shelter no tiene ninguna mascota registrada.';
+      throw error;
+    }
+    return pets;
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
 };
