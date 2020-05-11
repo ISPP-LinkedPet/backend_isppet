@@ -101,7 +101,7 @@ exports.payUser = async (connection, userId, breedingId) => {
     },
     json: true,
   };
-  const result = await rp(options);
+  let result = await rp(options);
 
   options = {
     method: 'POST',
