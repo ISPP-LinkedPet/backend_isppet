@@ -14,14 +14,23 @@ exports.getUser = async (connection, userId) => {
 
 exports.getCanDelete = async (connection, userId, role) => {
   let publications = undefined;
+  let pub2 = undefined;
   if (role === 'particular') {
     const particular = await connection('particular')
         .where('user_account_id', userId)
         .first();
+
     publications = await connection('publication')
         .where({particular_id: particular.id, transaction_status: 'In payment'})
         .orWhere({particular_id: particular.id, transaction_status: 'In progress'})
         .orWhere({particular_id: particular.id, transaction_status: 'Awaiting payment'})
+        .first();
+
+    pub2 = await connection('publication')
+        .join('request', {'publication.id': 'request.publication_id', 'request.particular_id': particular.id})
+        .where({status: 'Accepted', transaction_status: 'In payment'})
+        .orWhere({status: 'Accepted', transaction_status: 'In progress'})
+        .orWhere({status: 'Accepted', transaction_status: 'Awaiting payment'})
         .first();
   } else {
     const shelter = await connection('shelter')
@@ -36,7 +45,7 @@ exports.getCanDelete = async (connection, userId, role) => {
         .orWhere({shelter_id: shelter.id, transaction_status: 'Awaiting payment'})
         .first();
   }
-  if (publications) {
+  if (publications || pub2) {
     return false;
   } else {
     return true;

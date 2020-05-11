@@ -401,6 +401,20 @@ exports.deleteParticular = async (trx, userId) => {
     throw error;
   }
 
+  const pub2 = await trx('publication')
+      .join('request', {'publication.id': 'request.publication_id', 'request.particular_id': particular.id})
+      .where({status: 'Accepted', transaction_status: 'In payment'})
+      .orWhere({status: 'Accepted', transaction_status: 'In progress'})
+      .orWhere({status: 'Accepted', transaction_status: 'Awaiting payment'})
+      .first();
+
+  if (pub2) {
+    const error = new Error();
+    error.status = 400;
+    error.message = 'Particular has requests accepted to publications in payment process';
+    throw error;
+  }
+
   await trx('user_account')
       .where('user_account.id', userId)
       .del();
