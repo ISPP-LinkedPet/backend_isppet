@@ -95,7 +95,7 @@ exports.payUser = async (connection, userId, breedingId) => {
 
   let options = {
     method: 'POST',
-    uri: 'https://AUySj4xr_LUAZYzmtCIGU7ny4xiHwIaZwRV3B4v9K281Aqu-Vj38CGPwqgOAoWiXsESiqj6hZF1nuZYy:EDKcubqJ6hn4D9UvKWjj1WmSKCmb6utCij_sjxYHsiTtrDNkeFjxiBCm789t5xlWkGnHuhfacEjKGEPz@api.sandbox.paypal.com/v1/oauth2/token',
+    uri: 'https://AXzMV8vP6xGP74w-ARMMWm3bmdApUn5LJ4SjMtjkR2r5TQVYKxbpjQ-DTHEjwT__42u2XluItKnvYl8b:ELDUQ-uZhZn38iKNwYPsNrrMZnIbq2x8W_ZJgMPcVI8cRsYYT2rGGlFKx4BCgRezLUVLF0Q91h4Z4vbn@api.sandbox.paypal.com/v1/oauth2/token',
     form: {
       grant_type: 'client_credentials',
     },
@@ -213,7 +213,7 @@ const executeApprovedPayment = async (paymentId, payerId) => {
     },
     json: true,
   };
-  let result = await rp(options);
+  const result = await rp(options);
 
   options = {
     method: 'POST',

@@ -521,6 +521,10 @@ exports.editBreeding = async (
         .where({'breeding.id': breedingId})
         .update(pubData);
 
+    // Se borran las request de esta publicacion
+    await trx('request')
+        .where('publication_id', pub.id).del();
+
     // Update price
     if (breedingData.price) {
       await trx('breeding')
@@ -675,6 +679,10 @@ exports.finishBreeding = async (breedingData, breedingId, trx) => {
         .join('breeding', 'breeding.publication_id', '=', 'publication.id')
         .where({'breeding.id': breedingId})
         .update(pubData);
+
+    // increment pet breeding counter
+    await trx('pet').join('breeding', 'breeding.pet_id', '=', 'pet.id')
+        .where('breeding.id', breedingId).increment('number_breeding', 1);
 
     return await trx('publication')
         .join('breeding', 'breeding.publication_id', '=', 'publication.id')
@@ -946,6 +954,10 @@ exports.editBreedingWithPet = async (
         .join('breeding', 'breeding.publication_id', '=', 'publication.id')
         .where({'breeding.id': breedingId})
         .update(pubData);
+
+    // Se borran las request de esta publicacion
+    await trx('request')
+        .where('publication_id', pub.id).del();
 
     // Update price
     if (breedingData.price) {
