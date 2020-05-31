@@ -257,7 +257,8 @@ exports.up = (knex) => {
           table
               .foreign('pet_id')
               .references('id')
-              .inTable('pet');
+              .inTable('pet')
+              .onDelete('CASCADE');
           table
               .foreign('publication_id')
               .references('id')
@@ -291,7 +292,8 @@ exports.up = (knex) => {
           table
               .foreign('pet_id')
               .references('id')
-              .inTable('pet');
+              .inTable('pet')
+              .onDelete('CASCADE');
         })
   );
 };
